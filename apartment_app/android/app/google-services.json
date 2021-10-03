@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "559095880169",
+    "firebase_url": "https://apartment-392e3-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "apartment-392e3",
+    "storage_bucket": "apartment-392e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559095880169:android:e862145451834a21fb1378",
+        "android_client_info": {
+          "package_name": "com.example.apartment_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559095880169-p09ec781qkpcr5uhcivos8jn3qq9oofm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4YfV0Guhw31x_XRulBlnXA71jBMm9sdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559095880169-p09ec781qkpcr5uhcivos8jn3qq9oofm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "559095880169-7tdiduu8hsp77ofvfhljp6hh6jabthna.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.apartmentManagementApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
