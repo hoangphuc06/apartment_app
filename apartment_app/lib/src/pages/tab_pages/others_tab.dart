@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OthersTab extends StatefulWidget {
-  const OthersTab({ Key? key }) : super(key: key);
+  const OthersTab({Key? key}) : super(key: key);
 
   @override
   _OthersTabState createState() => _OthersTabState();
@@ -11,25 +11,26 @@ class _OthersTabState extends State<OthersTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
-          title: Text("Khác"),
-          
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "Khác",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
         ),
-        body: Container(
-          child: ListView(
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              buildManagerOptions("Tài khoản của bạn"),
-              buildManagerOptions("Tài khoản của bạn"),
-              buildManagerOptions("Tài khoản của bạn"),
-            ],),
-        ),
+      ),
+      body: Column(
+        children: [
+          buildManagerOptions("Tài khoản của bạn"),
+          buildManagerOptions("Tài khoản của bạn"),
+          buildManagerOptions("Tài khoản của bạn"),
+        ],
+      ),
     );
   }
+}
+
+
 
   
   Padding buildManagerOptions(String title) {
@@ -73,7 +74,4 @@ class _OthersTabState extends State<OthersTab> {
                 ),
       ),
     );
-  }
-
- 
 }
