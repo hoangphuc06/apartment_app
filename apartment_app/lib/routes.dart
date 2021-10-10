@@ -1,3 +1,5 @@
+import 'package:apartment_app/src/pages/floor_page.dart';
+import 'package:apartment_app/src/pages/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/login_page.dart';
 import 'package:apartment_app/src/pages/register_page.dart';
 import 'package:apartment_app/src/pages/splash_page.dart';
@@ -9,4 +11,6 @@ final routes = <String,WidgetBuilder>{
   "splash_page": (BuildContext context) => SplashPage(),
   "login_page": (BuildContext context) => LoginPage(),
   "tab_page": (BuildContext context) => TabPage(),
+  "category_apartment_page": (BuildContext context) => CategoryApartmentPage(),
+  "apartment_page": (BuildContext context) => ApartmentPage(),
 };
