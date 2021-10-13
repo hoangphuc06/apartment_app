@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:apartment_app/src/fire_base/fb_optionsmanager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 class OthersTab extends StatefulWidget {
   const OthersTab({Key? key}) : super(key: key);
@@ -8,6 +11,10 @@ class OthersTab extends StatefulWidget {
 }
 
 class _OthersTabState extends State<OthersTab> {
+
+  OptionsManagerFB optionsManagerFB = new OptionsManagerFB();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,59 +26,76 @@ class _OthersTabState extends State<OthersTab> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
         ),
       ),
-      body: Column(
-        children: [
-          buildManagerOptions("Tài khoản của bạn"),
-          buildManagerOptions("Dịch vụ"),
-          buildManagerOptions("Tài khoản của bạn"),
-        ],
-      ),
+
+      body: SingleChildScrollView(       
+        child:StreamBuilder(
+          stream: optionsManagerFB.collectionReference.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
+            if (!snapshot.hasData) {
+              return Center(child: Text("No Data"),);
+            }
+            else{
+               return ListView.builder(
+                 shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context,i) {
+                    QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                     return InkWell(
+                      splashColor: Colors.amber,
+                      onTap: ()=>{Navigator.pushNamed(context, x["ontap"])},
+                      child: Container(
+                                padding: EdgeInsets.all(15),
+                                decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(color: Colors.grey))
+                                      ),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(                      
+                                        child:  
+                                          Row(                         
+                                            children: [
+                                            Container(
+                                              padding: EdgeInsets.only(right: 20),
+                                              child:Icon(
+                                                Icons.credit_card,
+                                                color: Colors.grey,
+                                                size: 30,
+                                              ),
+                                            ), 
+                                              Text(
+                                                x["title"],
+                                                style: TextStyle(
+                                                fontSize: 14, 
+                                                fontWeight:FontWeight.w400,
+                                                color: Colors.grey[600],
+                                              ),
+                                        ),
+                                            ],
+                                          ),
+                                          ),   
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.grey,
+                                        size: 15,
+                                        ),
+                                    ],
+                                  ),
+                        ),
+                    );
+                  }
+               );
+            }
+          },)
+        
+        
+     
+      )
+      
+    
     );
   }
 }
 
 
-
-  
-  Padding buildManagerOptions(String title) {
-    return Padding(
-      padding: const EdgeInsets.all(15),
-      child: Container(
-         decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey))
-                    ),
-        child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                     
-                      child:  
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.credit_card,
-                              color: Colors.grey,
-                              
-                            ),
-                            Text(
-                              title,
-                              style: TextStyle(
-                              fontSize: 18, 
-                              fontWeight:FontWeight.w500,
-                              color: Colors.grey[600],
-                            ),
-                      ),
-                          ],
-                        ),
-                        ),   
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.grey,
-                      
-                      ),
-                  ],
-                ),
-      ),
-    );
-}
