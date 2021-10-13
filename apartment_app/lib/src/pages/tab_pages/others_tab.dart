@@ -22,7 +22,7 @@ class _OthersTabState extends State<OthersTab> {
       body: Column(
         children: [
           buildManagerOptions("Tài khoản của bạn"),
-          buildManagerOptions("Tài khoản của bạn"),
+          buildManagerOptions("Dịch vụ"),
           buildManagerOptions("Tài khoản của bạn"),
         ],
       ),
