@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/pages/add_contract_page.dart';
 import 'package:apartment_app/src/pages/apartment_info/edit_apartment_info.dart';
 import 'package:apartment_app/src/pages/floor_page.dart';
 import 'package:apartment_app/src/pages/category_apartment_page.dart';
@@ -17,4 +18,5 @@ final routes = <String,WidgetBuilder>{
   "apartment_page": (BuildContext context) => ApartmentPage(),
   "apartment_info_page": (BuildContext context) => ApartmentInfoPage(),
   "edit_apartment_info_page": (BuildContext context) => EditApartmentInfo(),
+  "add_contract_page": (BuildContext context) => AddContractPage(),
 };
