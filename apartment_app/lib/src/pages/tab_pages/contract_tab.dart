@@ -34,7 +34,7 @@ class _ContractTabState extends State<ContractTab> {
                     QueryDocumentSnapshot x = snapshot.data!.docs[i];
                      return InkWell(
                       splashColor: Colors.amber,
-                      onTap: ()=>{Navigator.pushNamed(context, x["ontap"])},
+                      onTap: ()=>{Navigator.pushNamed(context, "contract_details_page")},
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -69,7 +69,7 @@ class _ContractTabState extends State<ContractTab> {
                                 Icon(Icons.calendar_today_sharp),
                                   SizedBox(width: width*0.02,),
                                 Text(
-                                  "Từ ngày" + x["startDay"].toString() +" đến "+x["expirationDate"].toString(),
+                                  "Từ ngày " + x["startDay"].toString() +" đến "+x["expirationDate"].toString(),
                                 )
                               ],
                             ),
