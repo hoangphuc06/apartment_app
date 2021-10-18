@@ -20,6 +20,7 @@ class _ContractTabState extends State<ContractTab> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: StreamBuilder(
            stream: contractFB.collectionReference.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -29,6 +30,7 @@ class _ContractTabState extends State<ContractTab> {
             else{
               return ListView.builder(
                  shrinkWrap: true,
+                 physics: ScrollPhysics(),
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context,i){
                     QueryDocumentSnapshot x = snapshot.data!.docs[i];

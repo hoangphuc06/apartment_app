@@ -1,6 +1,8 @@
 import 'package:apartment_app/src/fire_base/fb_contract.dart';
+import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class AddContractPage extends StatefulWidget {
   const AddContractPage({ Key? key }) : super(key: key);
@@ -12,19 +14,41 @@ class AddContractPage extends StatefulWidget {
 class _AddContractPageState extends State<AddContractPage> {
 
   ContractFB contractFB = new ContractFB();
-  
+
+  String? _roomPaymentPeriodController ;
+
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _hostController = TextEditingController();
   final TextEditingController _roomController = TextEditingController();
   final TextEditingController _startDayController = TextEditingController();
   final TextEditingController _expirationDateController = TextEditingController();
   final TextEditingController _billingStartDateController = TextEditingController();
-  final TextEditingController _roomPaymentPeriodController = TextEditingController();
   final TextEditingController _roomChargeController = TextEditingController();
   final TextEditingController _depositController = TextEditingController();
   final TextEditingController _renterController = TextEditingController();
   final TextEditingController _rulesController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+  Task task = new Task();
+  DateTime selectedDate = DateTime.now();
+
+
+
+  _selectDate(BuildContext context,TextEditingController _startDayController) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2019, 8),
+        lastDate: DateTime(2100));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        var date =
+            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+        _startDayController.text = date;
+        selectedDate = DateTime.now();
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +68,8 @@ class _AddContractPageState extends State<AddContractPage> {
         title: Text("Tạo hợp đồng"),
         ),
       body: SingleChildScrollView(
+        child: Form(
+        key:  _formKey,
         child:Column(
           children: [
             SizedBox(height: height*0.01,),
@@ -110,73 +136,107 @@ class _AddContractPageState extends State<AddContractPage> {
               children: [
                 Container(
               width: width*0.4,
-              child:  TextFormField(
-                 controller: _startDayController,
-                decoration: InputDecoration(
-                labelText: "Ngày bắt đầu", ),                        
-                keyboardType: TextInputType.datetime,
-                validator: (value){
-                  if(value!.isEmpty ){
-                    return "Vui lòng nhập ngày bắt đầu thuê";;
-                  }
-                  else{
-                    return null;
-                  }
-                },
+              child:  GestureDetector(
+                onTap: () => _selectDate(context,_startDayController),
+                child: AbsorbPointer(
+                  child: TextFormField(
+                     controller: _startDayController,
+                    decoration: InputDecoration(
+                      suffixIcon: Padding(
+                        padding: EdgeInsetsDirectional.only(start:height*0.025,top: height*0.02),
+                        child: Icon(Icons.calendar_today_outlined),
+                      ),
+                      labelText: "Ngày bắt đầu", ),                        
+                    keyboardType: TextInputType.datetime,
+                    validator: (value){
+                      if(value!.isEmpty ){
+                        return "Vui lòng nhập ngày bắt đầu thuê";;
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                  ),
+                )
+                  
               ),            
             ),
             Container(
               width: width*0.4,
-              child:  TextFormField(
-                 controller: _expirationDateController,
-                decoration: InputDecoration(
-                labelText: "Ngày kết thúc", ),                        
-                keyboardType: TextInputType.datetime,
-                validator: (value){
-                  if(value!.isEmpty ){
-                    return "Vui lòng nhập ngày kết thúc thuê";;
-                  }
-                  else{
-                    return null;
-                  }
-                },
-              ),            
+              child: GestureDetector(
+                onTap: () => _selectDate(context,_expirationDateController),
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    controller: _expirationDateController,
+                    decoration: InputDecoration(
+                      
+                      suffixIcon: Padding(
+                        padding: EdgeInsetsDirectional.only(start:height*0.025,top: height*0.02),
+                        child: Icon(Icons.calendar_today_outlined),
+                      ),
+                      labelText: "Ngày kết thúc", ),                        
+                    keyboardType: TextInputType.datetime,
+                    validator: (value){
+                      if(value!.isEmpty ){
+                        return "Vui lòng nhập ngày kết thúc thuê";;
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                  ),           
+                ),
+              ), 
             ),
               ],
             ),
             SizedBox(height:height *0.03,),  
             Container(
-              child:  TextFormField(
-                 controller: _billingStartDateController,
-                decoration: InputDecoration(
-                labelText: "Ngày bắt đầu tính tiền", ),                        
-                keyboardType: TextInputType.datetime,
-                validator: (value){
-                  if(value!.isEmpty ){
-                    return "Vui lòng nhập ngày bắt đầu tính tiền";;
-                  }
-                  else{
-                    return null;
-                  }
-                },
-              ),            
+              child:  GestureDetector(
+                onTap: () => _selectDate(context,_billingStartDateController),
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    controller: _billingStartDateController,
+                    decoration: InputDecoration(
+                      suffixIcon: Padding(
+                        padding: EdgeInsetsDirectional.only(start:height*0.025,top: height*0.02),
+                        child: Icon(Icons.calendar_today_outlined),
+                      ),
+                     labelText: "Ngày bắt đầu tính tiền", ),                        
+                    keyboardType: TextInputType.datetime,
+                    validator: (value){
+                      if(value!.isEmpty ){
+                        return "Vui lòng nhập ngày bắt đầu tính tiền";;
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                  ),            
+                ),
+              ),
             ),
             SizedBox(height:height *0.03,), 
              Container(
-              child:  TextFormField(
-                 controller: _roomPaymentPeriodController,
+              child: DropdownButtonFormField<String>(
                 decoration: InputDecoration(
-                labelText: "Kỳ thanh toán tiền phòng", ),                        
-                keyboardType: TextInputType.name,
-                validator: (value){
-                  if(value!.isEmpty ){
-                    return "Vui lòng nhập kỳ thanh toán tiền phòng";;
-                  }
-                  else{
-                    return null;
-                  }
+                  labelText: "Kỳ thanh toán tiền phòng"
+                ),
+                value: _roomPaymentPeriodController,
+                items: ["1 Tháng", "2 Tháng", "3 Tháng", "4 Tháng", "5 Tháng", "6 Tháng",
+                      "7 Tháng", "8 Tháng", "9 Tháng", "10 Tháng", "11 Tháng", "12 Tháng"]
+                    .map((label) => DropdownMenuItem(
+                  child: Text(label),
+                  value: label,
+                ))
+                    .toList(),
+                hint: Text('Kỳ thanh toán'),
+                onChanged: (value) {
+                  setState(() {
+                    _roomPaymentPeriodController = value;
+                  });
                 },
-              ),            
+              ),
             ),
            
                 ],
@@ -353,12 +413,13 @@ class _AddContractPageState extends State<AddContractPage> {
            ),
            SizedBox(height: height*0.05,),
           ],) ,
-          
+             ),
         ),
     );
   }
   void _onClick()
   {
+    if( _formKey.currentState!.validate())
       _addContract();
   }
   void _addContract() {
@@ -368,7 +429,7 @@ class _AddContractPageState extends State<AddContractPage> {
       _startDayController.text, 
       _expirationDateController.text,
       _billingStartDateController.text,
-      _roomPaymentPeriodController.text,
+      _roomPaymentPeriodController!,
       _roomChargeController.text,
       _depositController.text,
       _renterController.text,
@@ -378,8 +439,7 @@ class _AddContractPageState extends State<AddContractPage> {
       _roomController.clear(),
       _startDayController.clear(), 
       _expirationDateController.clear(),
-      _billingStartDateController.clear(),
-      _roomPaymentPeriodController.clear(),
+      _billingStartDateController.clear(),  
       _roomChargeController.clear(),
       _depositController.clear(),
       _renterController.clear(),
@@ -387,5 +447,5 @@ class _AddContractPageState extends State<AddContractPage> {
       Navigator.pop(context),
     });
   }
-
+  
 }
