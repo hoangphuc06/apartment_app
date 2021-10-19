@@ -37,14 +37,17 @@ class _EditApartmentInfoState extends State<EditApartmentInfo> {
   }
  
   void binding() {
-    apartmentInfoFB.collectionReference.doc('0').get().then((value) => {
-      _NbPhone1Controller.text = value["phoneNumber1"],
-      _NbPhone2Controller.text = value["phoneNumber2"],
-      _AddressController.text = value["address"],
-      _HeadController.text = value["headquarters"],
-      _LinkController.text = value["linkPage"],
-    });
-   
+    setState((){
+      apartmentInfoFB.collectionReference.doc('1').get().then((value) => {
+        _NbPhone1Controller.text = value["phoneNumber1"],
+        _NbPhone2Controller.text = value["phoneNumber2"],
+        _AddressController.text = value["address"],
+        _HeadController.text = value["headquarters"],
+        _LinkController.text = value["linkPage"],
+      }
+     );
+    }
+    );
   }
 
   @override
