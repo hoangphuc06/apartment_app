@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ContractDetails extends StatefulWidget {
-  const ContractDetails({ Key? key }) : super(key: key);
+  // const ContractDetails({ Key? key }) : super(key: key);
+  final String id;
+  ContractDetails({required this.id});
 
   @override
   _ContractDetailsState createState() => _ContractDetailsState();
@@ -40,12 +42,13 @@ class _ContractDetailsState extends State<ContractDetails> {
         title: Text("Hợp đồng"),
         ),
       body: StreamBuilder(
-           stream: contractFB.collectionReference.snapshots(),
+           stream: contractFB.collectionReference.where('id',isEqualTo: widget.id).snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
             if (!snapshot.hasData) {
               return Center(child: Text("No Data"),);
             }
             else{
+              QueryDocumentSnapshot x = snapshot.data!.docs[0];
               return Column(children: [
                         Container(
                           decoration: BoxDecoration(
@@ -74,7 +77,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                               children: [
                             
                               Text(
-                                "#123456",
+                                x["id"],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 18,
@@ -86,7 +89,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                   Icon(Icons.home_outlined),
                                     SizedBox(width: width*0.02,),
                                   Text(
-                                    "room",
+                                    x["room"],
                                     style: TextStyle(                                 
                                       fontSize: 16,
                                     ),
@@ -99,7 +102,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                   Icon(Icons.calendar_today_sharp),
                                     SizedBox(width: width*0.02,),
                                   Text(
-                                    "Từ ngày "  " đến ",
+                                    "Từ ngày "+x["startDay"]+" đến "+x["expirationDate"],
                                     style: TextStyle(                                 
                                       fontSize: 16,
                                     ),
@@ -112,7 +115,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                   Icon(Icons.people_alt_outlined),
                                   SizedBox(width: width*0.02,),
                                   Text(
-                                    "Người cho thuê: ",
+                                    "Người cho thuê: "+x["host"],
                                     style: TextStyle(                                 
                                       fontSize: 16,
                                     ),
@@ -144,7 +147,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                   ),
                                 
                                   Text(
-                                    "1200000 đ",
+                                    x["roomCharge"],
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18,
@@ -164,7 +167,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                     ),
                                   ),
                                   Text(
-                                    "1000000 đ",
+                                    x["deposit"],
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18,
@@ -184,7 +187,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                     ),
                                   ),
                                   Text(
-                                    "1 tháng",
+                                    x["roomPaymentPeriod"],
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,
                                       fontSize: 18,
@@ -205,7 +208,9 @@ class _ContractDetailsState extends State<ContractDetails> {
                               padding: EdgeInsets.only(right: 15),
                               child:   RoundedButton(
                                 name: 'Chỉnh sửa', 
-                                onpressed: (){}, 
+                                onpressed: (){
+                                  
+                                }, 
                                 color: Colors.amber),
                             ),
                             Container(

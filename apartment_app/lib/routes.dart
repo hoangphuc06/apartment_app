@@ -20,5 +20,4 @@ final routes = <String,WidgetBuilder>{
   "apartment_info_page": (BuildContext context) => ApartmentInfoPage(),
   "edit_apartment_info_page": (BuildContext context) => EditApartmentInfo(),
   "add_contract_page": (BuildContext context) => AddContractPage(),
-  "contract_details_page": (BuildContext context) => ContractDetails(),
 };

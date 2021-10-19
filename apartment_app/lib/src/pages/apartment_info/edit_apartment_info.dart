@@ -23,7 +23,7 @@ class _EditApartmentInfoState extends State<EditApartmentInfo> {
 
 
   void _editInfo() {
-    apartmentInfoFB.update("0",_AddressController.text, _HeadController.text, _LinkController.text,_NbPhone1Controller.text,_NbPhone2Controller.text).then((value) => {
+    apartmentInfoFB.update("1",_AddressController.text, _HeadController.text, _LinkController.text,_NbPhone1Controller.text,_NbPhone2Controller.text).then((value) => {
        Navigator.pop(context),
     }).catchError((error)=>{
       print("Lỗi á !"),

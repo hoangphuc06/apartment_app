@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/fire_base/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract_details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class _ContractTabState extends State<ContractTab> {
                     QueryDocumentSnapshot x = snapshot.data!.docs[i];
                      return InkWell(
                       splashColor: Colors.amber,
-                      onTap: ()=>{Navigator.pushNamed(context, "contract_details_page")},
+                      onTap: ()=>{Navigator.push(context, MaterialPageRoute(builder: (context)=>ContractDetails(id:x["id"])))},
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
