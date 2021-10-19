@@ -29,13 +29,22 @@ class _EditApartmentInfoState extends State<EditApartmentInfo> {
       print("Lỗi á !"),
     });;
   }
-
-  void binding(QueryDocumentSnapshot x) {
-    _NbPhone1Controller.text = x["phoneNumber1"];
-    _NbPhone2Controller.text = x["phoneNumber2"];
-    _AddressController.text = x["address"];
-    _HeadController.text = x["headquarters"];
-    _LinkController.text = x["linkPage"];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    binding();
+  }
+ 
+  void binding() {
+    apartmentInfoFB.collectionReference.doc('0').get().then((value) => {
+      _NbPhone1Controller.text = value["phoneNumber1"],
+      _NbPhone2Controller.text = value["phoneNumber2"],
+      _AddressController.text = value["address"],
+      _HeadController.text = value["headquarters"],
+      _LinkController.text = value["linkPage"],
+    });
+   
   }
 
   @override
@@ -69,9 +78,7 @@ class _EditApartmentInfoState extends State<EditApartmentInfo> {
                 if (!snapshot.hasData) {
                   return Center(child: Text("No Data"),);
                 }
-                else{
-                  QueryDocumentSnapshot x = snapshot.data!.docs[0];
-                  binding(x);
+                else{               
                   return   
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
