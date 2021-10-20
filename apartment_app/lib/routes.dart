@@ -1,7 +1,15 @@
 
+
 import 'package:apartment_app/src/pages/add_icon_page.dart';
 import 'package:apartment_app/src/pages/add_service_page.dart';
 import 'package:apartment_app/src/pages/apartment_info_page.dart';
+
+//import 'package:apartment_app/src/pages/apartment_info/edit_apartment_info.dart';
+import 'package:apartment_app/src/pages/dweller_pages/view/add_dweller_page.dart';
+import 'package:apartment_app/src/pages/dweller_pages/view/list_dwellers_page.dart';
+
+import 'package:apartment_app/src/pages/floor_page.dart';
+
 import 'package:apartment_app/src/pages/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/floor_page.dart';
 import 'package:apartment_app/src/pages/login_page.dart';
@@ -29,5 +37,11 @@ final routes = <String,WidgetBuilder>{
   "service_page":(BuildContext context) =>ServicePage(),
   "add_service":(BuildContext context) =>AddServicPage(),
   "add_icon":(BuildContext context) =>IconList(),
-  'reset_password_page':(BuildContext context)=>ResetPassWord()
+  'reset_password_page':(BuildContext context)=>ResetPassWord(),
+  //"edit_apartment_info_page": (BuildContext context) => EditApartmentInfo(),
+
+  // Dân cư
+  "list_dwellers_page": (BuildContext context) => ListDwellersPage(),
+  "add_dweller_page": (BuildContext context) => AddDwellerPage(),
+
 };

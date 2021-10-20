@@ -37,7 +37,8 @@ class _FloorTabState extends State<FloorTab> {
                         ],
                       )
                   )
-                ]),
+                ]
+                ),
               ],
             ),
             SizedBox(height: 10,),
