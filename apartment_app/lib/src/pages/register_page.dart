@@ -39,10 +39,11 @@ class _RegisterPageState extends State<RegisterPage> {
     // categoryApartmentFB.add("3","loai 3");
   }
 
+ 
   @override
   Widget build(BuildContext context) {
-    // final userRepo = UserRepo();
-    // userRepo.createUserWithEmailAndPassword("lehoangphuc272@gmail.com", "123456789");
+    final userRepo = UserRepo();
+    userRepo.createUserWithEmailAndPassword("lehoangphuc272@gmail.com", "123456789");
     return Scaffold(
       body: Center(
         child: Column(
