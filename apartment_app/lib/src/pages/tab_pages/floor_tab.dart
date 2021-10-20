@@ -1,4 +1,6 @@
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/floor_info_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +64,7 @@ class _FloorTabState extends State<FloorTab> {
                                 elevation: 1,
                                 child: ListTile(
                                   onTap: () {
-
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => FloorInfoPage(floorid: x['id'], floorname: x['name'])));
                                   },
                                   title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                                 ),
