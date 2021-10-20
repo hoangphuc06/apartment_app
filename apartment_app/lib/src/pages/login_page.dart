@@ -122,9 +122,14 @@ class _LoginPageState extends State<LoginPage> {
                               onpressed: _onLoginClick,
                           ),
                           SizedBox(height: 20,),
-                          Text(
-                            "Quên mật khẩu?",
-                            style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pushNamed(context, "reset_password_page");
+                            },
+                            child: Text(
+                              "Quên mật khẩu?",
+                              style: TextStyle(fontSize: 15, color: Colors.blueGrey),
+                            ),
                           ),
                         ],
                       ),

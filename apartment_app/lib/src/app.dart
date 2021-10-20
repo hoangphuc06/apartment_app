@@ -11,7 +11,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: routes,
+<<<<<<< Updated upstream
       initialRoute: "service_page",
+=======
+      initialRoute: "login_page",
+>>>>>>> Stashed changes
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),

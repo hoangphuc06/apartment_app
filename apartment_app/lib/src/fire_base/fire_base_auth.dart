@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FirAuth {
   final FirebaseAuth _firebaseAuth =FirebaseAuth.instance;
+  Future<void> resetPassWord( String email)async {
+    await  this._firebaseAuth.sendPasswordResetEmail(email: email);
 
+  }
   void signIn(String email, String pass, Function onSuccess, Function(String) onSignInError) {
+
     _firebaseAuth.signInWithEmailAndPassword(email: email, password: pass)
         .then((user) {
           onSuccess();
