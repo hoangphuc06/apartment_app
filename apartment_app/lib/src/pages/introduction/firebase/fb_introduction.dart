@@ -1,7 +1,7 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-class ApartmentInfoFB {
+class IntroductionFB {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -18,7 +18,4 @@ class ApartmentInfoFB {
         .then((value) => print("completed"))
         .catchError((error)=>print("fail"));
   }
-
-  
-
 }

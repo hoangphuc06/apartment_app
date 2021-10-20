@@ -1,10 +1,13 @@
-import 'package:apartment_app/src/pages/dweller_pages/fire_base/fb_dweller.dart';
-import 'package:apartment_app/src/pages/dweller_pages/view/edit_dweller_page.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
+import 'package:apartment_app/src/pages/dweller/view/edit_dweller_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ListDwellersPage extends StatefulWidget {
-  const ListDwellersPage({Key? key}) : super(key: key);
+  final String id_apartment;
+  //const ListDwellersPage({Key? key}) : super(key: key);
+  ListDwellersPage(this.id_apartment);
 
   @override
   _ListDwellersPageState createState() => _ListDwellersPageState();
@@ -18,13 +21,13 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(),
+      //appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Expanded(
           child: SingleChildScrollView(
             child: StreamBuilder(
-                stream: dwellersFB.collectionReference.snapshots(),
+                stream: dwellersFB.collectionReference.where('idApartment', isEqualTo: widget.id_apartment).snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: Text("No Data"),);
@@ -56,7 +59,7 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.pushNamed(context, "add_dweller_page");
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
           },
           label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
       ),
