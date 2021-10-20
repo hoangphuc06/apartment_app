@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: routes,
-      initialRoute: "list_dwellers_page",
+      initialRoute: "splash_page",
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
