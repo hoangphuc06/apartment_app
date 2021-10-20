@@ -118,7 +118,7 @@ class StateAddPage extends State<AddServicPage> {
     Route route = MaterialPageRoute(builder: (context) => IconList());
     final Result = await Navigator.push(this.context, route);
     print(Result.toString());
-
+    if(Result==null) return;
     setState(() {
       this.pathAsset = Result;
     });

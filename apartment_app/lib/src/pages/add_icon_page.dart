@@ -48,7 +48,9 @@ class IconListState extends State<IconList> {
   String? SelectedIcon = null;
 
   void afterSelectIcon(String path) {
+    if(!path.isEmpty)
     Navigator.pop(this.context, path);
+    else Navigator.pop(context);
   }
 
   Future _initImages() async {
