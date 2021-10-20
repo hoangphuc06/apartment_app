@@ -201,6 +201,16 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
           }
         )
       ),
+       floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.edit),
+          backgroundColor: Colors.amber,
+          onPressed: (){
+             Navigator.pushNamed(context, "edit_apartment_info_page");
+          },
+
+        ),
     );
+    
 }
+
 }
