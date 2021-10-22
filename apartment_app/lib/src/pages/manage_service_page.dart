@@ -133,15 +133,8 @@ class StateServicePage extends State<ServicePage> {
         },
       ),
       appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(
-              width: 150,
-            ),
-            Text("DICH VU",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-          ],
-        ),
+        title:Text("DICH VU",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -171,7 +164,7 @@ class StateServicePage extends State<ServicePage> {
               ),
             ),*/
             SizedBox(height: 20),
-            SizedBox(height: 18),
+
             Expanded(
                 child: StreamBuilder(
                     stream: fb.collectionReference.snapshots(),
@@ -229,9 +222,9 @@ class StateServicePage extends State<ServicePage> {
               SizedBox(child: Image.asset(pathAsset, fit: BoxFit.fill)),
               Text(
                 info.name.toString(),
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 10),
               ),
-              Text(detail + temp1, style: TextStyle(fontSize: 16))
+              Text(detail + temp1, style: TextStyle(fontSize: 10))
             ],
           ),
         ),

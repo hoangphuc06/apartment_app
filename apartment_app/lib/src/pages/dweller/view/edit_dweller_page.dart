@@ -1,4 +1,4 @@
-import 'package:apartment_app/src/pages/dweller_pages/fire_base/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:select_form_field/select_form_field.dart';

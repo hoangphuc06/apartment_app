@@ -1,11 +1,13 @@
-import 'package:apartment_app/src/pages/dweller_pages/fire_base/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class AddDwellerPage extends StatefulWidget {
-  const AddDwellerPage({Key? key}) : super(key: key);
+  final String id_apartment;
+  //const AddDwellerPage({Key? key}) : super(key: key);
+  AddDwellerPage(this.id_apartment);
 
   @override
   _AddDwellerPageState createState() => _AddDwellerPageState();
@@ -145,7 +147,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
 
-      dwellersFB.add("1", name, birthday, gender, cmnd, phoneNumber, email)
+      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, phoneNumber, email)
           .then((value) => {
         Navigator.pop(context),
       });
