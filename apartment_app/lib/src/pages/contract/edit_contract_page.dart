@@ -93,7 +93,7 @@ class _EditContractPageState extends State<EditContractPage> {
           },
           icon: Icon(Icons.arrow_back_ios),
         ),
-        title: Text("Tạo hợp đồng"),
+        title: Text("Chỉnh sửa hợp đồng"),
       ),
       body: SingleChildScrollView(
         child: Form(
