@@ -1,7 +1,10 @@
-import 'package:apartment_app/src/fire_base/fb_category_apartment.dart';
+import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/model/categoty_apartment.dart';
+import 'package:apartment_app/src/pages/category_apartment/view/add_category_apartment_page.dart';
+import 'package:apartment_app/src/pages/category_apartment/view/edit_category_apartment_page.dart';
 import 'package:apartment_app/src/widgets/buttons/back_button.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:apartment_app/src/widgets/cards/category_apartment_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -35,13 +38,8 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text("Loại căn hộ"),
         elevation: 0,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return backButton(context);
-          },
-        ),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -49,31 +47,6 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  border: Border.all(color:  Colors.black),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, size: 20,),
-                    Container(
-                      margin: EdgeInsets.only(left: 5),
-                      child: Text("Tìm kiếm", style: TextStyle(fontSize: 17),),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Loại căn hộ",
-                  style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: StreamBuilder(
@@ -89,18 +62,17 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
                                 itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (context,i) {
                                   QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                                  return Card(
-                                    color: Colors.white70,
-                                    elevation: 1,
-                                    child: ListTile(
-                                      onTap: () {
-                                        binding(x);
-                                        _isAdd = false;
-                                        _showOptionPanel();
-                                      },
-                                      title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                                    ),
-                                  );
+                                  // return Card(
+                                  //   color: Colors.white70,
+                                  //   elevation: 1,
+                                  //   child: ListTile(
+                                  //     onTap: () {
+                                  //       Navigator.push(context, MaterialPageRoute(builder: (context) => EditCategoryApartmentPage(x['id'])));
+                                  //     },
+                                  //     title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                  //   ),
+                                  // );
+                                  return CategoryApartmentCard();
                                 }
                             );
                           }
@@ -116,10 +88,7 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
         builder: (BuildContext context) {
           return FloatingActionButton.extended(
             onPressed: () {
-              _isAdd = true;
-              _nameController.clear();
-              _areaController.clear();
-              _showAddOrEditDialog();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AddCategoryApartmentPage()));
             },
             label: Text("Thêm loại"),
           );
@@ -247,22 +216,7 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
           ),
         )
       );
-  void _addCategory() {
-    categoryApartmentFB.add(_nameController.text,_areaController.text).then((value) => {
-      _nameController.clear(),
-      _areaController.clear(),
-      Navigator.pop(context),
-    });
-  }
 
-  void _editCategory() {
-    categoryApartmentFB.update(_idController.text, _nameController.text, _areaController.text).then((value) => {
-      Navigator.pop(context),
-      _showOptionPanel()
-    }).catchError((error)=>{
-      print("Lỗi á !"),
-    });
-  }
 
   void _deleteCategory() {
     categoryApartmentFB.delete(_idController.text);
@@ -317,8 +271,8 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
                   ),
                   MainButton(
                     name: _isAdd ? "Thêm" : "Sửa",
-                    onpressed: _isAdd ? _addCategory : () {
-                      _editCategory();
+                    onpressed: () {
+                      //_editCategory();
                     },
                   )
                 ],

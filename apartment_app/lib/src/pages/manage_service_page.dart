@@ -18,6 +18,7 @@ class StateServicePage extends State<ServicePage> {
   List<ServiceInfo> listService = <ServiceInfo>[];
   ServiceFB fb = new ServiceFB();
   TextEditingController seachControler= new TextEditingController();
+
   Future<ServiceInfo> addButtonOnPressed() async {
     Route route = MaterialPageRoute(builder: (context) => AddServicPage());
     ServiceInfo Result = await Navigator.push(this.context, route);
@@ -41,6 +42,7 @@ class StateServicePage extends State<ServicePage> {
       });
 
   }
+
   void filt(){
     listService.forEach((element) {
       if(element.name!.contains(this.seachControler.text))
@@ -74,6 +76,7 @@ class StateServicePage extends State<ServicePage> {
   void addService(ServiceInfo service) {
     this.items.add(this.ServiceBox(service));
   }
+
   void modifiService(ServiceInfo sv) {
     showModalBottomSheet(
         context: context,
@@ -111,12 +114,14 @@ class StateServicePage extends State<ServicePage> {
           );
         });
   }
+
   @override
   void initState() {
     super.initState();
     this.loadData();
     //  createListCard();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

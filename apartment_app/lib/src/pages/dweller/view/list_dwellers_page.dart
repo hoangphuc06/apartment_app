@@ -44,7 +44,7 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
                             elevation: 1,
                             child: ListTile(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(x["id"])));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(x["id"],x["idApartment"])));
                               },
                               title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                             ),

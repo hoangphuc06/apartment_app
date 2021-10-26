@@ -1,4 +1,4 @@
-import 'package:apartment_app/src/fire_base/fb_category_apartment.dart';
+import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/model/categoty_apartment.dart';
 import 'package:apartment_app/src/user_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';

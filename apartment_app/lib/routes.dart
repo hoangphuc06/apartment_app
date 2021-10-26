@@ -6,7 +6,7 @@ import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
 import 'package:apartment_app/src/pages/add_contract_page.dart';
 import 'package:apartment_app/src/pages/contract_details_page.dart';
 import 'package:apartment_app/src/pages/floor_page.dart';
-import 'package:apartment_app/src/pages/category_apartment_page.dart';
+import 'package:apartment_app/src/pages/category_apartment/view/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/introduction/view/edit_introduction_page.dart';
 import 'package:apartment_app/src/pages/introduction/view/introduction_page.dart';
 import 'package:apartment_app/src/pages/login_page.dart';
