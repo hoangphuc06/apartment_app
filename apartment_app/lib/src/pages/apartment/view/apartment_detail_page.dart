@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/pages/apartment/view/apartment_info_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
+import 'package:apartment_app/src/pages/Bill/view/list_bill_info_page.dart';
 import 'package:flutter/material.dart';
 
 class ApartmentDetailPage extends StatefulWidget {
@@ -33,8 +34,9 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
         ),
         body: TabBarView(
           children: [
-            ApartmentInfoPage(),
+            ApartmentInfoPage(widget.id_apartment),
             ListDwellersPage(widget.id_apartment),
+            ListBillInfoPage(widget.id_apartment),
           ],
         ),
       ),

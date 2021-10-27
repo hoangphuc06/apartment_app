@@ -2,6 +2,7 @@
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/apartment/view/apartment_detail_page.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,13 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
   final TextEditingController _idcontroler = TextEditingController();
   final TextEditingController _namecontroler = TextEditingController();
   final TextEditingController _statuscontroler = TextEditingController();
+  final TextEditingController _notecontroler = TextEditingController();
 
   void binding(QueryDocumentSnapshot x){
     _idcontroler.text = x['id'];
     _namecontroler.text = x['name'];
     _statuscontroler.text = x['status'];
+    _notecontroler.text = x['note'];
   }
 
   @override
@@ -103,15 +106,17 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
   }
 
   void _AddRoom(){
-    floorInfoFB.add(widget.floorid, _namecontroler.text,'trống').then((value) => {
+    floorInfoFB.add(widget.floorid, _namecontroler.text,'trống',_notecontroler.text).then((value) => {
       _namecontroler.clear(),
+      _notecontroler.clear(),
       Navigator.pop(context),
     });
   }
   void _EditRoom(){
-    floorInfoFB.update(_idcontroler.text,widget.floorid,_namecontroler.text,_statuscontroler.text).then((value) => {
+    floorInfoFB.update(_idcontroler.text,widget.floorid,_namecontroler.text,_statuscontroler.text, _notecontroler.text).then((value) => {
       _idcontroler.clear(),
       _namecontroler.clear(),
+      _notecontroler.clear(),
       Navigator.pop(context),
     });
   }
@@ -142,6 +147,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                         return null;
                       },
                       controller: _namecontroler,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.home_sharp),
                           hintText: 'Tên căn hộ',
@@ -150,6 +156,21 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                           )
                       ),
                     ),
+                    SizedBox(height: 10,),
+                     Text('Ghi chú',
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                    SizedBox(height: 10,),
+                    TextField(
+                      controller: _notecontroler,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 4,
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+                    ),
+                    SizedBox(height: 10,),
                     MainButton(name: _isAdd ? "Thêm" : "Sửa",
                         onpressed: _isAdd ? _AddRoom : () {
                           _EditRoom();
