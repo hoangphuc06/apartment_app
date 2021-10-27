@@ -1,10 +1,9 @@
-
 import 'package:apartment_app/src/pages/add_icon_page.dart';
 import 'package:apartment_app/src/pages/add_service_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
-import 'package:apartment_app/src/pages/add_contract_page.dart';
-import 'package:apartment_app/src/pages/contract_details_page.dart';
+import 'package:apartment_app/src/pages/contract/add_contract_page.dart';
+import 'package:apartment_app/src/pages/contract/contract_details_page.dart';
 import 'package:apartment_app/src/pages/floor_page.dart';
 import 'package:apartment_app/src/pages/category_apartment/view/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/introduction/view/edit_introduction_page.dart';
@@ -19,7 +18,7 @@ import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password_page.dart';
 import 'package:flutter/material.dart';
 
-final routes = <String,WidgetBuilder>{
+final routes = <String, WidgetBuilder>{
   "register_page": (BuildContext context) => RegisterPage(),
   "splash_page": (BuildContext context) => SplashPage(),
   "login_page": (BuildContext context) => LoginPage(),
@@ -41,9 +40,9 @@ final routes = <String,WidgetBuilder>{
   "add_contract_page": (BuildContext context) => AddContractPage(),
 
   //Dich vu
-  "service_page":(BuildContext context) =>ServicePage(),
-  "add_service":(BuildContext context) =>AddServicPage(),
-  "add_icon":(BuildContext context) =>IconList(),
+  "service_page": (BuildContext context) => ServicePage(),
+  "add_service": (BuildContext context) => AddServicPage(),
+  "add_icon": (BuildContext context) => IconList(),
 
   // Giới thiệu
   "introduction_page":(BuildContext context) =>IntroductionPage(),

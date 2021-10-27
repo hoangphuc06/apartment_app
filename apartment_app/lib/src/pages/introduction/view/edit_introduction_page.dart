@@ -170,7 +170,7 @@ class _EditIntroductionPageState extends State<EditIntroductionPage> {
                           SizedBox(height: height*0.06,),
                           MainButton(
                             name: 'Xác nhận',
-                            onpressed: _onLoginClick,
+                            onpressed: _onClick,
                           ),
                         ],
                       );
@@ -185,7 +185,7 @@ class _EditIntroductionPageState extends State<EditIntroductionPage> {
     );
   }
 
-  void _onLoginClick() {
+  void _onClick() {
     if(formKey.currentState!.validate()){
       _editInfo();
     }
