@@ -115,7 +115,7 @@ class StateAddPage extends State<AddServicPage> {
 
 
   void setIcon() async {
-    Route route = MaterialPageRoute(builder: (context) => IconList());
+    Route route = MaterialPageRoute(builder: (context) => IconList(path: 'assets/images/service_icon/',));
     final Result = await Navigator.push(this.context, route);
     print(Result.toString());
     if(Result==null) return;
