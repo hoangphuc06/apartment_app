@@ -5,10 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class IconList extends StatefulWidget{
+  String ?path='images/service_icon/';
+  IconList({this.path ,Key? key}): super(key: key);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return IconListState();
+    IconListState temp= new IconListState();
+    if(!path!.isEmpty||path!=null){
+      temp.path=this.path;
+    }
+
+    return temp;
     throw UnimplementedError();
   }
 
@@ -46,9 +53,11 @@ class IconList extends StatefulWidget{
 class IconListState extends State<IconList> {
   List<String> pathIcon = [];
   String? SelectedIcon = null;
-
+  String? path='images/service_icon/';
   void afterSelectIcon(String path) {
+    if(!path.isEmpty)
     Navigator.pop(this.context, path);
+    else Navigator.pop(context);
   }
 
   Future _initImages() async {
@@ -59,7 +68,7 @@ class IconListState extends State<IconList> {
     // >> To get paths you need these 2 lines
 
     final imagePaths = manifestMap.keys
-        .where((String key) => key.contains('images/service_icon/'))
+        .where((String key) => key.contains(path.toString()))
         .toList();
     setState(() {
       pathIcon = imagePaths;

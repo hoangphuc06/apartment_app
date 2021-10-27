@@ -30,7 +30,9 @@ class AuthBloc {
 
     return true;
   }
-
+  bool updatePassWord(String pass){
+    return this._firAuth.updatePass(pass);
+  }
   void dispose() {
     _emailController.close();
     _passController.close();

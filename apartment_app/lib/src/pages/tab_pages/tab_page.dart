@@ -5,11 +5,15 @@ import 'package:apartment_app/src/pages/tab_pages/report_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/search_tab.dart';
 import 'package:flutter/material.dart';
 
+import '../notification_page.dart';
+
 class TabPage extends StatefulWidget {
-  const TabPage({Key? key}) : super(key: key);
+
+   TabPage({Key? key}) : super(key: key);
 
   @override
-  _TabPageState createState() => _TabPageState();
+  _TabPageState createState() =>_TabPageState();
+
 }
 
 class _TabPageState extends State<TabPage> {
@@ -17,7 +21,7 @@ class _TabPageState extends State<TabPage> {
   List<Widget> _widgetOptions=[
     HomeTab(),
     SearchTab(),
-    MessageTab(),
+    NotificationPage(),
     ReportTab(),
     OthersTab(),
   ];

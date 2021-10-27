@@ -11,10 +11,12 @@ import 'package:apartment_app/src/pages/introduction/view/edit_introduction_page
 import 'package:apartment_app/src/pages/introduction/view/introduction_page.dart';
 import 'package:apartment_app/src/pages/login_page.dart';
 import 'package:apartment_app/src/pages/manage_service_page.dart';
+import 'package:apartment_app/src/pages/notification_page.dart';
 import 'package:apartment_app/src/pages/register_page.dart';
 import 'package:apartment_app/src/pages/reset_password_page.dart';
 import 'package:apartment_app/src/pages/splash_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
+import 'package:apartment_app/src/pages/update_password_page.dart';
 import 'package:flutter/material.dart';
 
 final routes = <String,WidgetBuilder>{
@@ -29,6 +31,7 @@ final routes = <String,WidgetBuilder>{
   "apartment_page": (BuildContext context) => ApartmentPage(),
   //"apartment_info_page": (BuildContext context) => ApartmentInfoPage(),
   'reset_password_page':(BuildContext context)=>ResetPassWord(),
+ // "tab_page_with_email": (BuildContext context) => TabPage( email),
 
   // Dân cư
   //"list_dwellers_page": (BuildContext context) => ListDwellersPage(),
@@ -45,4 +48,8 @@ final routes = <String,WidgetBuilder>{
   // Giới thiệu
   "introduction_page":(BuildContext context) =>IntroductionPage(),
   "edit_introduction_page":(BuildContext context) =>EditIntroductionPage(),
+  //thong bao
+  "notification_page":(BuildContext context) =>NotificationPage(),
+  //doi mat khảu
+  "update_password_page":(BuildContext context) =>UpdatePassWordPage(),
 };
