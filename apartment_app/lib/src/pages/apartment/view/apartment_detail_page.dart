@@ -16,7 +16,7 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -29,6 +29,7 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
             tabs: [
               Tab(text: "Thông tin",),
               Tab(text: "Thành viên",),
+              Tab(text: "Dịch vụ",),
             ],
           ),
         ),
