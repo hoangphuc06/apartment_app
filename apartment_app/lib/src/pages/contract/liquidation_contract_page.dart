@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:apartment_app/src/fire_base/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:steps/steps.dart';
 
@@ -79,7 +80,7 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
           height: MediaQuery.of(context).size.height,
           child: Stepper(
             steps: _stepper(height, width),
-            type: StepperType.vertical,
+            type: StepperType.horizontal,
             physics: ClampingScrollPhysics(),
             currentStep: this._currentStep,
             onStepTapped: (step) {
@@ -257,176 +258,209 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tiền chốt dịch vụ cuối (1)",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+            StreamBuilder(
+                stream: contractFB.collectionReference
+                    .where('id', isEqualTo: widget.id)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: Text("No Data"),
+                    );
+                  } else {
+                    QueryDocumentSnapshot x = snapshot.data!.docs[0];
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 5, right: 5, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Tiền chốt dịch vụ cuối (1)",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "Từ " +
+                                          x["billingStartDate"] +
+                                          " đến " +
+                                          dateNow.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                          color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '1000.000 đ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Từ  đến " + dateNow.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14,
+                        SizedBox(
+                          height: height * 0.01,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10.0),
+                                  topLeft: Radius.circular(10.0)),
                               color: Colors.grey),
+                          padding: EdgeInsets.only(left: 15),
+                          alignment: Alignment.centerLeft,
+                          width: width,
+                          height: height * 0.05,
+                          child: Text(
+                            "Tiền trả khách",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '1000.000 đ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: height * 0.01,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10.0),
-                      topLeft: Radius.circular(10.0)),
-                  color: Colors.grey),
-              padding: EdgeInsets.only(left: 15),
-              alignment: Alignment.centerLeft,
-              width: width,
-              height: height * 0.05,
-              child: Text(
-                "Tiền trả khách",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tiền phòng",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 5, right: 5, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Tiền phòng",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "Từ " +
+                                          x["billingStartDate"] +
+                                          " đến " +
+                                          dateNow.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                          color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '1000.000 đ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Từ  đến " + dateNow.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14,
-                              color: Colors.grey),
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 5, right: 5, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Tiền dịch vụ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "Từ " +
+                                          x["billingStartDate"] +
+                                          " đến " +
+                                          dateNow.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                          color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '1000.000 đ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '1000.000 đ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tiền dịch vụ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
+                        Container(
+                          padding: EdgeInsets.only(
+                              left: 5, right: 5, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Tiền cọc",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "Từ " +
+                                          x["billingStartDate"] +
+                                          " đến " +
+                                          dateNow.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                          color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '1000.000 đ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Từ  đến " + dateNow.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14,
-                              color: Colors.grey),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '1000.000 đ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tiền cọc",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Từ  đến " + dateNow.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 14,
-                              color: Colors.grey),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '1000.000 đ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                      ],
+                    );
+                  }
+                }),
             SizedBox(
               height: height * 0.01,
             ),
@@ -517,11 +551,17 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          "10000000",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
+                        Container(
+                          width: width * 0.25,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Vui lòng nhập tiền phạt";
+                              } else {
+                                return null;
+                              }
+                            },
                           ),
                         ),
                       ],
@@ -533,23 +573,22 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Giảm giá",
+                          "Giảm giá (%)",
                           style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 18,
                               color: Colors.red),
                         ),
-                        Text(
-                          "100%",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
+                        Container(
+                          width: width * 0.25,
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: height * 0.01,
+                      height: height * 0.025,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -575,6 +614,44 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
                     ),
                   ],
                 )),
+            Container(
+              padding: EdgeInsets.only(
+                  right: 5,
+                  left: 5,
+                  top: height * 0.015,
+                  bottom: height * 0.015),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Ghi chú",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(
+                    height: height * 0.02,
+                  ),
+                  TextFormField(
+                    minLines: 2,
+                    maxLines: 5,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: 'Ghi chú cho thanh lý',
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                          color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
         isActive: _currentStep >= 1,

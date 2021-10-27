@@ -198,6 +198,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                 }
               }
           )
+     
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.edit),
