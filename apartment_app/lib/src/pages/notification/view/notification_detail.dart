@@ -1,7 +1,10 @@
+import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:flutter/material.dart';
 
-import 'add_icon_page.dart';
-import 'notification_info.dart';
+import '../../add_icon_page.dart';
+import '../model/notification_info.dart';
 
 class NotificationDetailPage extends StatefulWidget {
   NotificationInfo? info;
@@ -53,70 +56,65 @@ class _NotificationDetailState extends State<NotificationDetailPage> {
       this.pathAsset = Result;
     });
   }
+  _titleTextField() => TextFormField(
+    style: MyStyle().style_text_tff(),
+    controller:  this._TitleController,
+    decoration: InputDecoration(
+      hintText: 'Tiêu đề',
+    ),
+    keyboardType: TextInputType.name,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Tiêu đề không hợp lệ";
+      }
+      return null;
+    },
+  );
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
     return Scaffold(
       appBar: AppBar(title: Text('Thong bao'),),
-        body: Padding(padding: EdgeInsets.all(18),
-                    child: ListView(
+        body: SingleChildScrollView(padding: EdgeInsets.all(18),
+                    child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                          child: Text(
-                            'Tieu de',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
+                        TitleInfoNotNull(text: "Tiêu đề"),
+                        SizedBox(height: 30,),
+                        _titleTextField(),
+
+                        SizedBox(height: 30,),
+                        TitleInfoNotNull(text: "Nội dung"),
+                        SizedBox(height: 30,),
                         TextField(
-                          controller: this._TitleController,
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
-                          decoration: InputDecoration(
-                            hintText: 'Tieu de',
-                            hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 20),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                          child: Text(
-                            'Noi dung',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        TextField(
-                          minLines: 6,
-                          maxLines: 8,
+                          minLines: 5,
+                          maxLines: 6,
                           controller: this._NoteController,
                           keyboardType: TextInputType.number,
                           style: TextStyle(fontSize: 20, color: Colors.grey),
                           decoration: InputDecoration(
-                            hintText: 'Noi dung',
-                            hintStyle: TextStyle(color: Colors.grey.shade600, fontSize: 20),
+                            hintText: 'Nội dung của thông báo',
+                            hintStyle: MyStyle().style_text_tff(),
                           ),
                         ),
+                        SizedBox(height: 30,),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: SizedBox(
                             height: 60,
                             child: RaisedButton(
                               color: Colors.grey.shade50,
-                              onPressed: () {},
+                              onPressed: setIcon,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-
-                                  Text(
-                                    'Anh dai dien',
-                                    style: TextStyle(fontSize: 25),
-                                  ),
+                                  TitleInfoNotNull(text: 'Ảnh đại diện'),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       GestureDetector(
                                           onTap: setIcon,
-                                          child:ImageIcon(new AssetImage(pathAsset),size:35)
+                                          child:ImageIcon(new AssetImage(pathAsset),size:32)
                                       )
 
                                     ],
@@ -126,30 +124,42 @@ class _NotificationDetailState extends State<NotificationDetailPage> {
                             ),
                           ),
                         ),
-                        RaisedButton(
-                          onPressed:() {
+                        SizedBox(height: 30,),
+                        MainButton(name: 'Xác nhận', onpressed: () {
 
-                            this.info.icon=this.pathAsset;
-                            this.info.body= this._NoteController.text;
-                            this.info.title=this._TitleController.text;
+                          this.info.icon=this.pathAsset;
+                          this.info.body= this._NoteController.text;
+                          this.info.title=this._TitleController.text;
 
-                            if(this.check())
-                            {
-                              Navigator.pop(context,this.info);
-                            }
-                          },
-                          padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                          color: Colors.green,
-                          child: Text(
-                            'Xac Nhan',
-                            style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                        )
+                          if(this.check())
+                          {
+                            Navigator.pop(context,this.info);
+                          }
+                        }),
+                        // RaisedButton(
+                        //   onPressed:() {
+                        //
+                        //     this.info.icon=this.pathAsset;
+                        //     this.info.body= this._NoteController.text;
+                        //     this.info.title=this._TitleController.text;
+                        //
+                        //     if(this.check())
+                        //     {
+                        //       Navigator.pop(context,this.info);
+                        //     }
+                        //   },
+                        //   padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+                        //   color: Colors.green,
+                        //   child: Text(
+                        //     'Xac Nhan',
+                        //     style: TextStyle(
+                        //         fontSize: 22,
+                        //         fontWeight: FontWeight.bold,
+                        //         color: Colors.white),
+                        //   ),
+                        //   shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                        // )
                       ],
 
                     ),

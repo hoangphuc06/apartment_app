@@ -1,7 +1,8 @@
 
-import 'package:apartment_app/src/pages/service_info.dart';
+import 'package:apartment_app/src/pages/service/model/service_info.dart';
+import 'package:apartment_app/src/style/my_style.dart';
 import 'package:flutter/material.dart';
-import 'package:apartment_app/src/fire_base/fb_service.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'add_service_page.dart';
@@ -22,6 +23,7 @@ class StateServicePage extends State<ServicePage> {
   Future<ServiceInfo> addButtonOnPressed() async {
     Route route = MaterialPageRoute(builder: (context) => AddServicPage());
     ServiceInfo Result = await Navigator.push(this.context, route);
+    this.seachControler.text='';
     return Result;
   }
 
@@ -70,6 +72,7 @@ class StateServicePage extends State<ServicePage> {
 
     this.fb.update(sv.id.toString(), Result.iconPath.toString(), Result.name.toString(),Result.detail.toString() , Result.charge.toString(), Result.type.toString());
     }
+    this.seachControler.text='';
     setState(() {});
   }
 
@@ -114,7 +117,20 @@ class StateServicePage extends State<ServicePage> {
           );
         });
   }
-
+  _searchTextField() => TextFormField(
+    style: MyStyle().style_text_tff(),
+    controller: seachControler,
+    decoration: InputDecoration(
+      hintText: "ten dich vu",
+      icon: Icon(Icons.search),
+      
+    ),
+    onChanged: (text){
+      setState(() {
+        
+      });
+    },
+  );
   @override
   void initState() {
     super.initState();
@@ -142,11 +158,13 @@ class StateServicePage extends State<ServicePage> {
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16),
         child: Column(
+
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            _searchTextField(),
        /*     Container(
               decoration: BoxDecoration(
                   color: Colors.white70,
@@ -177,19 +195,28 @@ class StateServicePage extends State<ServicePage> {
                       if (!snapshot.hasData) {
                         return CircularProgressIndicator();
                       }
+                      this.listService.clear();
+                      snapshot.data!.docs.forEach((element) {
+                        if(this.seachControler.text.isEmpty||element['name'].toString().contains(seachControler.text))
+                        this.listService.add(ServiceInfo(
+                            id: element['id'], name: element['name'], type: element['type'],iconPath: element['icon'],detail: element['note'],charge: element['charge']));
+                        print('Ten dich vu:###${element['name']}');
+                      }
+                      );
                       return GridView.builder(
-                          itemCount: snapshot.data!.docs.length,
+                          itemCount: listService.length,
                           gridDelegate:
                           SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: 2 / 2.5,
                             crossAxisCount: 3,
                           ),
                           itemBuilder: (context, index) {
-                            QueryDocumentSnapshot x =
-                            snapshot.data!.docs[index];
-                            //    if(!x['name'].toString().contains(this.seachControler.text))
-                            return ServiceBox(ServiceInfo(
-                                id: x['id'], name: x['name'], type: x['type'],iconPath: x['icon'],detail: x['note'],charge: x['charge']));
+                            return ServiceBox(listService[index]);
+                            // QueryDocumentSnapshot x = snapshot.data!.docs[index];
+                            //   //  if(!x['name'].toString().contains(this.seachControler.text))
+                            // return ServiceBox(ServiceInfo(
+                            //     id: x['id'], name: x['name'], type: x['type'],iconPath: x['icon'],detail: x['note'],charge: x['charge']));
+
                           });
                     })
             ),
@@ -213,7 +240,7 @@ class StateServicePage extends State<ServicePage> {
         : '0vnd');
     print(detail);
     print(temp1);
-
+    if(temp1.contains('Lũy tiền theo chỉ số đồng hồ')) temp1='';
     return GestureDetector(
       onLongPress: () {
 
@@ -224,12 +251,16 @@ class StateServicePage extends State<ServicePage> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              SizedBox(child: Image.asset(pathAsset, fit: BoxFit.fill)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 4, 0, 10),
+                child: SizedBox(height: 125,child: Image.asset(pathAsset, fit: BoxFit.fill)),
+              ),
               Text(
                 info.name.toString(),
-                style: TextStyle(fontSize: 10),
+                style: TextStyle(fontSize: 18),
               ),
-              Text(detail + temp1, style: TextStyle(fontSize: 10))
+              SizedBox.fromSize(size: Size(0,4),),
+              Text(detail + temp1, style: MyStyle().style_text_tff(),)
             ],
           ),
         ),

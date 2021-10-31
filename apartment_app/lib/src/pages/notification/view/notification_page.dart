@@ -1,5 +1,5 @@
-import 'package:apartment_app/src/fire_base/fb_notification.dart';
-import 'package:apartment_app/src/pages/notification_info.dart';
+import 'package:apartment_app/src/pages/notification/firebase/fb_notification.dart';
+import 'package:apartment_app/src/pages/notification/model/notification_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +110,7 @@ class _NotificationState extends State<NotificationPage> {
     print(title);
     print(body);
     print(path);
-  String timeformt=  DateFormat('yyyy-MM-dd – kk:mm').format(time);
+  String timeformt=  DateFormat('dd-MM-yyyy hh:mm a').format(time);
     print(id);
     print('===============');
     if (path==null||path.isEmpty){
@@ -122,6 +122,7 @@ class _NotificationState extends State<NotificationPage> {
         this.modifiService(temp);
       },
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,9 +136,9 @@ class _NotificationState extends State<NotificationPage> {
                     child: ImageIcon(
                         new AssetImage(
                            path ),
-                        size: 35),
+                        size: 25),
                   ),
-                  Text(title, style: TextStyle(fontSize: 25)),
+                  Text(title, style: TextStyle(fontSize: 16)),
                 ],
               ),
             ),
@@ -145,10 +146,11 @@ class _NotificationState extends State<NotificationPage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 body,
-                style: TextStyle(fontSize: 23),
+                style: TextStyle(fontSize: 18),
               ),
             ),
-            Text(timeformt, style: TextStyle(fontSize: 18))
+            SizedBox(height: 10,),
+            Text(timeformt, style: TextStyle(fontSize: 14))
           ],
         ),
       ),
