@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: routes,
-      initialRoute: "tab_page",
+      initialRoute: "splash_page",
       theme: ThemeData(
         primarySwatch: Colors.green
       ),
