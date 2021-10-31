@@ -3,6 +3,7 @@ import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class EditContractPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class EditContractPage extends StatefulWidget {
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
 
-  String? _roomPaymentPeriodController = "1 Tháng";
+  String? _roomPaymentPeriodController;
 
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _hostController = TextEditingController();
@@ -196,36 +197,49 @@ class _EditContractPageState extends State<EditContractPage> {
                       ),
                       //Chọn kỳ thanh toán tiền phòng
                       TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
-                      Container(
-                        child: DropdownButtonFormField<String>(
-                          value: _roomPaymentPeriodController,
-                          items: [
-                            "1 Tháng",
-                            "2 Tháng",
-                            "3 Tháng",
-                            "4 Tháng",
-                            "5 Tháng",
-                            "6 Tháng",
-                            "7 Tháng",
-                            "8 Tháng",
-                            "9 Tháng",
-                            "10 Tháng",
-                            "11 Tháng",
-                            "12 Tháng"
-                          ]
-                              .map((label) => DropdownMenuItem(
-                                    child: Text(label),
-                                    value: label,
-                                  ))
-                              .toList(),
-                          hint: Text('Kỳ thanh toán'),
-                          onChanged: (value) {
-                            setState(() {
-                              _roomPaymentPeriodController = value;
-                            });
-                          },
-                        ),
-                      ),
+                      StreamBuilder(
+                          stream: contractFB.collectionReference.where('id',isEqualTo: widget.id).snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: Text("No Data"),
+                              );
+                            } else {
+                              QueryDocumentSnapshot x = snapshot.data!.docs[0];
+                              _roomPaymentPeriodController=x["roomPaymentPeriod"];
+                              return Container(
+                                child: DropdownButtonFormField<String>(
+                                  value: _roomPaymentPeriodController,
+                                  items: [
+                                    "1 Tháng",
+                                    "2 Tháng",
+                                    "3 Tháng",
+                                    "4 Tháng",
+                                    "5 Tháng",
+                                    "6 Tháng",
+                                    "7 Tháng",
+                                    "8 Tháng",
+                                    "9 Tháng",
+                                    "10 Tháng",
+                                    "11 Tháng",
+                                    "12 Tháng"
+                                  ]
+                                      .map((label) => DropdownMenuItem(
+                                            child: Text(label),
+                                            value: label,
+                                          ))
+                                      .toList(),
+                                  hint: Text('Kỳ thanh toán'),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _roomPaymentPeriodController = value;
+                                    });
+                                  },
+                                ),
+                              );
+                            }
+                          }),
                     ],
                   )),
               _title("Tiền thuê nhà", width, height),

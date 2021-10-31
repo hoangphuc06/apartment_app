@@ -160,7 +160,7 @@ class _AddContractPageState extends State<AddContractPage> {
                                   child: _textformFieldwithIcon(
                                       _billingStartDateController,
                                       "20/04/2021...",
-                                      "Ngày bắt đầu tính tiền",
+                                      "ngày bắt đầu tính tiền",
                                       height,
                                       Icons.calendar_today_outlined),
                                 )),
