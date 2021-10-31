@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
+import 'package:apartment_app/src/widgets/cards/floor_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,13 +19,13 @@ class _FloorTabState extends State<FloorTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      backgroundColor:Colors.grey.withOpacity(0.1),
+      body: Container(
+        margin: EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Danh sách tầng",
@@ -59,15 +60,12 @@ class _FloorTabState extends State<FloorTab> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context,i) {
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                              return Card(
-                                color: Colors.grey,
-                                elevation: 1,
-                                child: ListTile(
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => FloorInfoPage(floorid: x['id'], floorname: x['name'])));
-                                  },
-                                  title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                                ),
+                              return FloorCard(
+                                name: x["id"],
+                                numOfApm: x["numOfApm"],
+                                funtion: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FloorInfoPage(floorid: x["id"])));
+                                },
                               );
                             }
                         );

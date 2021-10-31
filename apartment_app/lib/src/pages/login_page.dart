@@ -1,11 +1,14 @@
+import 'dart:ui';
+
 import 'package:apartment_app/src/blocs/auth_bloc.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fire_base_auth.dart';
 import 'package:apartment_app/src/pages/update_password_page.dart';
+import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/dialog/loading_dialog.dart';
 import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
-import 'package:apartment_app/src/widgets/textfields/email_textfield.dart';
-import 'package:apartment_app/src/widgets/textfields/password_textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../app.dart';
@@ -30,120 +33,87 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formkey,
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Image(
-                    image: AssetImage('assets/images/welcome.png'),
-                    width: double.infinity,
-                    height: 350.0,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
                     fit: BoxFit.cover,
-                  ),
-                ],
+                    image: AssetImage('assets/images/welcome.png')
+                )
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 1.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.6),
               ),
-              Transform.translate(
-                offset: Offset(0.0, -20.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0)
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            "Xin chào!",
-                            style: TextStyle(
-                                color: Colors.black,
-                                //fontWeight: FontWeight.w500,
-                                fontSize: 25.0
-                            ),
-                          ),
-                          Text(
-                            "Vui lòng đăng nhập để tiếp tục",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 15.0
-                            ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Vui lòng nhập email";
-                              }
-                              var isValidEmail = RegExp(
-                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                  .hasMatch(val);
-                              if (!isValidEmail) {
-                                return "Định dạng email không đúng";
-                              }
-                              return null;
-                            },
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.email),
-                                hintText: 'Email',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                )
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                          TextFormField(
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Vui lòng nhập mật khẩu";
-                              }
-                              if (val.length < 6) {
-                                return "Mật khẩu phải không nhỏ hơn 6 kí tự";
-                              }
-                              return null;
-                            },
-                            controller: _passController,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.lock),
-                                hintText: 'Password',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                )
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                          MainButton(
-                              name: 'Đăng nhập',
-                              onpressed: _onLoginClick,
-                          ),
-                          SizedBox(height: 20,),
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.pushNamed(context, "reset_password_page");
-                            },
-                            child: Text(
-                              "Quên mật khẩu?",
-                              style: TextStyle(fontSize: 15, color: Colors.blueGrey),
-                            ),
-                          ),
-                        ],
+            ),
+          ),
+          Form(
+            key: _formkey,
+            child: Container(
+              margin: EdgeInsets.only(left: 40, right: 40),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Xin chào!",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 40.0
                       ),
                     ),
-                  ),
+                    Text(
+                      "Vui lòng đăng nhập để tiếp tục",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 15.0
+                      ),
+                    ),
+
+                    SizedBox(height: 30,),
+                    _title(Icons.email, "Email"),
+                    _emailTextField(),
+
+                    SizedBox(height: 30,),
+                    _title(Icons.lock, "Mật khẩu"),
+                    _passwordTextField(),
+
+                    SizedBox(height: 30,),
+                    MainButton(
+                      name: "Đăng nhập",
+                      onpressed: _onLoginClick,
+                    ),
+
+                    SizedBox(height: 30,),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, "reset_password_page");
+                      },
+                      child: Text(
+                        "Quên mật khẩu?",
+                        style: MyStyle().style_text_lg_hint(),
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
+
+  _buttonLogin() => FlatButton(
+    onPressed: () {  },
+    child: Container(
+
+    ),
+  );
 
   void _onLoginClick() {
     String email = _emailController.text;
@@ -151,15 +121,14 @@ class _LoginPageState extends State<LoginPage> {
 
     if(_formkey.currentState!.validate()) {
       LoadingDialog.showLoadingDialog(context, "Loading...");
-      print("Email: ${_emailController.text}"); // Nhìn terminal biết email
-      print("Password: ${_passController.text}"); // Nhìn terminal biết mật khẩu
+
       authBloc.signIn(
           email,
           pass,
           () {
             UpdatePassWordState.email=email;
                 LoadingDialog.hideLoadingDialog(context);
-                Navigator.pushNamed(context, "tab_page");
+                Navigator.pushReplacementNamed(context, "tab_page");
             },
           (msg) {
                     LoadingDialog.hideLoadingDialog(context);
@@ -171,4 +140,49 @@ class _LoginPageState extends State<LoginPage> {
     //var auth = AuthBloc();
 
   }
+
+  _emailTextField() => TextFormField(
+    style: MyStyle().style_text_lg_hint(),
+    controller: _emailController,
+    //cursorColor: myGreen,
+    decoration: InputDecoration(
+      hintText: "Nhập email...",
+      hintStyle: MyStyle().style_text_lg_hint(),
+    ),
+    keyboardType: TextInputType.emailAddress,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Vui lòng nhập email";
+      }
+      return null;
+    },
+  );
+
+  _passwordTextField() => TextFormField(
+    obscureText: true,
+    style: MyStyle().style_text_lg_hint(),
+    controller: _passController,
+    decoration: InputDecoration(
+      hintText: "Nhập mật khẩu...",
+      hintStyle: MyStyle().style_text_lg_hint(),
+    ),
+    keyboardType: TextInputType.emailAddress,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Vui lòng nhập mật khẩu";
+      }
+      return null;
+    },
+  );
+
+  _title(IconData icon, String text) => Container(
+    child: Row(
+      children: [
+        Icon(icon, color: Colors.white,),
+        SizedBox(width: 10,),
+        Text(text, style: MyStyle().style_text_lg(),)
+      ],
+    ),
+  );
 }
+

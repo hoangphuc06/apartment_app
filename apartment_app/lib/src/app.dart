@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/blocs/auth_bloc.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: routes,
-      initialRoute: "login_page",
+      initialRoute: "tab_page",
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        primarySwatch: Colors.green
       ),
     );
   }

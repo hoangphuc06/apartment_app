@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/tab_pages/contract_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/service_tab.dart';
 import 'package:flutter/material.dart';
@@ -10,20 +11,23 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: myGreen,
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Trang chính",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           bottom: TabBar(
+            labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+            indicatorColor: Colors.white,
+            indicatorWeight: 5,
             tabs: [
               Tab(text: "Tầng",),
               Tab(text: "Hợp đồng",),
-              Tab(text: "Dịch vụ",),
             ],
           ),
         ),
@@ -31,7 +35,6 @@ class HomeTab extends StatelessWidget {
           children: [
             FloorTab(),
             ContractTab(),
-            ServiceTab()
           ],
         ),
       ),

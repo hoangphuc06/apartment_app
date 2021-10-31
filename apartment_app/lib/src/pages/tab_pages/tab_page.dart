@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/tab_pages/home_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/message_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/others_tab.dart';
@@ -45,7 +46,7 @@ class _TabPageState extends State<TabPage> {
   Widget _bottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       iconSize: 30.0,
-      selectedItemColor: Colors.amber,
+      selectedItemColor: myGreen,
       unselectedItemColor: Colors.grey,
       currentIndex: _selectedItemIndex,
       onTap: _cambiarWidget,
