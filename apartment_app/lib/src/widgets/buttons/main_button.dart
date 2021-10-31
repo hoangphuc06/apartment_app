@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class MainButton extends StatelessWidget {
       width: double.infinity,
       height: 55,
       decoration: BoxDecoration(
-          color: Colors.amber,
+          color: myGreen,
           borderRadius: BorderRadius.circular(10.0)
       ),
       child: FlatButton(
@@ -24,7 +25,7 @@ class MainButton extends StatelessWidget {
         child: Text(
           name,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w400
           ),

@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 class FloorInfoPage extends StatefulWidget{
 
   final String floorid;
-  final String floorname;
-  FloorInfoPage({required this.floorid,required this.floorname});
+  //final String floorname;
+  FloorInfoPage({required this.floorid});
   //const FloorInfoPage({Key ? key}) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
         }),
         elevation: 0,
         centerTitle: true,
-        title:  Text(widget.floorname,style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22)),
+        title:  Text(widget.floorid,style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
