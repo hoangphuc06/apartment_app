@@ -1,6 +1,6 @@
-import 'package:apartment_app/src/fire_base/fb_contract.dart';
-import 'package:apartment_app/src/pages/contract/edit_contract_page.dart';
-import 'package:apartment_app/src/pages/contract/liquidation_contract_page.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract/view/liquidation_contract_page.dart';
+import 'package:apartment_app/src/pages/contract/view/edit_contract_page.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
-import 'package:apartment_app/src/fire_base/fb_contract.dart';
-import 'package:apartment_app/src/pages/contract/contract_details_page.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract/view/contract_details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
