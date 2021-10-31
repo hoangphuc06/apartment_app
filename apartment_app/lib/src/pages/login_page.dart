@@ -1,6 +1,6 @@
 import 'package:apartment_app/src/blocs/auth_bloc.dart';
 import 'package:apartment_app/src/fire_base/fire_base_auth.dart';
-import 'package:apartment_app/src/pages/update_password_page.dart';
+import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/dialog/loading_dialog.dart';
 import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';

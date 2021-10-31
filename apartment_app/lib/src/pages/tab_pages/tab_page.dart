@@ -4,8 +4,7 @@ import 'package:apartment_app/src/pages/tab_pages/others_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/report_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/search_tab.dart';
 import 'package:flutter/material.dart';
-
-import '../notification_page.dart';
+import '../notification/view/notification_page.dart';
 
 class TabPage extends StatefulWidget {
 
