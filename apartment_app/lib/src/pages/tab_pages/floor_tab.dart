@@ -21,28 +21,13 @@ class _FloorTabState extends State<FloorTab> {
     return Scaffold(
       backgroundColor:Colors.grey.withOpacity(0.1),
       body: Container(
-        margin: EdgeInsets.only(left: 16, right: 16),
+        margin: EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  "Danh sách tầng",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
-                ),
-                Spacer(),
-                PopupMenuButton(itemBuilder: (context) => [
-                  PopupMenuItem(
-                      child: Row(
-                        children: [
-                          Text("Thêm tầng")
-                        ],
-                      )
-                  )
-                ]
-                ),
-              ],
+            Text(
+              "Danh sách tầng",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 10,),
             Expanded(
