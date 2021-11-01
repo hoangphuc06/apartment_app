@@ -1,4 +1,6 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
+import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -6,8 +8,8 @@ import 'package:flutter/material.dart';
 
 class EditCategoryApartmentPage extends StatefulWidget {
   //const EditCategoryApartmentPage({Key? key}) : super(key: key);
-  final String id;
-  EditCategoryApartmentPage(this.id);
+  final CategoryApartment categoryApartment;
+  EditCategoryApartmentPage(this.categoryApartment);
 
   @override
   _EditCategoryApartmentPageState createState() => _EditCategoryApartmentPageState();
@@ -37,17 +39,15 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
   }
 
   void initInfo() {
-    categoryApartmentFB.collectionReference.doc(widget.id).get().then((value) => {
-      _nameController.text = value['name'],
-      _areaController.text = value['area'],
-      _amountBedroomController.text = value['amountBedroom'],
-      _amountWcController.text = value['amountWc'],
-      _amountDwellerController.text = value['amountDweller'],
-      _minPriceController.text = value['minPrice'],
-      _maxPriceController.text = value['maxPrice'],
-      _minRentalPriceController.text = value['minRentalPrice'],
-      _maxRentalPriceController.text = value['maxRentalPrice'],
-    });
+    _nameController.text = widget.categoryApartment.name.toString();
+    _areaController.text = widget.categoryApartment.area.toString();
+    _amountBedroomController.text = widget.categoryApartment.amountBedroom.toString();
+    _amountWcController.text = widget.categoryApartment.amountWc.toString();
+    _amountDwellerController.text = widget.categoryApartment.amountWc.toString();
+    _minPriceController.text = widget.categoryApartment.minPrice.toString();
+    _maxPriceController.text = widget.categoryApartment.maxPrice.toString();
+    _minRentalPriceController.text = widget.categoryApartment.minRentalPrice.toString();
+    _maxRentalPriceController.text = widget.categoryApartment.maxRentalPrice.toString();
   }
 
   @override
@@ -55,79 +55,117 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Sửa loại căn hộ", ),
+        backgroundColor: myGreen,
         elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "Sửa loại căn hộ",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        padding: EdgeInsets.all(8),
         child: Form(
           key: _formkey,
           child: Column(
             children: [
-              // Tên loại căn hộ
-              TitleInfoNotNull(text: "Tên loại căn hộ"),
-              _nameTextField(),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
 
-              // Diện tích căn hộ
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Diện tích (m2)"),
-              _areaTextField(),
+                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
 
-              //Số lượng phòng ngủ
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Số phòng ngủ"),
-              _amountBedroomTextField(),
+                      // Tên loại căn hộ
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Tên loại căn hộ"),
+                      _nameTextField(),
 
-              //Số lượng phòng vệ sinh
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Số phòng vệ sinh"),
-              _amountWcTextField(),
+                      // Diện tích căn hộ
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Diện tích (m2)"),
+                      _areaTextField(),
 
-              //Số lượng người ở
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Số lượng người ở"),
-              _amountDwellerTextField(),
+                      //Số lượng phòng ngủ
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Số phòng ngủ"),
+                      _amountBedroomTextField(),
 
-              //Giá bán
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Giá bán (VNĐ)"),
-              Row(children: [
-                Container(
-                    width: 130,
-                    child: _minPriceTextField()
+                      //Số lượng phòng vệ sinh
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Số phòng vệ sinh"),
+                      _amountWcTextField(),
+
+                      //Số lượng người ở
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Số lượng người ở"),
+                      _amountDwellerTextField(),
+
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 ),
-                Spacer(),
-                Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
-                Spacer(),
-                Container(
-                    width: 130,
-                    child: _maxPriceTextField()
-                ),
-              ],),
+              ),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
 
-              //Giá thuê
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
-              Row(children: [
-                Container(
-                    width: 130,
-                    child: _minRentalPriceTextField()
-                ),
-                Spacer(),
-                Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
-                Spacer(),
-                Container(
-                    width: 130,
-                    child: _maxRentalPriceTextField()
-                ),
-              ],),
+                      Text("GIÁ CẢ GIAO ĐỘNG", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
 
+                      //Giá bán
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Giá bán (VNĐ)"),
+                      Row(children: [
+                        Container(
+                            width: 130,
+                            child: _minPriceTextField()
+                        ),
+                        Spacer(),
+                        Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
+                        Spacer(),
+                        Container(
+                            width: 130,
+                            child: _maxPriceTextField()
+                        ),
+                      ],),
+
+                      //Giá thuê
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
+                      Row(children: [
+                        Container(
+                            width: 130,
+                            child: _minRentalPriceTextField()
+                        ),
+                        Spacer(),
+                        Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
+                        Spacer(),
+                        Container(
+                            width: 130,
+                            child: _maxRentalPriceTextField()
+                        ),
+                      ],),
+
+                      SizedBox(height: 10,),
+                    ],
+                  ),
+                ),
+              ),
               // Nút bấm
-              SizedBox(height: 30,),
+              SizedBox(height: 10,),
               MainButton(
-                name: "Sửa",
+                name: "Thêm",
                 onpressed: _editCategoty,
-              )
+              ),
+              SizedBox(height: 50,),
             ],
           ),
         ),
@@ -138,7 +176,7 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
   void _editCategoty() {
     if (_formkey.currentState!.validate()) {
       categoryApartmentFB.update(
-          widget.id,
+          widget.categoryApartment.id.toString(),
           _nameController.text,
           _areaController.text,
           _amountBedroomController.text,

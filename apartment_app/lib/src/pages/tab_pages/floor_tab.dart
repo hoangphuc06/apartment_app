@@ -21,7 +21,7 @@ class _FloorTabState extends State<FloorTab> {
     return Scaffold(
       backgroundColor:Colors.grey.withOpacity(0.1),
       body: Container(
-        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

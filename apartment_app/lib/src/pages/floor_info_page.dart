@@ -32,7 +32,9 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
           "Tầng " + widget.floorid,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
-      body: Padding(
+      body: Container(
+        height: double.infinity,
+        color: Colors.grey.withOpacity(0.1),
         padding: const EdgeInsets.all(16),
         child: Expanded(
           child: SingleChildScrollView(

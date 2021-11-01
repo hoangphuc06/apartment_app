@@ -18,15 +18,28 @@ class _OthersTabState extends State<OthersTab> {
     CardManager(
         title: "Thông tin chung cư",
         icon: Icons.info_outline,
-        nextPage: "introduction_page"),
+        nextPage: "introduction_page"
+    ),
     CardManager(
-        title: "Dịch vụ", icon: Icons.credit_card, nextPage: "service_page"),
+        title: "Dịch vụ",
+        icon: Icons.credit_card,
+        nextPage: "service_page"
+    ),
+    CardManager(
+        title: "Loại căn hộ",
+        icon: Icons.apartment,
+        nextPage: "category_apartment_page"
+    ),
     CardManager(
         title: "Đổi mật khẩu",
         icon: Icons.credit_card,
-        nextPage: "update_password_page"),
+        nextPage: "update_password_page"
+    ),
     CardManager(
-        title: "Đăng xuất", icon: Icons.credit_card, nextPage: "login_page"),
+        title: "Đăng xuất",
+        icon: Icons.credit_card,
+        nextPage: "login_page"
+    ),
       
   ];
 

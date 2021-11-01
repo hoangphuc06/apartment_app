@@ -1,5 +1,4 @@
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
-import 'package:apartment_app/src/model/categoty_apartment.dart';
 import 'package:apartment_app/src/user_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +24,9 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void hihi() {
-    final ca1 =  CategoryApartment("1","loai 1");
-    final ca2 =  CategoryApartment("2","loai 2");
-    final ca3 =  CategoryApartment("3","loai 3");
+    // final ca1 =  CategoryApartment("1","loai 1");
+    // final ca2 =  CategoryApartment("2","loai 2");
+    // final ca3 =  CategoryApartment("3","loai 3");
     // categoryApartmentFB.addCategoryApartment(ca1);
     // categoryApartmentFB.addCategoryApartment(ca2);
     // categoryApartmentFB.addCategoryApartment(ca3);

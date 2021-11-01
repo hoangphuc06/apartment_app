@@ -1,4 +1,3 @@
-import 'package:apartment_app/src/model/categoty_apartment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
