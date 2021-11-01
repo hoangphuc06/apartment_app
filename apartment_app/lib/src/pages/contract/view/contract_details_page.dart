@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/view/liquidation_contract_page.dart';
 import 'package:apartment_app/src/pages/contract/view/edit_contract_page.dart';
@@ -246,14 +247,14 @@ class _ContractDetailsState extends State<ContractDetails> {
                                                           EditContractPage(
                                                               id: widget.id)))
                                             },
-                                        color: Colors.amber),
+                                        color: myYellow),
                                   ),
                                   Container(
                                     padding: EdgeInsets.only(right: 15),
                                     child: RoundedButton(
                                         name: 'Xóa',
                                         onpressed: () => {_onClick()},
-                                        color: Colors.red),
+                                        color: myRed),
                                   ),
                                   Container(
                                     child: RoundedButton(
@@ -266,7 +267,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                                           LiquidationContractPage(
                                                               id: widget.id)))
                                             },
-                                        color: Colors.green),
+                                        color: myGreen),
                                   ),
                                 ],
                               ),

@@ -87,6 +87,7 @@ class _AddCategoryApartmentPageState extends State<AddCategoryApartmentPage> {
                   ),
                 ),
               ),
+             
               Card(
                 elevation: 2,
                 child: Container(

@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/view/contract_details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -110,7 +111,7 @@ class _ContractTabState extends State<ContractTab> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Colors.amber,
+        backgroundColor: myGreen,
         onPressed: () {
           Navigator.pushNamed(context, "add_contract_page");
         },
