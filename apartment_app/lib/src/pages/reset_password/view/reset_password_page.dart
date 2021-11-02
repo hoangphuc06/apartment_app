@@ -1,6 +1,8 @@
 import 'package:apartment_app/src/blocs/auth_bloc.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fire_base_auth.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
@@ -9,16 +11,19 @@ class ResetPassWord extends StatefulWidget {
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return _ResetPassWordState();
-
-    throw UnimplementedError();
   }
 }
 
 class _ResetPassWordState extends State<ResetPassWord> {
+
   TextEditingController mail = new TextEditingController();
+
   FirAuth _firAuth = new FirAuth();
+
   late String msg;
+
   final _formkey = GlobalKey<FormState>();
+
   void sentMsg() {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(msg,style: TextStyle(fontSize: 18),),
@@ -42,7 +47,7 @@ class _ResetPassWordState extends State<ResetPassWord> {
     keyboardType: TextInputType.text,
     validator: (val) {
       if (val!.isEmpty) {
-        return "Định dạng email không đúng";
+        return "Vui lòng nhâp email";
       }
       var isValidEmail = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
@@ -53,86 +58,74 @@ class _ResetPassWordState extends State<ResetPassWord> {
       return null;
     },
   );
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quên mật khẩu'),
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "Quên mật khẩu",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
+      backgroundColor: Colors.white.withOpacity(0.9),
       body: SingleChildScrollView(
-        padding:  EdgeInsets.only(left: 16,right: 16),
+        padding: EdgeInsets.all(8),
         child: Form(
-          key: this._formkey,
+          key: _formkey,
           child: Column(
             children: [
-              /*Text(
-                  'Nhập email để lấy lại mật khẩu ,mail xác nhận thay đổi mật khẩu sẽ được gửi vào mail của bạn',
-                  style:  TextStyle(
-                    color: Colors.black54,
-                    fontSize: 21,
-                    fontWeight: FontWeight.w400,
-                  )
-              ),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
 
-               */
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: AssetImage('assets/images/forget.jpg')
+                            )
+                        ),
+                      ),
 
-              TitleInfoNull(text: 'Email '),
-              _emailTextField(),
+                      //Tiêu đề
+                      SizedBox(height: 20,),
+                      Text(
+                        "Vui lòng cung cấp chính xác địa chỉ email của bạn để chúng tôi hỗ trợ bạn tốt nhất!",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      ),
 
-             /* Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
+                      // Tên loại căn hộ
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: 'Email'),
+                      _emailTextField(),
 
-                  style: MyStyle().style_text_tff(),
-                  controller: mail,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.mail), hintText: 'Nhap Email'),
-                ),
-              ),*/
-              SizedBox(height: 30,),
-              MainButton(name: 'Xác Nhận', onpressed: () async{
-             this.sentEmailToResetPassWord();
-              }),
-             /*z Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height:50,
-                  child: RaisedButton(
-                    onPressed: () async{
-                      this.msg='';
-                      if (this.mail.text.isEmpty) {
-
-                        this.msg = 'Vui long nhập Email';
-                        this.sentMsg();
-                       return;
-                      }
-                      else if (!RegExp(
-                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                          .hasMatch(this.mail.text)) {
-                        this.msg='Định dạng email không đúng';
-                        this.sentMsg();
-                       return;
-                      } else {
-                     await   this._firAuth.resetPassWord(this.mail.text);
-                        this.msg='Đã gửi mail thay đổi mật ';
-                        this.sentMsg();
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text('Xac Nhan',style: TextStyle(fontSize: 25,color: Colors.black87),),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    color: Colors.amber,
+                      SizedBox(height: 10,),
+                    ],
                   ),
                 ),
-              )*/
+              ),
+              // Nút bấm
+              SizedBox(height: 10,),
+              MainButton(
+                name: 'Xác Nhận',
+                onpressed: () async{
+                  this.sentEmailToResetPassWord();
+              }),
+              SizedBox(height: 50,),
             ],
           ),
         ),
       ),
     );
-    throw UnimplementedError();
   }
 }

@@ -1,4 +1,5 @@
 
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/service/model/service_info.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/cards/service_card.dart';
@@ -144,62 +145,65 @@ class StateServicePage extends State<ServicePage> {
     // TODO: implement build
   print('BUILD FUNTION');
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.9),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: myGreen,
         child: Icon(Icons.add),
         onPressed: () async {
           ServiceInfo temp = await addButtonOnPressed();
           if(temp==null) return;
           this.fb.add(temp.iconPath.toString(), temp.name.toString(), temp.detail.toString(), temp.charge.toString(), temp.type.toString());
-      //    listService.add(temp);
-
           setState(() {});
         },
       ),
       appBar: AppBar(
-        title:Text("Dịch Vụ",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "Dịch vụ",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
+      body: Container(
+        padding: EdgeInsets.all(8),
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _searchTextField(),
-            SizedBox(height: 20),
+            //_searchTextField(),
+            //SizedBox(height: 20),
             Expanded(
-                child: StreamBuilder(
-                    stream: fb.collectionReference.snapshots(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      }
-                      this.listService.clear();
-                      snapshot.data!.docs.forEach((element) {
-                        if(this.seachControler.text.isEmpty||element['name'].toString().contains(seachControler.text))
-                        this.listService.add(ServiceInfo(
-                            id: element['id'], name: element['name'], type: element['type'],iconPath: element['icon'],detail: element['note'],charge: element['charge']));
-                        print('Ten dich vu:###${element['name']}');
-                      }
+              child: StreamBuilder(
+                  stream: fb.collectionReference.snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator();
+                    }
+                    this.listService.clear();
+                    snapshot.data!.docs.forEach((element) {
+                      if(this.seachControler.text.isEmpty||element['name'].toString().contains(seachControler.text))
+                      this.listService.add(ServiceInfo(
+                          id: element['id'],
+                          name: element['name'],
+                          type: element['type'],
+                          iconPath: element['icon'],
+                          detail: element['note'],
+                          charge: element['charge'])
                       );
-                      return GridView.builder(
-                          itemCount: listService.length,
-                          gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 2 / 2.5,
-                            crossAxisCount: 3,
-                          ),
-                          itemBuilder: (context, index) {
-                            return ServiceCard(info: listService[index],onPressed: (){ this.modifi(listService[index]); },);
-                           // return ServiceBox(listService[index]);
-                            // QueryDocumentSnapshot x = snapshot.data!.docs[index];
-                            //   //  if(!x['name'].toString().contains(this.seachControler.text))
-                            // return ServiceBox(ServiceInfo(
-                            //     id: x['id'], name: x['name'], type: x['type'],iconPath: x['icon'],detail: x['note'],charge: x['charge']));
-
-                          });
-                    })
+                    }
+                    );
+                    return GridView.builder(
+                        itemCount: listService.length,
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 2 / 2.5,
+                          crossAxisCount: 3,
+                        ),
+                        itemBuilder: (context, index) {
+                          return ServiceCard(info: listService[index],onPressed: (){ this.modifi(listService[index]); },);
+                        });
+                  })
             ),
           ],
         ),
@@ -234,7 +238,7 @@ class StateServicePage extends State<ServicePage> {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 4, 0, 10),
-                child: SizedBox(height: 125,child: Image.asset(pathAsset, fit: BoxFit.fill)),
+                child: SizedBox(height: 50,child: Image.asset(pathAsset, fit: BoxFit.fill)),
               ),
               Text(
                 info.name.toString(),

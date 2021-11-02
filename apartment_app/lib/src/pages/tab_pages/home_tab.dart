@@ -1,6 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/tab_pages/contract_tab.dart';
-import 'package:apartment_app/src/pages/tab_pages/service_tab.dart';
 import 'package:flutter/material.dart';
 
 import 'floor_tab.dart';
