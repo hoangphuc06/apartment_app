@@ -64,6 +64,7 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
+       backgroundColor: Colors.white.withOpacity(0.9),
       appBar: AppBar(
         centerTitle: true,
         elevation: 1,
