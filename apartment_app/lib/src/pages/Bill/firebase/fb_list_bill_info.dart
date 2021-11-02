@@ -4,12 +4,14 @@ class ApartmentBillInfo {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("billinfo");
 
-  Future<void> add(String roomid,String billdate) async {
+  Future<void> add(String roomid,String billdate,String month,String year) async {
     String id = (new DateTime.now().microsecondsSinceEpoch).toString();
     return FirebaseFirestore.instance.collection("billinfo").doc(id).set({
       "billid" : id,
       "billdate" : billdate,
       "roomid" : roomid,
+      "month" : month,
+      "year" : year,
       "status" : 'chưa thanh toán',
     }
     ).then((value) => print("completed"))

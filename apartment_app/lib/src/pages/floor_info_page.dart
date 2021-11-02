@@ -5,6 +5,7 @@ import 'package:apartment_app/src/pages/apartment/view/apartment_detail_page.dar
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
+import 'package:apartment_app/src/pages/apartment/view/add_new_apartment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => ApartmentDetailPage(x["id"])));
                               }
                           );
-                        }
+                        },
                     );
                   }
                 }
@@ -69,7 +70,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: (){
-
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddApartmentPage(widget.floorid)));
         }
       ),
     );

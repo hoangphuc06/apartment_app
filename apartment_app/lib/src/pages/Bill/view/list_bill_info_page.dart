@@ -1,7 +1,9 @@
+import 'package:apartment_app/src/widgets/cards/bill_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
+import 'package:apartment_app/src/pages/Bill/view/bill_detail_page.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_list_bill_info.dart';
 
 class ListBillInfoPage extends StatefulWidget {
@@ -22,11 +24,15 @@ class _ListBillInfoPageState extends State<ListBillInfoPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: Text("Danh sách hóa đơn", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),),
+                child: Text(
+                  "Danh sách hóa đơn",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                ),
               ),
               Container(
                 child: SingleChildScrollView(
@@ -42,19 +48,16 @@ class _ListBillInfoPageState extends State<ListBillInfoPage> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context,i){
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                              return Card(
-                                color: Colors.white70,
-                                elevation: 1,
-                                child: ListTile(
-                                  onTap: () {
-
-                                  },
-                                  title: Text(x['billid'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                                  subtitle: Text(x['billdate'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                                ),
-                              );
+                              return BillCard(
+                                  MonthYear: x['month']+"/"+x['year'],
+                                  billdate: x['billdate'],
+                                  status: x['status'],
+                                  funtion: ()
+                                  {
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => BillDetailPage(x['billid'])));
+                                  }
+                                  );
                             }
-
 
                           );
                         }
@@ -65,11 +68,10 @@ class _ListBillInfoPageState extends State<ListBillInfoPage> {
             ],
           ),
         ),
-
       floatingActionButton: FloatingActionButton.extended(
         tooltip: 'add',
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => BillInfoPage(widget.id)));
+          //Navigator.push(context, MaterialPageRoute(builder: (context) => BillInfoPage(widget.id)));
         },
         label: Text("Thêm hóa đơn", style: TextStyle(color: Colors.black),),
       ),

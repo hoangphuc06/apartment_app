@@ -1,5 +1,7 @@
 import 'package:apartment_app/src/pages/Bill/firebase/fb_list_bill_info.dart';
+import 'package:apartment_app/src/pages/Bill/model/sevice_model.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:select_form_field/select_form_field.dart';
@@ -15,36 +17,42 @@ class BillInfoPage extends StatefulWidget {
 class _BillInfoPageState extends State<BillInfoPage> {
   ApartmentBillInfo apartmentBillInfo = new ApartmentBillInfo();
 
+  late  String _selectedID;
+  List<Sevice> SeviceItem = [];
+
+  Object? selectedCurrency;
+
+  void getCategory(String id)
+  {
+    final sevicefb = FirebaseFirestore.instance.collection('sevice');
+
+  }
+
   final _fomkey = GlobalKey<FormState>();
 
   final TextEditingController _idcontroler = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
   final TextEditingController _billdatecontroler = TextEditingController();
+  final TextEditingController _billmonthcontroler = TextEditingController();
+  final TextEditingController _billyearcontroler = TextEditingController();
   final TextEditingController _servicecontroler = TextEditingController();
   final TextEditingController _statuscontroler = TextEditingController();
 
   DateTime selectedDate = new DateTime.now();
 
-  _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2100));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        var date =
-            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
-        _billdatecontroler.text = date;
-      });
+  void _getDate(){
+        selectedDate = DateTime.now();
+        _billmonthcontroler.text = selectedDate.month.toString();
+        _billyearcontroler.text = selectedDate.year.toString();
+        String date = selectedDate.day.toString();
+        _billdatecontroler.text = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
   }
 
   void _AddBil(){
     if(_fomkey.currentState!.validate()){
       String billdate = _billdatecontroler.text.trim();
 
-      apartmentBillInfo.add(widget.roomid, billdate).then((value) => {
+      apartmentBillInfo.add(widget.roomid, billdate,_billmonthcontroler.text.trim(),_billyearcontroler.text.trim()).then((value) => {
         Navigator.pop(context),
       });
     }
@@ -53,6 +61,7 @@ class _BillInfoPageState extends State<BillInfoPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    _getDate();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -69,71 +78,57 @@ class _BillInfoPageState extends State<BillInfoPage> {
             children: [
               SizedBox(height: size.height * 0.015,),
               Container(
-                padding: EdgeInsets.only(left: 16.0),
+                width: double.infinity,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24.0)),
-                    color: Colors.lightBlueAccent
+                  border: Border(
+                    bottom: BorderSide(width: 0.5),
+                    top: BorderSide(width: 0.5),
+                  ),
                 ),
-                alignment: Alignment.centerLeft,
-                width: size.width,
-                height: size.height* 1/15,
+                padding: EdgeInsets.only(
+                    top: 16, bottom: 16, left: 16, right: 16),
                 child: Text(
                   "Thông tin hóa đơn",
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
-
               ),
               SizedBox(height: size.height * 0.03,),
               Container(
                 padding: EdgeInsets.only(left: 16.0),
                 child: RichText(
                   text:
-                  TextSpan(text: 'Chọn ngày lập hóa đơn',style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                  TextSpan(text: 'Ngày lập hóa đơn',style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                       children: [TextSpan(text: '*',style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18))]),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(left: 8.0,right: 16.0),
-                child: GestureDetector(
-                  onTap: (){
-                    _selectDate(context);
-                  },
-                  child: AbsorbPointer(
                     child: TextFormField(
+                      enabled: false,
                       controller: _billdatecontroler,
                       keyboardType: TextInputType.datetime,
                       decoration: InputDecoration(
                           icon: Icon(Icons.calendar_today)
                       ),
                     ),
-                  ),
-                ),
               ),
               SizedBox(height: size.height * 0.03,),
               Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24.0)),
-                    color: Colors.lightBlueAccent
+                  border: Border(
+                    bottom: BorderSide(width: 0.5),
+                    top: BorderSide(width: 0.5),
+                  ),
                 ),
-                padding: EdgeInsets.only(left: 16.0),
-                alignment: Alignment.centerLeft,
-                width: size.width,
-                height: size.height* 1/15,
+                padding: EdgeInsets.only(
+                    top: 16, bottom: 16, left: 16, right: 16),
                 child: Text(
                   "Chi tiết hóa đơn",
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 18, fontWeight: FontWeight.w700),
                 ),
-
               ),
               SizedBox(height: size.height * 0.03,),
               Container(
@@ -148,14 +143,56 @@ class _BillInfoPageState extends State<BillInfoPage> {
                   ],
                 ),
               ),
-              Container(
-                  padding: EdgeInsets.only(left: 16.0,right: 16.0),
-                child: TextFormField(
-                      decoration: InputDecoration(
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('ServiceInfo').snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if(!snapshot.hasData){
+                    return Center(child: Text("No Data"),);
+                  }
+                  else{
+                    List<DropdownMenuItem> currentItem=[];
+                    for(int i=0; i<snapshot.data!.docs.length; i++)
+                    {
+                      DocumentSnapshot snap= snapshot.data!.docs[i];
+                      currentItem.add(
+                          DropdownMenuItem(child: Text(
+                            snap['name'],
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                            value: "${snap.id.toString()}",
+                          ),
+                      );
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Icon(Icons.shopping_cart,
+                            color: const Color(0xFF000000),
+                            size: 16.0),
+                        SizedBox(width: 50),
+                        DropdownButton<Object?>(
+                          items: currentItem,
+                          onChanged: (currencyValue){
+                              setState(() {
+                                selectedCurrency = currencyValue;
+                              });
+                          },
+                          style: const TextStyle(color: Colors.deepPurple),
+                          value: selectedCurrency,
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          isExpanded: false,
+                          hint: new Text('Chọn dịch vụ ',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                },
+              ),
 
-                      ),
-                    )
-                ),
               SizedBox(height: size.height * 0.03,),
               Container(
                 padding: EdgeInsets.only(left: 16.0),
@@ -175,6 +212,7 @@ class _BillInfoPageState extends State<BillInfoPage> {
                     keyboardType: TextInputType.number,
                   )
               ),
+
               SizedBox(height: size.height * 0.03,),
               Container(
                 padding: EdgeInsets.only(left: 16.0),
