@@ -23,7 +23,8 @@ class NotificationDetailPage extends StatefulWidget {
 class _NotificationDetailState extends State<NotificationDetailPage> {
   TextEditingController _TitleController= new TextEditingController();
   TextEditingController _NoteController= new TextEditingController();
-  String pathAsset = 'assets/images/notification_icon/megaphone.png';
+  String pathAsset = 'assets/notification_icon/megaphone.png';
+  final _formkey = GlobalKey<FormState>();
    NotificationInfo info= new NotificationInfo();
    void filltemplate(){
      this._TitleController.text=info.title.toString();
@@ -48,7 +49,7 @@ class _NotificationDetailState extends State<NotificationDetailPage> {
     return true;
   }
   void setIcon() async {
-    Route route = MaterialPageRoute(builder: (context) => IconList(path: 'assets/images/notification_icon/',));
+    Route route = MaterialPageRoute(builder: (context) => IconList(path: 'assets/notification_icon/',));
     final Result = await Navigator.push(this.context, route);
     print(Result.toString());
     if(Result==null) return;
@@ -56,11 +57,15 @@ class _NotificationDetailState extends State<NotificationDetailPage> {
       this.pathAsset = Result;
     });
   }
-  _titleTextField() => TextFormField(
+
+  _bodyTextField() => TextFormField(
+    minLines: 5,
+    maxLines: 6,
     style: MyStyle().style_text_tff(),
-    controller:  this._TitleController,
+    controller:  this._NoteController,
     decoration: InputDecoration(
-      hintText: 'Tiêu đề',
+      hintText: 'Nội dung của thông báo',
+      hintStyle: MyStyle().style_text_tff(),
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
@@ -70,98 +75,104 @@ class _NotificationDetailState extends State<NotificationDetailPage> {
       return null;
     },
   );
+  _titleTextField() => TextFormField(
+    style: MyStyle().style_text_tff(),
+    controller:  this._TitleController,
+    decoration: InputDecoration(
+      hintText: 'Tiêu đề',
+    ),
+    keyboardType: TextInputType.name,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Nội dung không hợp lệ";
+      }
+      return null;
+    },
+  );
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
     return Scaffold(
-      appBar: AppBar(title: Text('Thong bao'),),
+      appBar: AppBar(title: Text('Thông báo'),),
         body: SingleChildScrollView(padding: EdgeInsets.all(18),
-                    child: Column(
-                      children: [
-                        TitleInfoNotNull(text: "Tiêu đề"),
-                        SizedBox(height: 30,),
-                        _titleTextField(),
 
-                        SizedBox(height: 30,),
-                        TitleInfoNotNull(text: "Nội dung"),
-                        SizedBox(height: 30,),
-                        TextField(
-                          minLines: 5,
-                          maxLines: 6,
-                          controller: this._NoteController,
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(fontSize: 20, color: Colors.grey),
-                          decoration: InputDecoration(
-                            hintText: 'Nội dung của thông báo',
-                            hintStyle: MyStyle().style_text_tff(),
-                          ),
-                        ),
-                        SizedBox(height: 30,),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: SizedBox(
-                            height: 60,
-                            child: RaisedButton(
-                              color: Colors.grey.shade50,
-                              onPressed: setIcon,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TitleInfoNotNull(text: 'Ảnh đại diện'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      GestureDetector(
-                                          onTap: setIcon,
-                                          child:ImageIcon(new AssetImage(pathAsset),size:32)
-                                      )
+                    child: Form(
+                      key: _formkey,
+                      child: Column(
+                        children: [
+                          TitleInfoNotNull(text: "Tiêu đề"),
+                          _titleTextField(),
+                          SizedBox(height: 30,),
+                          TitleInfoNotNull(text: "Nội dung"),
+                          _bodyTextField(),
+                          SizedBox(height: 30,),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: SizedBox(
+                              height: 60,
+                              child: RaisedButton(
+                                color: Colors.grey.shade50,
+                                onPressed: setIcon,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    TitleInfoNotNull(text: 'Ảnh đại diện'),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        GestureDetector(
+                                            onTap: setIcon,
+                                            child:ImageIcon(new AssetImage(pathAsset),size:32)
+                                        )
 
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30,),
-                        MainButton(name: 'Xác nhận', onpressed: () {
+                          SizedBox(height: 30,),
+                          MainButton(name: 'Xác nhận', onpressed: () {
 
-                          this.info.icon=this.pathAsset;
-                          this.info.body= this._NoteController.text;
-                          this.info.title=this._TitleController.text;
+                            this.info.icon=this.pathAsset;
+                            this.info.body= this._NoteController.text;
+                            this.info.title=this._TitleController.text;
 
-                          if(this.check())
-                          {
-                            Navigator.pop(context,this.info);
-                          }
-                        }),
-                        // RaisedButton(
-                        //   onPressed:() {
-                        //
-                        //     this.info.icon=this.pathAsset;
-                        //     this.info.body= this._NoteController.text;
-                        //     this.info.title=this._TitleController.text;
-                        //
-                        //     if(this.check())
-                        //     {
-                        //       Navigator.pop(context,this.info);
-                        //     }
-                        //   },
-                        //   padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                        //   color: Colors.green,
-                        //   child: Text(
-                        //     'Xac Nhan',
-                        //     style: TextStyle(
-                        //         fontSize: 22,
-                        //         fontWeight: FontWeight.bold,
-                        //         color: Colors.white),
-                        //   ),
-                        //   shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                        // )
-                      ],
+                            if(_formkey.currentState!.validate())
+                            {
+                              Navigator.pop(context,this.info);
+                            }
+                          }),
+                          // RaisedButton(
+                          //   onPressed:() {
+                          //
+                          //     this.info.icon=this.pathAsset;
+                          //     this.info.body= this._NoteController.text;
+                          //     this.info.title=this._TitleController.text;
+                          //
+                          //     if(this.check())
+                          //     {
+                          //       Navigator.pop(context,this.info);
+                          //     }
+                          //   },
+                          //   padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+                          //   color: Colors.green,
+                          //   child: Text(
+                          //     'Xac Nhan',
+                          //     style: TextStyle(
+                          //         fontSize: 22,
+                          //         fontWeight: FontWeight.bold,
+                          //         color: Colors.white),
+                          //   ),
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          // )
 
+                        ],
+
+                      ),
                     ),
 
         ),
