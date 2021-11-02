@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/style/my_style.dart';
@@ -30,6 +31,7 @@ class _AddContractPageState extends State<AddContractPage> {
   final TextEditingController _depositController = TextEditingController();
   final TextEditingController _renterController = TextEditingController();
   final TextEditingController _rulesController = TextEditingController();
+  final TextEditingController _serviceController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -59,195 +61,274 @@ class _AddContractPageState extends State<AddContractPage> {
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.9),
       appBar: AppBar(
+        backgroundColor: myGreen,
+        elevation: 0,
         centerTitle: true,
-        elevation: 1,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_ios),
+        title: Text(
+          "Thêm hợp đồng",
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
         ),
-        title: Text("Tạo hợp đồng"),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(
-                height: height * 0.01,
-              ),
-              _title("Thông tin", width, height),
-              Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      //Đại diện cho thuê
-                      TitleInfoNotNull(text: "Đại diện cho thuê"),
-                      _textformField(_hostController, "Đại diện cho thuê...",
-                          "đại diện cho thuê"),
-                      SizedBox(
-                        height: 30,
-                      ),
+              Card(
+                elevation: 2,
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _title("THÔNG TIN"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        //Đại diện cho thuê
+                        TitleInfoNotNull(text: "Đại diện cho thuê"),
+                        _textformField(_hostController, "Đại diện cho thuê...",
+                            "đại diện cho thuê"),
+                        SizedBox(
+                          height: 20,
+                        ),
 
-                      //Chọn phòng
-                      TitleInfoNotNull(text: "Chọn phòng"),
-                      _textformField(
-                          _roomController, "A18-312...", "chọn phòng"),
-                      SizedBox(
-                        height: 30,
-                      ),
+                        //Chọn phòng
+                        TitleInfoNotNull(text: "Chọn phòng"),
+                        _textformField(
+                            _roomController, "A18-312...", "chọn phòng"),
+                        SizedBox(
+                          height: 20,
+                        ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //Chọn ngày bắt đầu
-                          Container(
-                            width: width * 0.4,
-                            child: Column(
-                              children: [
-                                TitleInfoNotNull(text: "Ngày bắt đầu"),
-                                GestureDetector(
-                                    onTap: () => _selectDate(
-                                        context, _startDayController),
-                                    child: AbsorbPointer(
-                                      child: _textformFieldwithIcon(
-                                          _startDayController,
-                                          "20/04/2021...",
-                                          "ngày bắt đầu",
-                                          height,
-                                          Icons.calendar_today_outlined),
-                                    )),
-                              ],
-                            ),
-                          ),
-                          //Chọn ngày kết thúc
-                          Container(
-                            width: width * 0.4,
-                            child: Column(
-                              children: [
-                                TitleInfoNotNull(text: "Ngày kết thúc"),
-                                GestureDetector(
-                                    onTap: () => _selectDate(
-                                        context, _expirationDateController),
-                                    child: AbsorbPointer(
-                                      child: _textformFieldwithIcon(
-                                          _expirationDateController,
-                                          "20/04/2021...",
-                                          "ngày kết thúc",
-                                          height,
-                                          Icons.calendar_today_outlined),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: height * 0.03,
-                      ),
-                      //Chọn ngày bắt đầu tính tiền
-                      Container(
-                        child: Column(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            TitleInfoNotNull(text: "Ngày bắt đầu tính tiền"),
-                            GestureDetector(
-                                onTap: () => _selectDate(
-                                    context, _billingStartDateController),
-                                child: AbsorbPointer(
-                                  child: _textformFieldwithIcon(
-                                      _billingStartDateController,
-                                      "20/04/2021...",
-                                      "ngày bắt đầu tính tiền",
-                                      height,
-                                      Icons.calendar_today_outlined),
-                                )),
+                            //Chọn ngày bắt đầu
+                            Container(
+                              width: width * 0.4,
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(text: "Ngày bắt đầu"),
+                                  GestureDetector(
+                                      onTap: () => _selectDate(
+                                          context, _startDayController),
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _startDayController,
+                                            "20/04/2021...",
+                                            "ngày bắt đầu",
+                                            height,
+                                            Icons.calendar_today_outlined),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            //Chọn ngày kết thúc
+                            Container(
+                              width: width * 0.4,
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(text: "Ngày kết thúc"),
+                                  GestureDetector(
+                                      onTap: () => _selectDate(
+                                          context, _expirationDateController),
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _expirationDateController,
+                                            "20/04/2021...",
+                                            "ngày kết thúc",
+                                            height,
+                                            Icons.calendar_today_outlined),
+                                      )),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      //Chọn kỳ thanh toán tiền phòng
-                      TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
-                      Container(
-                        child: DropdownButtonFormField<String>(
-                          value: _roomPaymentPeriodController,
-                          items: [
-                            "1 Tháng",
-                            "2 Tháng",
-                            "3 Tháng",
-                            "4 Tháng",
-                            "5 Tháng",
-                            "6 Tháng",
-                            "7 Tháng",
-                            "8 Tháng",
-                            "9 Tháng",
-                            "10 Tháng",
-                            "11 Tháng",
-                            "12 Tháng"
-                          ]
-                              .map((label) => DropdownMenuItem(
-                                    child: Text(label),
-                                    value: label,
-                                  ))
-                              .toList(),
-                          hint: Text('Kỳ thanh toán'),
-                          onChanged: (value) {
-                            setState(() {
-                              _roomPaymentPeriodController = value;
-                            });
-                          },
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ],
-                  )),
-              _title("Tiền thuê nhà", width, height),
-              Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      //tiền nhà
-                      TitleInfoNotNull(text: "Tiền nhà"),
-                      _textformField(
-                          _roomChargeController, "100000000...", "tiền nhà"),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      //tiền cọc
-                      TitleInfoNotNull(text: "Tiền cọc"),
-                      _textformField(
-                          _depositController, "10000000...", "tiền cọc"),
-                    ],
-                  )),
-              _title("Người thuê", width, height),
-              Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      //người thuê nhà
-                      TitleInfoNotNull(text: "Người thuê nhà"),
-                      _textformField(_renterController, "Lê Hoàng Phúc...",
-                          "người thuê nhà"),
-                    ],
-                  )),
-              _title("Dịch vụ", width, height),
-              SizedBox(
-                height: height * 0.01,
+                        //Chọn ngày bắt đầu tính tiền
+                        Container(
+                          child: Column(
+                            children: [
+                              TitleInfoNotNull(text: "Ngày bắt đầu tính tiền"),
+                              GestureDetector(
+                                  onTap: () => _selectDate(
+                                      context, _billingStartDateController),
+                                  child: AbsorbPointer(
+                                    child: _textformFieldwithIcon(
+                                        _billingStartDateController,
+                                        "20/04/2021...",
+                                        "ngày bắt đầu tính tiền",
+                                        height,
+                                        Icons.calendar_today_outlined),
+                                  )),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        //Chọn kỳ thanh toán tiền phòng
+                        TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
+                        Container(
+                          child: DropdownButtonFormField<String>(
+                            value: _roomPaymentPeriodController,
+                            items: [
+                              "1 Tháng",
+                              "2 Tháng",
+                              "3 Tháng",
+                              "4 Tháng",
+                              "5 Tháng",
+                              "6 Tháng",
+                              "7 Tháng",
+                              "8 Tháng",
+                              "9 Tháng",
+                              "10 Tháng",
+                              "11 Tháng",
+                              "12 Tháng"
+                            ]
+                                .map((label) => DropdownMenuItem(
+                                      child: Text(label),
+                                      value: label,
+                                    ))
+                                .toList(),
+                            hint: Text('Kỳ thanh toán'),
+                            onChanged: (value) {
+                              setState(() {
+                                _roomPaymentPeriodController = value;
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
               ),
-              _title("Điều khoản", width, height),
-              Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    children: [
-                      // dịch vụ
-                      TitleInfoNotNull(text: "Điều khoản"),
-                      _textformField(_rulesController, "Giảm tiền nhà...",
-                          "điều khoản thuê nhà"),
-                    ],
-                  )),
+
+              Card(
+                elevation: 2,
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _title("TIỀN THUÊ NHÀ"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        //tiền nhà
+                        TitleInfoNotNull(text: "Tiền nhà"),
+                        _textformField(
+                            _roomChargeController, "100000000...", "tiền nhà"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        //tiền cọc
+                        TitleInfoNotNull(text: "Tiền cọc"),
+                        _textformField(
+                            _depositController, "10000000...", "tiền cọc"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
+              ),
+
+              Card(
+                elevation: 2,
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _title("NGƯỜI THUÊ"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        //người thuê nhà
+                        TitleInfoNotNull(text: "Người thuê nhà"),
+                        _textformField(_renterController, "Lê Hoàng Phúc...",
+                            "người thuê nhà"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
+              ),
+
+              Card(
+                elevation: 2,
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _title("DỊCH VỤ "),
+                        SizedBox(
+                          height: 20,
+                        ),
+
+                        // dịch vụ
+                        TitleInfoNotNull(text: "Dịch vụ"),
+                        _textformField(
+                            _serviceController, "Giặt ủi...", "dịch vụ"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
+              ),
+
+              Card(
+                elevation: 2,
+                child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _title("ĐIỂU KHOẢN"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        // dịch vụ
+                        TitleInfoNotNull(text: "Điều khoản"),
+                        _textformField(_rulesController, "Giảm tiền nhà...",
+                            "điều khoản thuê nhà"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    )),
+              ),
+
               SizedBox(
                 height: height * 0.05,
               ),
@@ -334,23 +415,6 @@ class _AddContractPageState extends State<AddContractPage> {
           }
         },
       );
-  _title(String text, double width, double height) => Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10.0),
-                topLeft: Radius.circular(10.0)),
-            color: Colors.grey),
-        padding: EdgeInsets.only(left: 15),
-        alignment: Alignment.centerLeft,
-        width: width,
-        height: height * 0.05,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      );
+  _title(String text) =>
+      Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
 }
