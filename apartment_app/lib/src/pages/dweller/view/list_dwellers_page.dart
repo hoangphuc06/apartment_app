@@ -1,6 +1,9 @@
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
+import 'package:apartment_app/src/pages/dweller/view/detail_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/edit_dweller_page.dart';
+import 'package:apartment_app/src/widgets/cards/dweller_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -20,49 +23,42 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      //appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: StreamBuilder(
-                stream: dwellersFB.collectionReference.where('idApartment', isEqualTo: widget.id_apartment).snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: Text("No Data"),);
-                  }
-                  else {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context,i) {
-                          QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                          return Card(
-                            color: Colors.white70,
-                            elevation: 1,
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(x["id"],x["idApartment"])));
-                              },
-                              title: Text(x['name'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                            ),
-                          );
-                        }
-                    );
-                  }
+      backgroundColor: Colors.white.withOpacity(0.9),
+      body: Container(
+        padding: EdgeInsets.all(8),
+        child: SingleChildScrollView(
+          child: StreamBuilder(
+              stream: dwellersFB.collectionReference.where('idApartment', isEqualTo: widget.id_apartment).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: Text("No Data"));
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, i) {
+                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                        Dweller dweller = Dweller.fromDocument(x);
+                        return DwellerCard(
+                          dweller: dweller,
+                          funtion: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: dweller)));
+                          },
+                        );
+                      }
+                  );
                 }
-            ),
+              }
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
-          },
-          label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //     onPressed: () {
+      //       Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
+      //     },
+      //     label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
+      // ),
     );
   }
 }
