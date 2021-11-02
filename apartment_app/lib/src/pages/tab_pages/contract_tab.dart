@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/view/contract_details_page.dart';
+import 'package:apartment_app/src/widgets/cards/contract_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -20,95 +21,59 @@ class _ContractTabState extends State<ContractTab> {
     final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: StreamBuilder(
-            stream: contractFB.collectionReference
-                .where('isVisible', isEqualTo: true)
-                .snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: Text("No Data"),
-                );
-              } else {
-                return ListView.builder(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, i) {
-                      QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                      return InkWell(
-                        splashColor: Colors.amber,
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ContractDetails(id: x["id"])))
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.centerLeft,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0)),
-                              border: Border.all(),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "#" + x["id"].toString(),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.home_outlined),
-                                    SizedBox(
-                                      width: width * 0.02,
-                                    ),
-                                    Text(x["room"])
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.calendar_today_sharp),
-                                    SizedBox(
-                                      width: width * 0.02,
-                                    ),
-                                    Text(
-                                      "Từ ngày " +
-                                          x["startDay"].toString() +
-                                          " đến " +
-                                          x["expirationDate"].toString(),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.people_alt_outlined),
-                                    SizedBox(
-                                      width: width * 0.02,
-                                    ),
-                                    Text(
-                                      "Người cho thuê: " + x["host"].toString(),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    });
-              }
-            }),
-      ),
+      backgroundColor: Colors.grey.withOpacity(0.1),
+      body: Container(
+          padding: EdgeInsets.all(8),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "Danh sách hợp đồng",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: StreamBuilder(
+                    stream: contractFB.collectionReference
+                        .where('isVisible', isEqualTo: true)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("No Data"),
+                        );
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, i) {
+                              QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                              return ContractCard(
+                                  id: x["id"],
+                                  host: x["host"],
+                                  room: x["room"],
+                                  startDay: x["startDay"],
+                                  expirationDate: x["expirationDate"],
+                                  funtion: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ContractDetails(id: x["id"])));
+                                  });
+                            });
+                      }
+                    }),
+              ),
+            ),
+          ])),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: myGreen,
