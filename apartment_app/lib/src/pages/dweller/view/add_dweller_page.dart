@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
@@ -30,6 +31,9 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
   final TextEditingController _cmndController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _jobController = TextEditingController();
+  final TextEditingController _homeTownController = TextEditingController();
+  final TextEditingController _roleController = TextEditingController();
 
   final List<Map<String, dynamic>> _items = [
     {
@@ -42,68 +46,155 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
     },
   ];
 
+  final List<Map<String, dynamic>> _itemsRole = [
+    {
+      'value': '1',
+      'label': 'Chủ hộ',
+    },
+    {
+      'value': '2',
+      'label': 'Người thân chủ hộ',
+    },
+    {
+      'value': '3',
+      'label': 'Người thuê lại',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.white.withOpacity(0.9),
       appBar: AppBar(
-        title: Text("Thêm thành viên", ),
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "Thêm thành viên",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        padding: EdgeInsets.all(8),
         child: Form(
           key: _formkey,
           child: Column(
             children: [
-              // Tên loại căn hộ
-              TitleInfoNotNull(text: "Tên thành viên"),
-              _nameTextField(),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
+                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 20,),
 
-              // Ngày sinh
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Ngày sinh"),
-              GestureDetector(
-                onTap: () {
-                  _selectDate(context);
-                },
-                child: AbsorbPointer(
-                  child: _birthdayTextField()
+                      //Họ tên
+                      TitleInfoNotNull(text: "Tên thành viên"),
+                      _nameTextField(),
+
+                      // Ngày sinh
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Ngày sinh"),
+                      GestureDetector(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: AbsorbPointer(
+                            child: _birthdayTextField()
+                        ),
+                      ),
+
+                      // Giới tính
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Giới tính"),
+                      SelectFormField(
+                        hintText: "Nhập giới tính",
+                        type: SelectFormFieldType.dropdown, // or can be dialog
+                        items: _items,
+                        onChanged: (val) => _genderController.text = val,
+                        onSaved: (val) => _genderController.text = val!,
+                      ),
+
+                      //CMND/CCCD
+                      SizedBox(height: 20,),
+                      TitleInfoNull(text: "CMND/CCCD"),
+                      _cmndTextField(),
+
+                      //Quê quán
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Quê quán"),
+                      _homeTownTextField(),
+
+                      //Nghề nghiệp
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Nghề nghiệp"),
+                      _jobTextField(),
+
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 ),
               ),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
+                      Text("CƯ TRÚ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 20,),
 
-              // Giới tính
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Giới tính"),
-              SelectFormField(
-                hintText: "Nhập giới tính",
-                type: SelectFormFieldType.dropdown, // or can be dialog
-                items: _items,
-                onChanged: (val) => _genderController.text = val,
-                onSaved: (val) => _genderController.text = val!,
+                      //Vai trò
+                      TitleInfoNotNull(text: "Vai trò"),
+                      SelectFormField(
+                        hintText: "Nhập vai trò",
+                        type: SelectFormFieldType.dropdown, // or can be dialog
+                        items: _itemsRole,
+                        onChanged: (val) => _roleController.text = val,
+                        onSaved: (val) => _roleController.text = val!,
+                      ),
+
+                      SizedBox(height: 10,),
+                    ],
+                  ),
+                ),
               ),
-              //_genderTextField(),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
+                      Text("LIÊN HỆ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 20,),
 
-              //CMND/CCCD
-              SizedBox(height: 30,),
-              TitleInfoNull(text: "CMND/CCCD"),
-              _cmndTextField(),
+                      //Họ tên
+                      TitleInfoNull(text: "Số điện thoại"),
+                      _phoneNumberTextField(),
 
-              //SĐT
-              SizedBox(height: 30,),
-              TitleInfoNull(text: "Số điện thoại"),
-              _phoneNumberTextField(),
+                      // Ngày sinh
+                      SizedBox(height: 20,),
+                      TitleInfoNull(text: "Email"),
+                      _emailTextField(),
 
-              //Email
-              SizedBox(height: 30,),
-              TitleInfoNull(text: "Email"),
-              _emailTextField(),
-
+                      SizedBox(height: 10,),
+                    ],
+                  ),
+                ),
+              ),
               //Nút nhấn
-              SizedBox(height: 30,),
+              SizedBox(height: 10,),
               MainButton(
-                  name: "Thêm",
-                  onpressed: adDweller
+                name: "Thêm",
+                onpressed: _addDweller,
               ),
+              SizedBox(height: 50,),
             ],
           ),
         ),
@@ -111,16 +202,19 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
     );
   }
 
-  void adDweller() {
+  void _addDweller() {
     if (_formkey.currentState!.validate()) {
       String name = _nameController.text.trim();
       String birthday = _birthdayController.text.trim();
       String gender = _genderController.text.trim();
       String cmnd = _cmndController.text.trim();
+      String homeTown = _homeTownController.text.trim();
+      String job = _jobController.text.trim();
+      String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
 
-      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, phoneNumber, email)
+      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email)
           .then((value) => {
         Navigator.pop(context),
       });
@@ -192,7 +286,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
 
   _emailTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
-    controller: _cmndController,
+    controller: _emailController,
     decoration: InputDecoration(
       hintText: "Nhập email...",
     ),
@@ -207,6 +301,36 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       if (!isValidEmail) {
         return "Định dạng email không đúng";
       }
+    },
+  );
+
+  _jobTextField() => TextFormField(
+    style: MyStyle().style_text_tff(),
+    controller: _jobController,
+    decoration: InputDecoration(
+      hintText: "Nhập nghề nghiệp...",
+    ),
+    keyboardType: TextInputType.text,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Vui lòng nhập nghề nghiệp";
+      }
+      return null;
+    },
+  );
+
+  _homeTownTextField() => TextFormField(
+    style: MyStyle().style_text_tff(),
+    controller: _homeTownController,
+    decoration: InputDecoration(
+      hintText: "Nhập quê quán...",
+    ),
+    keyboardType: TextInputType.name,
+    validator: (val) {
+      if (val!.isEmpty) {
+        return "Vui lòng nhập quê quán";
+      }
+      return null;
     },
   );
 

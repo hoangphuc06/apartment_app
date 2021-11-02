@@ -5,7 +5,8 @@ class DwellersFB {
 
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("dweller");
 
-  Future<void> add(String idApartment, String name, String birthday, String gender, String cmnd, String phoneNumber, String email) async {
+  Future<void> add(String idApartment, String name, String birthday, String gender, String cmnd,
+      String homeTown, String job, String role, String phoneNumber, String email) async {
 
     String id = (new DateTime.now().millisecondsSinceEpoch).toString();
 
@@ -16,6 +17,9 @@ class DwellersFB {
       "birthday": birthday,
       "gender": gender,
       "cmnd": cmnd,
+      "homeTown": homeTown,
+      "job": job,
+      "role": role,
       "phoneNumber": phoneNumber,
       "email": email,
     })
@@ -23,7 +27,8 @@ class DwellersFB {
         .catchError((error)=>print("fail"));
   }
 
-  Future<void> update(String id, String idApartment, String name, String birthday, String gender, String cmnd, String phoneNumber, String email) async {
+  Future<void> update(String id, String idApartment, String name, String birthday, String gender, String cmnd,
+      String homeTown, String job, String role,String phoneNumber, String email) async {
 
     return collectionReference.doc(id).update({
       "id": id,
@@ -32,6 +37,9 @@ class DwellersFB {
       "birthday": birthday,
       "gender": gender,
       "cmnd": cmnd,
+      "homeTown": homeTown,
+      "job": job,
+      "role": role,
       "phoneNumber": phoneNumber,
       "email": email,
     })

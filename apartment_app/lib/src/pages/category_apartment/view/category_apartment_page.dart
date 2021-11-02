@@ -22,6 +22,7 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.9),
       appBar: AppBar(
         backgroundColor: myGreen,
         elevation: 0,
@@ -31,35 +32,31 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: Container(
-        height: double.infinity,
-        color: Colors.grey.withOpacity(0.1),
         padding: EdgeInsets.all(8),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: StreamBuilder(
-                stream: categoryApartmentFB.collectionReference.snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: Text("No Data"));
-                  } else {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, i) {
-                          QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                          CategoryApartment categoryApartment = CategoryApartment.fromDocument(x);
-                          return CategoryApartmentCard(
-                            categoryApartment: categoryApartment,
-                            funtion: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => CategotyApartmentDetailPage(categoryApartment: categoryApartment)));
-                            },
-                          );
-                        }
-                    );
-                  }
+        child: SingleChildScrollView(
+          child: StreamBuilder(
+              stream: categoryApartmentFB.collectionReference.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: Text("No Data"));
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, i) {
+                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                        CategoryApartment categoryApartment = CategoryApartment.fromDocument(x);
+                        return CategoryApartmentCard(
+                          categoryApartment: categoryApartment,
+                          funtion: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => CategotyApartmentDetailPage(categoryApartment: categoryApartment)));
+                          },
+                        );
+                      }
+                  );
                 }
-            ),
+              }
           ),
         ),
       ),
