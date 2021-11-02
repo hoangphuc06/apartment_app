@@ -3,5 +3,6 @@ class NotificationInfo{
   late String? title;
   late String? body;
   late String?icon;
-  NotificationInfo({this.id,this.title, this.body,this.icon});
+  late String? date;
+  NotificationInfo({this.id,this.title, this.body,this.icon,this.date});
 }

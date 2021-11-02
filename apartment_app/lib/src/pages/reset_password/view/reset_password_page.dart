@@ -25,7 +25,7 @@ class _ResetPassWordState extends State<ResetPassWord> {
     ));
   }
   void sentEmailToResetPassWord() async{
-
+        if(this._formkey.currentState!.validate())
         await   this._firAuth.resetPassWord(this.mail.text).then((value) => {
         Navigator.pop(context),
         });
@@ -42,7 +42,7 @@ class _ResetPassWordState extends State<ResetPassWord> {
     keyboardType: TextInputType.text,
     validator: (val) {
       if (val!.isEmpty) {
-        return null;
+        return "Định dạng email không đúng";
       }
       var isValidEmail = RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
@@ -50,6 +50,7 @@ class _ResetPassWordState extends State<ResetPassWord> {
       if (!isValidEmail) {
         return "Định dạng email không đúng";
       }
+      return null;
     },
   );
   @override
@@ -59,8 +60,8 @@ class _ResetPassWordState extends State<ResetPassWord> {
       appBar: AppBar(
         title: Text('Quên mật khẩu'),
       ),
-      body: Container(
-        margin:  EdgeInsets.only(left: 16,right: 16),
+      body: SingleChildScrollView(
+        padding:  EdgeInsets.only(left: 16,right: 16),
         child: Form(
           key: this._formkey,
           child: Column(
@@ -90,8 +91,8 @@ class _ResetPassWordState extends State<ResetPassWord> {
                 ),
               ),*/
               SizedBox(height: 30,),
-              MainButton(name: 'Xac Nhan', onpressed: () async{
-
+              MainButton(name: 'Xác Nhận', onpressed: () async{
+             this.sentEmailToResetPassWord();
               }),
              /*z Padding(
                 padding: const EdgeInsets.all(10.0),

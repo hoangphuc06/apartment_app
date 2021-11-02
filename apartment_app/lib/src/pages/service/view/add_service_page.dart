@@ -6,6 +6,7 @@ import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 
 import '../../add_icon_page.dart';
 
@@ -21,9 +22,9 @@ class AddServicPage extends StatefulWidget {
     if(sv==null) {
       return StateAddPage();
     }
-
     var temp= StateAddPage();
     temp.sv=sv;
+    temp.visibleButton=true;
     print(this.sv!=null? this.sv?.name.toString():'sth wrong');
     if(this.sv!=null) temp.filltemplate(this.sv);
     return temp;
@@ -32,25 +33,29 @@ class AddServicPage extends StatefulWidget {
 }
 
 class StateAddPage extends State<AddServicPage> {
-  String pathAsset = 'assets/images/service_icon/add_icon.png';
-  String type = 'Thu phi dua tren';
+  String pathAsset = 'assets/images/add_icon.png';
+  String type = 'Thu phí dựa trên';
   TextEditingController chargeController= new TextEditingController();
   TextEditingController nameController= new TextEditingController();
   TextEditingController noteController= new TextEditingController();
+  TextEditingController typeServiceController= new TextEditingController();
   String? name;
   String? notes;
   String? charge;
   ServiceInfo ?sv;
-  String buttonText='Them Dich Vu';
-
+  bool checkIcon=true;
+  bool checkType=true;
+  bool visibleButton= false;
+  String buttonText='Thêm Dịch Vụ';
+  final _formkey = GlobalKey<FormState>();
   late ServiceInfo info;
   ServiceInfo? get service=>sv;
-
-
+  ServiceFB fb = new ServiceFB();
 
   void setTypeService (String name, BuildContext ct) {
     setState(() {
       this.type = name;
+      this.checkType=true;
       Navigator.pop(ct);
     });
   }
@@ -72,7 +77,7 @@ class StateAddPage extends State<AddServicPage> {
     pathAsset = path;
   }
   bool checkService() {
-    if (info.iconPath == 'assets/images/service_icon/add_icon.png') {
+    if (info.iconPath == 'assets/images/add_icon.png') {
       getMes('Chua them icon');
       return false;
     } else if (info.type == 'Thu phi dua tren') {
@@ -117,15 +122,52 @@ class StateAddPage extends State<AddServicPage> {
 
 
   void setIcon() async {
-    Route route = MaterialPageRoute(builder: (context) => IconList(path: 'assets/images/service_icon/',));
+    Route route = MaterialPageRoute(builder: (context) => IconList(path: 'assets/service_icon/',));
     final Result = await Navigator.push(this.context, route);
     print(Result.toString());
     if(Result==null) return;
     setState(() {
       this.pathAsset = Result;
+      this.checkIcon=true;
     });
   }
+  void delete() {
+    if(sv==null) return;
+    this.fb.delete(sv!.id.toString());
+    Navigator.pop(context);
+  }
+  void addButtonPressed(){
+    if (pathAsset == 'assets/images/add_icon.png') {
+      getMes('Chưa thêm icon');
+      this.checkIcon=false;
+    }
+    else  this.checkIcon=true;
+    if ( type== 'Thu phí dựa trên') {
+      getMes('Chưa thêm hình thức thu phí ');
+      this.checkType=false;
+    }
+    else this.checkType=true;
 
+    if(_formkey.currentState!.validate()&&checkIcon&&checkType){
+      this.info= new ServiceInfo(
+          name :this.nameController.text,
+          charge: this.chargeController.text,
+          iconPath: pathAsset,
+          type: type,
+          detail: noteController.text
+      );
+      Navigator.pop(context,this.info);
+    }
+    else {
+
+      setState(() {
+
+      });
+    }
+    //  if(this.checkService()) {
+    //    Navigator.pop(context,this.info);
+    // }
+  }
   void ChoiceType() {
     showModalBottomSheet(
         context: context,
@@ -137,7 +179,7 @@ class StateAddPage extends State<AddServicPage> {
               child: Column(
                 children: [
                   getTypeButton('Lũy tiền theo chỉ số đồng hồ', 'Dich vụ có chỉ số đầu cuối', conText),
-                  getTypeButton('Người ', 'Tinh theo so nguoi', conText),
+                  getTypeButton('Người ', 'Tinh theo số người', conText),
                   getTypeButton('Phòng', 'Tính theo phòng', conText),
                   getTypeButton('Số lần sử dụng', 'Tính theo số lần', conText),
                   getTypeButton('Khác', 'Tùy chỉnh', conText),
@@ -153,20 +195,22 @@ class StateAddPage extends State<AddServicPage> {
     print(this.sv?.name != null?this.sv?.name.toString():'');
   }
   _nameTextField() => TextFormField(
+
     style: MyStyle().style_text_tff(),
     controller: this.nameController,
     decoration: InputDecoration(
-      hintText:  'Dien,Nuoc,Thang may,bao ve,..',
+      hintText:  'Diện,Nước,Thang máy,bảo vệ,..',
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
       if (val!.isEmpty) {
-        return "Vui lòng nhập ten";
+        return "Vui lòng nhập tên";
       }
 
       return null;
     },
   );
+
   _chargeTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
     controller: this.chargeController,
@@ -180,9 +224,16 @@ class StateAddPage extends State<AddServicPage> {
 
   );
   @override
+  void initState() {
+
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -193,149 +244,90 @@ class StateAddPage extends State<AddServicPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-        child: Column(
+        child: Form(
+          key: _formkey,
+          child: Column(
 
-          // mainAxisAlignment: MainAxisAlignment.start,
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TitleInfoNotNull(text: "Ten dich vu"),
-            SizedBox(height: 30,),
-            _nameTextField(),
-            SizedBox(height: 30,),
-            TitleInfoNotNull(text: "Thu phi dua tren"),
-            SizedBox(height: 30,),
-            RaisedButton(
-              padding: EdgeInsets.all(10),
-              onPressed: this.ChoiceType,
-              color: Colors.grey.shade50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    this.type!=null? this.type:'Thu phi dua tren',
-                    style: TextStyle(fontSize: 17,color: Colors.grey.shade600),
-                  ),
-                  Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    size: 25,
-                    color: Colors.grey,
-                  ),
-                ],
+            // mainAxisAlignment: MainAxisAlignment.start,
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TitleInfoNotNull(text: "Tên dịch vụ"),
+              _nameTextField(),
+              SizedBox(height: 30,),
+              TitleInfoNotNull(text: "Thu phí dựa trên"),
+              RaisedButton(
+                padding: EdgeInsets.all(10),
+                onPressed: this.ChoiceType,
+                color: Colors.grey.shade50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      this.type!=null? this.type:'Thu phí dựa trên',
+                      style: TextStyle(fontSize: 17,color: this.checkType==true?Colors.grey.shade600:Colors.redAccent),
+                    ),
+                    Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 25,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 30,),
-            TitleInfoNull(text:  'Phi dich vu'),
-            SizedBox(height: 30,),
-            _chargeTextField(),
-            SizedBox(height: 30,),
-            RaisedButton(
-              color: Colors.grey.shade50,
-              onPressed: () {},
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TitleInfoNotNull(text: 'Anh dai dien'),
+              SizedBox(height: 30,),
+              TitleInfoNull(text:  'Phi dịch vụ'),
+              _chargeTextField(),
+              SizedBox(height: 30,),
+              TitleInfoNotNull(text: 'Ảnh đại diện'),
+              RaisedButton(
+                color: Colors.grey.shade50,
+                onPressed: setIcon,
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
+                   Text('Ảnh đại diện',style: TextStyle(fontSize: 17,color: this.checkIcon==true?Colors.grey.shade600:Colors.redAccent),),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: GestureDetector(
+                            onTap: setIcon,
+                          child:ImageIcon(new AssetImage(pathAsset),size:30)
+                          ),
+                        )
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: setIcon,
-                      child:ImageIcon(new AssetImage(pathAsset),size:25)
-                      )
-
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 30,),
-            TitleInfoNull(text: 'Ghi chu'),
-            SizedBox(height: 30,),
-            TextField(
-              style: MyStyle().style_text_tff(),
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 1,color: Colors.grey.shade300),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(10.0),
-                  ),),
-                hintText: 'Nhap ghi chu',
+              SizedBox(height: 30,),
+              TitleInfoNull(text: 'Ghi chú'),
+              TextField(
+                style: MyStyle().style_text_tff(),
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 1,color: Colors.grey.shade300),
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(10.0),
+                    ),),
+                  hintText: 'Nhập ghi chú',
+                ),
+                minLines: 5,
+                maxLines: 8,
+                controller: this.noteController,
+                keyboardType: TextInputType.multiline,
               ),
-              minLines: 5,
-              maxLines: 8,
-              controller: this.noteController,
-              keyboardType: TextInputType.multiline,
-            ),
-            SizedBox(
-              height: 30,
-            ),
+              SizedBox(height: 30,),
+              MainButton(name:buttonText, onpressed: this.addButtonPressed ),
+              SizedBox(height: 30,),
+              Visibility(child: MainButton(name: 'Xóa', onpressed:delete),visible: this.visibleButton,)
 
-            MainButton(name:buttonText, onpressed: () {
-              /*   print('============');
-               print(this.nameController.text);
-               print(this.noteController.text);
-                print(this.pathAsset);
-               print(this.chargeController.text);
-                print(this.type);
-              print('============');
-
-            */
-              this.info= new ServiceInfo(
-                  name :this.nameController.text,
-                  charge: this.chargeController.text,
-                  iconPath: pathAsset,
-                  type: type,
-                  detail: noteController.text
-              );
-
-
-              if(this.checkService())
-              {
-                Navigator.pop(context,this.info);
-              }
-            }),
-        /*    RaisedButton(
-              onPressed:() {
-                /*   print('============');
-               print(this.nameController.text);
-               print(this.noteController.text);
-                print(this.pathAsset);
-               print(this.chargeController.text);
-                print(this.type);
-              print('============');
-
-            */
-                this.info= new ServiceInfo(
-                    name :this.nameController.text,
-                    charge: this.chargeController.text,
-                    iconPath: pathAsset,
-                    type: type,
-                    detail: noteController.text
-                );
-
-
-                if(this.checkService())
-                {
-                  Navigator.pop(context,this.info);
-                }
-              },
-              padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-              color: Colors.green,
-              child: Text(
-                buttonText,
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            )*/
-
-          ],
+            ],
+          ),
         ),
       ),
     );

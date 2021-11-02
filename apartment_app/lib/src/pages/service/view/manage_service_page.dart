@@ -1,6 +1,7 @@
 
 import 'package:apartment_app/src/pages/service/model/service_info.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/cards/service_card.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 
@@ -121,7 +122,7 @@ class StateServicePage extends State<ServicePage> {
     style: MyStyle().style_text_tff(),
     controller: seachControler,
     decoration: InputDecoration(
-      hintText: "ten dich vu",
+      hintText: "Tên Dịch Vụ ",
       icon: Icon(Icons.search),
       
     ),
@@ -144,6 +145,7 @@ class StateServicePage extends State<ServicePage> {
   print('BUILD FUNTION');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
         onPressed: () async {
           ServiceInfo temp = await addButtonOnPressed();
           if(temp==null) return;
@@ -154,7 +156,7 @@ class StateServicePage extends State<ServicePage> {
         },
       ),
       appBar: AppBar(
-        title:Text("DICH VU",
+        title:Text("Dịch Vụ",
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
       ),
       body: Padding(
@@ -165,29 +167,7 @@ class StateServicePage extends State<ServicePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _searchTextField(),
-       /*     Container(
-              decoration: BoxDecoration(
-                  color: Colors.white70,
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: TextField(
-                controller: this.seachControler,
-                style: TextStyle(fontSize: 18),
-                cursorColor: Colors.red,
-                decoration: InputDecoration(
-                  hintText: 'Tim kiem theo ten',
-                  hintStyle:
-                      TextStyle(color: Colors.grey.shade400, fontSize: 18),
-                  icon: const Icon(
-                    Icons.search,
-                    size: 35,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),*/
             SizedBox(height: 20),
-
             Expanded(
                 child: StreamBuilder(
                     stream: fb.collectionReference.snapshots(),
@@ -211,7 +191,8 @@ class StateServicePage extends State<ServicePage> {
                             crossAxisCount: 3,
                           ),
                           itemBuilder: (context, index) {
-                            return ServiceBox(listService[index]);
+                            return ServiceCard(info: listService[index],onPressed: (){ this.modifi(listService[index]); },);
+                           // return ServiceBox(listService[index]);
                             // QueryDocumentSnapshot x = snapshot.data!.docs[index];
                             //   //  if(!x['name'].toString().contains(this.seachControler.text))
                             // return ServiceBox(ServiceInfo(
@@ -231,7 +212,7 @@ class StateServicePage extends State<ServicePage> {
     print('Icon Path:${info.iconPath.toString()}');
     String pathAsset = info.iconPath != null
         ? info.iconPath.toString()
-        : 'assets/images/service_icon/add_icon.png';
+        : 'assets/images/add_icon.png';
     String temp1 = '/';
     temp1 = info.type != null ? temp1 + info.type.toString() : '';
 
@@ -242,9 +223,9 @@ class StateServicePage extends State<ServicePage> {
     print(temp1);
     if(temp1.contains('Lũy tiền theo chỉ số đồng hồ')) temp1='';
     return GestureDetector(
-      onLongPress: () {
-
-        this.modifiService(info);
+      onTap: () {
+        this.modifi(info);
+      //  this.modifiService(info);
       },
       child: Card(
         child: Padding(
