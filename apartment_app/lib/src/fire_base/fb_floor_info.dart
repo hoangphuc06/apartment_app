@@ -5,9 +5,9 @@ class FloorInfoFB{
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("floorinfo");
 
   Future<void> add(String floorid,String name,String categoryid,String numDweller,String status,String note) async {
-  String id = (new DateTime.now().microsecondsSinceEpoch).toString();
-  return FirebaseFirestore.instance.collection("floorinfo").doc(id).set({
-    "id" : id,
+  //String id = (new DateTime.now().microsecondsSinceEpoch).toString();
+  return FirebaseFirestore.instance.collection("floorinfo").doc(name).set({
+    "id" : name,
     "name" : name,
     "floorid" : floorid,
     "categoryid" : categoryid,
