@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/blocs/auth_bloc.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/dialog/loading_dialog.dart';
 import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
@@ -16,47 +17,43 @@ class UpdatePassWordPage extends StatefulWidget {
 }
 
 class UpdatePassWordState extends State<UpdatePassWordPage> {
+
   AuthBloc authBloc = new AuthBloc();
+
   final _formkey = GlobalKey<FormState>();
+
   static String ?email ;
+
   String? email2;
+
   TextEditingController curpass = new TextEditingController();
+
   TextEditingController newpass1 = new TextEditingController();
+
   TextEditingController newpass2 = new TextEditingController();
+
   void getMes  (String msg) {
 
     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(content: Text(msg))
     );
   }
+
   Future <void >changePassWord() async{
-    // if(this.newpass1.text.isEmpty||this.newpass1.text.length<6){
-    //   this.newpass1.text='';
-    //   MsgDialog.showMsgDialog(context, "Mật khẩu mới không hợp lệ ",'');
-    //   return;
-    // }
-    //
-    // if(this.newpass2.text!=this.newpass1.text){
-    //   MsgDialog.showMsgDialog(context, "Mật khẩu khong chung ",'');
-    //   this.newpass2.text='';
-    //   return;
-    // }
     if(_formkey.currentState!.validate()) {
-      // LoadingDialog.showLoadingDialog(context, "Loading...");
+      LoadingDialog.showLoadingDialog(context, "Loading...");
       authBloc.signIn(
           UpdatePassWordState.email.toString(),
           this.curpass.text,
-              () {
+          () {
             if (this.authBloc.updatePassWord(this.newpass2.text)) {
-              this.curpass.text = '';
-              this.newpass1.text = '';
-              this.newpass2.text = '';
+              LoadingDialog.hideLoadingDialog(context);
               MsgDialog.showMsgDialog(
                   context, "Đã thay đổi mật khẩu", '');
             }
           },
-              (msg) {
+          (msg) {
+            LoadingDialog.hideLoadingDialog(context);
             MsgDialog.showMsgDialog(context, "Sai mật khẩu", '');
-            this.curpass.text = '';
             return;
           });
     }
@@ -64,13 +61,14 @@ class UpdatePassWordState extends State<UpdatePassWordPage> {
 
 
   }
+
   _passTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
     controller: curpass,
 
     obscureText: true,
     decoration: InputDecoration(
-      hintText: "Mật khẩu",
+      hintText: "Nhập mật khẩu hiện tại",
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
@@ -84,13 +82,14 @@ class UpdatePassWordState extends State<UpdatePassWordPage> {
       return null;
     },
   );
+
   _newTextField() => TextFormField(
 
     style: MyStyle().style_text_tff(),
     controller: newpass1,
     obscureText: true,
     decoration: InputDecoration(
-      hintText: 'Mật khẩu Mới',
+      hintText: 'Nhập mật khẩu mới',
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
@@ -104,22 +103,27 @@ class UpdatePassWordState extends State<UpdatePassWordPage> {
       return null;
     },
   );
+
   _new2TextField() => TextFormField(
     style: MyStyle().style_text_tff(),
 
     controller: newpass2,
     obscureText: true,
     decoration: InputDecoration(
-      hintText: 'Nhập lại mật khẩu',
+      hintText: 'Nhập lại mật khẩu mới',
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
+      if (val!.isEmpty) {
+        return "Vui lòng nhập mật khẩu";
+      }
       if (this.newpass1.text!=this.newpass2.text) {
-        return "Mật khẩu khong chung";
+        return "Mật khẩu mới không trùng khớp";
       }
       return null;
     },
   );
+
   @override
   Widget build(BuildContext context) {
 
@@ -127,73 +131,67 @@ class UpdatePassWordState extends State<UpdatePassWordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Đổi Mật Khẩu '),
-        ),
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "Đổi mật khẩu",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
+      backgroundColor: Colors.white.withOpacity(0.9),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+        padding: EdgeInsets.all(8),
         child: Form(
           key: _formkey,
           child: Column(
             children: [
-              TitleInfoNotNull(text: "Mật khẩu"),
-              _passTextField(),
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Mật khẩu Mới"),
-              _newTextField(),
-              SizedBox(height: 30,),
-              TitleInfoNotNull(text: "Nhập lại mật khẩu"),
-              _new2TextField(),
-              SizedBox(height: 30,),
-              MainButton(name:' Xác nhận', onpressed:() async {await this.changePassWord();}),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10,),
 
-       /*     RaisedButton(
-                onPressed:() async {
-                  if(this.newpass1.text.isEmpty||this.newpass1.text.length<6){
-                    this.newpass1.text='';
-                    MsgDialog.showMsgDialog(context, "Mật khẩu mới không hợp lệ ",'');
-                    return;
-                  }
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                fit: BoxFit.contain,
+                                image: AssetImage('assets/images/update_pass.jpg')
+                            )
+                        ),
+                      ),
 
-                  if(this.newpass2.text!=this.newpass1.text){
-                    MsgDialog.showMsgDialog(context, "Mật khẩu khong chung ",'');
-                    this.newpass2.text='';
-                    return;
-                  }
+                      //Tiêu đề
+                      SizedBox(height: 20,),
+                      Text(
+                        "Vui lòng cung cấp chính xác mật khẩu hiện tại và mật khẩu mới của bạn để chúng tôi hỗ trợ một cách tốt nhất!",
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+                      ),
 
-                  authBloc.signIn(
-                      UpdatePassWordState.email.toString(),
-                      this.curpass.text,
-                          () {
-                        if(this.authBloc.updatePassWord(this.newpass2.text)) {
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Mật khẩu hiện tại"),
+                      _passTextField(),
 
-                          MsgDialog.showMsgDialog(context, "Đã thay đổi mật khẩu",'');
-                        }
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Mật khẩu mới"),
+                      _newTextField(),
 
-                      },
-                          (msg) {
-                        MsgDialog.showMsgDialog(context, "Sai mật khẩu", '');
-                        this.curpass.text='';
-                        return;
-                      });
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text: "Nhập lại mật khẩu mới"),
+                      _new2TextField(),
 
-
-
-                },
-                padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                color: Colors.green,
-                child: Text(
-                  'Xac Nhan',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      SizedBox(height: 10,),
+                    ],
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              )*/
-
+              ),
+              // Nút bấm
+              SizedBox(height: 10,),
+              MainButton(name:' Xác nhận', onpressed:() async {await this.changePassWord();}),
+              SizedBox(height: 50,),
             ],
           ),
         ),

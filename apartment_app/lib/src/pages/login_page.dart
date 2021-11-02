@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 30,),
                     GestureDetector(
                       onTap: (){
-                        Navigator.pushNamed(context, "tab_page");
+                        Navigator.pushNamed(context, "reset_password_page");
                       },
                       child: Text(
                         "Quên mật khẩu?",
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
           () {
             UpdatePassWordState.email=email;
                 LoadingDialog.hideLoadingDialog(context);
-                Navigator.pushReplacementNamed(context, "update_password_page");
+                Navigator.pushReplacementNamed(context, "tab_page");
             },
           (msg) {
                     LoadingDialog.hideLoadingDialog(context);
