@@ -29,7 +29,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Thêm hợp đồng",
+          "Thông tin chung cư",
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
         ),
@@ -129,7 +129,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                               fontWeight: FontWeight.w800,
                                             ),
                                           ),
-                                          SizedBox(height:5),
+                                          SizedBox(height: 5),
                                           Text(
                                             x["phoneNumber1"],
                                             style: TextStyle(
@@ -139,7 +139,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                                   TextDecoration.underline,
                                             ),
                                           ),
-                                          SizedBox(height:5),
+                                          SizedBox(height: 5),
                                           Text(
                                             x["phoneNumber2"],
                                             style: TextStyle(
@@ -149,7 +149,7 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                                   TextDecoration.underline,
                                             ),
                                           ),
-                                          SizedBox(height:5),
+                                          SizedBox(height: 5),
                                           Text(
                                             x["linkPage"],
                                             style: TextStyle(
@@ -182,31 +182,33 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Trụ sở chính",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w800,
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Trụ sở chính",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w800,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height:5),
-                                        Text(
-                                          x["headquarters"],
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
+                                          SizedBox(height: 5),
+                                          Text(
+                                            x["headquarters"],
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height:5),
-                                        Column(children: [
+                                          SizedBox(height: 5),
                                           Text(
                                             x["address"],
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
                                             style: TextStyle(
                                               fontStyle: FontStyle.italic,
                                               fontSize: 16,
@@ -215,8 +217,8 @@ class _IntroductionPageState extends State<IntroductionPage> {
                                                   TextDecoration.underline,
                                             ),
                                           ),
-                                        ])
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
