@@ -1,28 +1,25 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/tab_pages/bill_tab/bill_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/home_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/message_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/others_tab.dart';
-import 'package:apartment_app/src/pages/tab_pages/report_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/search_tab.dart';
 import 'package:flutter/material.dart';
 import '../notification/view/notification_page.dart';
 
 class TabPage extends StatefulWidget {
-
-   TabPage({Key? key}) : super(key: key);
+  TabPage({Key? key}) : super(key: key);
 
   @override
-  _TabPageState createState() =>_TabPageState();
-
+  _TabPageState createState() => _TabPageState();
 }
 
 class _TabPageState extends State<TabPage> {
-
-  List<Widget> _widgetOptions=[
+  List<Widget> _widgetOptions = [
     HomeTab(),
     SearchTab(),
+    BillTab(),
     NotificationPage(),
-    ReportTab(),
     OthersTab(),
   ];
 
@@ -51,29 +48,13 @@ class _TabPageState extends State<TabPage> {
       onTap: _cambiarWidget,
       showUnselectedLabels: true,
       items: <BottomNavigationBarItem>[
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
+        BottomNavigationBarItem(icon: Icon(Icons.search), label: "Tìm kiếm"),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "Home"
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: "Home"
-        ),
-         BottomNavigationBarItem(
-          icon: Icon(Icons.message),
-          label: "Home"
-        ),
-         BottomNavigationBarItem(
-          icon: Icon(Icons.report),
-          label: "Home"
-        ),
-         BottomNavigationBarItem(
-          icon: Icon(Icons.more_horiz),
-          label: "Others"
-        ),
+            icon: Icon(Icons.money_off_csred), label: "Hóa đơn"),
+        BottomNavigationBarItem(icon: Icon(Icons.message), label: "Thông báo"),
+        BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: "Khác"),
       ],
     );
   }
-
-  
 }

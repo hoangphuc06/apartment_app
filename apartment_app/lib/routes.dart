@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/add_icon_page.dart';
 import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
@@ -17,6 +18,8 @@ import 'package:apartment_app/src/pages/splash_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:flutter/material.dart';
+
+import 'src/pages/Bill/view/selectRoom.dart';
 
 final routes = <String, WidgetBuilder>{
   "register_page": (BuildContext context) => RegisterPage(),
@@ -52,4 +55,7 @@ final routes = <String, WidgetBuilder>{
   "notification_detail_page":(BuildContext context) =>NotificationDetailPage(),
   //doi mat khảu
   "update_password_page":(BuildContext context) =>UpdatePassWordPage(),
+  //Hoa don
+  "add_new_bill_page":(BuildContext context) =>AddBillPage(),
+  "select_room":(BuildContext context) =>SelectRoom(),
 };

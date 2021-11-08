@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -9,8 +10,8 @@ import 'package:flutter/material.dart';
 
 class EditContractPage extends StatefulWidget {
   // const EditContractPage({ Key? key }) : super(key: key);
-  final String id;
-  EditContractPage({required this.id});
+  final Contract contract;
+  EditContractPage({required this.contract});
 
   @override
   _EditContractPageState createState() => _EditContractPageState();
@@ -65,18 +66,19 @@ class _EditContractPageState extends State<EditContractPage> {
 
   void binding() {
     setState(() {
-      contractFB.collectionReference.doc(widget.id).get().then((value) => {
-            _hostController.text = value["host"],
-            _roomController.text = value["room"],
-            _startDayController.text = value["startDay"],
-            _expirationDateController.text = value["expirationDate"],
-            _billingStartDateController.text = value["billingStartDate"],
-            _roomPaymentPeriodController = value["roomPaymentPeriod"],
-            _roomChargeController.text = value["roomCharge"],
-            _depositController.text = value["deposit"],
-            _renterController.text = value["renter"],
-            _rulesController.text = value["rules"]
-          });
+      _hostController.text = this.widget.contract.host.toString();
+      _roomController.text = this.widget.contract.room.toString();
+      _startDayController.text = this.widget.contract.startDay.toString();
+      _expirationDateController.text =
+          this.widget.contract.expirationDate.toString();
+      _billingStartDateController.text =
+          this.widget.contract.billingStartDate.toString();
+      _roomPaymentPeriodController =
+          this.widget.contract.roomPaymentPeriod.toString();
+      _roomChargeController.text = this.widget.contract.roomCharge.toString();
+      _depositController.text = this.widget.contract.deposit.toString();
+      _renterController.text = this.widget.contract.renter.toString();
+      _rulesController.text = this.widget.contract.rules.toString();
     });
   }
 
@@ -208,53 +210,37 @@ class _EditContractPageState extends State<EditContractPage> {
                         ),
                         //Chọn kỳ thanh toán tiền phòng
                         TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
-                        StreamBuilder(
-                            stream: contractFB.collectionReference
-                                .where('id', isEqualTo: widget.id)
-                                .snapshots(),
-                            builder: (context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: Text("No Data"),
-                                );
-                              } else {
-                                QueryDocumentSnapshot x =
-                                    snapshot.data!.docs[0];
-                                _roomPaymentPeriodController =
-                                    x["roomPaymentPeriod"];
-                                return Container(
-                                  child: DropdownButtonFormField<String>(
-                                    value: _roomPaymentPeriodController,
-                                    items: [
-                                      "1 Tháng",
-                                      "2 Tháng",
-                                      "3 Tháng",
-                                      "4 Tháng",
-                                      "5 Tháng",
-                                      "6 Tháng",
-                                      "7 Tháng",
-                                      "8 Tháng",
-                                      "9 Tháng",
-                                      "10 Tháng",
-                                      "11 Tháng",
-                                      "12 Tháng"
-                                    ]
-                                        .map((label) => DropdownMenuItem(
-                                              child: Text(label),
-                                              value: label,
-                                            ))
-                                        .toList(),
-                                    hint: Text('Kỳ thanh toán'),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _roomPaymentPeriodController = value;
-                                      });
-                                    },
-                                  ),
-                                );
-                              }
-                            }),
+                        Container(
+                          child: DropdownButtonFormField<String>(
+                            value: _roomPaymentPeriodController,
+                            items: [
+                              "1 Tháng",
+                              "2 Tháng",
+                              "3 Tháng",
+                              "4 Tháng",
+                              "5 Tháng",
+                              "6 Tháng",
+                              "7 Tháng",
+                              "8 Tháng",
+                              "9 Tháng",
+                              "10 Tháng",
+                              "11 Tháng",
+                              "12 Tháng"
+                            ]
+                                .map((label) => DropdownMenuItem(
+                                      child: Text(label),
+                                      value: label,
+                                    ))
+                                .toList(),
+                            hint: Text('Kỳ thanh toán'),
+                            onChanged: (value) {
+                              setState(() {
+                                _roomPaymentPeriodController = value;
+                              });
+                            },
+                          ),
+                        ),
+
                         SizedBox(
                           height: 10,
                         )
@@ -398,7 +384,7 @@ class _EditContractPageState extends State<EditContractPage> {
   void _updateContract() {
     contractFB
         .update(
-            widget.id,
+            widget.contract.id!,
             _hostController.text,
             _roomController.text,
             _startDayController.text,
