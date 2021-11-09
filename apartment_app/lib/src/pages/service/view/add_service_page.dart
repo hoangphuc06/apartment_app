@@ -1,6 +1,7 @@
 
 
 import 'package:animated_float_action_button/animated_floating_action_button.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/service/model/service_info.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
@@ -38,7 +39,7 @@ class StateAddPage extends State<AddServicPage> {
   TextEditingController noteController= new TextEditingController();
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
   ServiceModel ?sv;
-  String buttonText='Thêm Dịch Vụ';
+  String buttonText='Thêm dịch vụ';
   List<String>  chargeType=['Lũy tiền theo chỉ số đồng hồ', 'Dich vụ có chỉ số đầu cuối','Người ','Phòng','Số lần sử dụng','Khác'];
   final _formkey = GlobalKey<FormState>();
   late ServiceModel info;
@@ -47,7 +48,7 @@ class StateAddPage extends State<AddServicPage> {
 
   //---------------------------------------------------
   void filltemplate(ServiceModel? service){
-    this.buttonText='Thay doi thong tin';
+    this.buttonText='Thay đổi thông tin';
     this.nameController.text=service!.name.toString();
     this.chargeController.text=service.charge.toString();
     type= service.type.toString();
@@ -66,7 +67,7 @@ class StateAddPage extends State<AddServicPage> {
           type: type,
           detail: noteController.text
       );
-      if(this.buttonText!='Thêm Dịch Vụ')
+      if(this.buttonText!='Thêm dịch vụ')
       this.fb.update(widget.sv!.id.toString(), this.nameController.text, this.noteController.text, this.chargeController.text, type);
       Navigator.pop(context,this.info);
     }
@@ -86,7 +87,7 @@ class StateAddPage extends State<AddServicPage> {
     style: MyStyle().style_text_tff(),
     controller: this.nameController,
     decoration: InputDecoration(
-      hintText:  'Diện,Nước,Thang máy,bảo vệ,..',
+      hintText:  'Nhập tên dịch vụ',
     ),
     keyboardType: TextInputType.name,
     validator: (val) {
@@ -117,7 +118,7 @@ class StateAddPage extends State<AddServicPage> {
     style: MyStyle().style_text_tff(),
     controller: this.chargeController,
     decoration: InputDecoration(
-      hintText:  'O VND',
+      hintText:  'Nhập số tiền',
     ),
     keyboardType: TextInputType.number,
   );
@@ -138,7 +139,12 @@ class StateAddPage extends State<AddServicPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(buttonText, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          buttonText,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
@@ -148,19 +154,25 @@ class StateAddPage extends State<AddServicPage> {
             children: [
               Card(
                 child: Container(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 10,),
+                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 20,),
+
                       TitleInfoNotNull(text: "Tên dịch vụ"),
                       _nameTextField(),
-                      SizedBox(height: 30,),
+                      SizedBox(height: 20,),
 
                       TitleInfoNotNull(text: "Thu phí dựa trên"),
                       _dropDownList(),
-                      SizedBox(height: 30,),
-                      TitleInfoNull(text:  'Phi dịch vụ'),
+                      SizedBox(height: 20,),
+                      TitleInfoNotNull(text:  'Phi dịch vụ'),
                       _chargeTextField(),
-                      SizedBox(height: 30,),
+
+                      SizedBox(height: 10,),
                     ],
                   ),
                 ),
@@ -168,19 +180,17 @@ class StateAddPage extends State<AddServicPage> {
 
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitleInfoNull(text: 'Ghi chú'),
+                      SizedBox(height: 10,),
+                      Text("GHI CHÚ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      SizedBox(height: 20,),
+
                       TextField(
                         style: MyStyle().style_text_tff(),
                         decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1,color: Colors.grey.shade300),
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(10.0),
-                            ),
-                          ),
                           hintText: 'Nhập ghi chú',
                         ),
                         minLines: 5,
@@ -188,12 +198,13 @@ class StateAddPage extends State<AddServicPage> {
                         controller: this.noteController,
                         keyboardType: TextInputType.multiline,
                       ),
+                      SizedBox(height: 10,),
                     ],
                   ),
                 ),
               ),
 
-              SizedBox(height: 30,),
+              SizedBox(height: 20,),
               MainButton(name:buttonText, onpressed: this.addButtonPressed ),
             ],
           ),
