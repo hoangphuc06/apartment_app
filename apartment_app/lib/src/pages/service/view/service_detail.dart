@@ -1,21 +1,23 @@
 import 'package:animated_float_action_button/animated_floating_action_button.dart';
+import 'package:animated_float_action_button/float_action_button_text.dart';
 import 'package:apartment_app/src/colors/colors.dart';
-import 'package:apartment_app/src/pages/notification/model/notification_info.dart';
-import 'package:apartment_app/src/pages/notification/firebase/fb_notification.dart';
-import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
+import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:flutter/material.dart';
-import 'add_notification.dart';
-class NotificationDetail extends StatefulWidget {
-  late NotificationInfo notify;
-  NotificationDetail({Key? key,
-    required this.notify}) : super(key: key);
+
+import 'add_service_page.dart';
+
+class ServiceDetailPage extends StatefulWidget {
+  late ServiceModel service;
+   ServiceDetailPage({Key? key,
+    required this.service}) : super(key: key);
   @override
-  _NotificationDetailState createState() => _NotificationDetailState();
+  _ServiceDetailPageState createState() => _ServiceDetailPageState();
 }
 
-class _NotificationDetailState extends State<NotificationDetail> {
+class _ServiceDetailPageState extends State<ServiceDetailPage> {
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
-  NotificationFB fb = new NotificationFB();
+  ServiceFB fb = new ServiceFB();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class _NotificationDetailState extends State<NotificationDetail> {
         elevation: 0,
         centerTitle: true,
         title:  Text(
-          widget.notify.title.toString(),
+          widget.service.name.toString(),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
@@ -40,12 +42,14 @@ class _NotificationDetailState extends State<NotificationDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10,),
-                    Text("Thông tin báo", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    Text("Thông tin dich vụ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                     SizedBox(height: 20,),
-                    _detailInfo(Icons.wysiwyg , "Nội dung:", widget.notify.body.toString()),
+                    _detailInfo(Icons.attach_money , "Phí dịch vụ:", widget.service.charge.toString()+" VNĐ"),
                     SizedBox(height: 20,),
-                    _detailInfo(Icons.calendar_today, "Ngày", widget.notify.date.toString()),
+                    _detailInfo(Icons.credit_card, "Thu phí dự trên", widget.service.type.toString()),
                     SizedBox(height: 20,),
+                    _detailInfo(Icons.wysiwyg, "Ghi chú", widget.service.detail.toString() ),
+                    SizedBox(height: 10,),
                   ],
                 ),
               ),
@@ -77,20 +81,33 @@ class _NotificationDetailState extends State<NotificationDetail> {
     ],
   );
 
+  _priceInfo(IconData icons, String title, String minValue, String maxValue) => Column(
+    children: [
+      Row(
+        children: [
+          Icon(icons),
+          SizedBox(width: 5,),
+          Text(title, style: TextStyle(fontSize: 15),),
+          Spacer(),
+          Text(minValue + " - " + maxValue + " VNĐ", style: TextStyle(fontSize: 15),),
+        ],
+      ),
 
+    ],
+  );
 
   Widget edit() {
     return FloatActionButtonText(
       onPressed: ()async{
         fabKey.currentState!.animate();
 
-        dynamic Result=  await  Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotificationPage(info:this.widget.notify)));
-        if(Result.runtimeType==NotificationInfo)
-        {
-          setState(() {
-            this.widget.notify=Result;
-          });
-        }
+   dynamic Result=  await  Navigator.push(context, MaterialPageRoute(builder: (context) => AddServicPage(sv:this.widget.service)));
+    if(Result.runtimeType==ServiceModel)
+      {
+        setState(() {
+          this.widget.service=Result;
+        });
+      }
       },
       icon: Icons.mode_edit,
       text: "Sửa",
@@ -101,8 +118,9 @@ class _NotificationDetailState extends State<NotificationDetail> {
     return FloatActionButtonText(
       onPressed: (){
         fabKey.currentState!.animate();
-        this.fb.delete(widget.notify.id.toString());
+        this.fb.delete(widget.service.id.toString());
         Navigator.pop(context);
+
       },
       icon: Icons.delete,
       textLeft: -80,

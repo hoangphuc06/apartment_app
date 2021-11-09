@@ -3,10 +3,9 @@ class ServiceFB{
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("ServiceInfo");
-  Future<void> add( String icon, String name, String note,String charge,String type) async {
+  Future<void> add(  String name, String note,String charge,String type) async {
     String id = (new DateTime.now().millisecondsSinceEpoch).toString();
     return FirebaseFirestore.instance.collection("ServiceInfo").doc(id).set({
-      "icon": icon,
       'name': name,
       'charge':charge,
       'type':type,
@@ -17,9 +16,8 @@ class ServiceFB{
         .catchError((error)=>print("fail"));
   }
 
-  Future<void> update(String id, String icon, String name, String note,String charge,String type) async {
+  Future<void> update(String id,  String name, String note,String charge,String type) async {
     return FirebaseFirestore.instance.collection("ServiceInfo").doc(id).update({
-      "icon": icon,
       'name': name,
       'note':note,
       'type':type,

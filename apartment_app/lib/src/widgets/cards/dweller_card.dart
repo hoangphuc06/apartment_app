@@ -30,6 +30,24 @@ class DwellerCard extends StatelessWidget {
                   Spacer(),
                   Text(
                     dweller.gender.toString()=="0"? "Nam" : "Nữ",
+            
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Icon(Icons.person),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Số CMND",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Spacer(),
+                  Text(
+                    this.dweller.cmnd.toString(),
                     style: TextStyle(fontSize: 15),
                   ),
                 ],
@@ -44,12 +62,52 @@ class DwellerCard extends StatelessWidget {
                   Text(
                     dweller.phoneNumber.toString()==""? "Trống" : dweller.phoneNumber.toString(),
                     style: TextStyle(fontSize: 15),),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Icon(Icons.phone),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Số điện thoại:",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Spacer(),
+                  Text(
+                    this.dweller.phone.toString(),
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Icon(Icons.home),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "Căn hộ:",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Spacer(),
+                  Text(
+                    this.dweller.idApartment.toString(),
+                    style: TextStyle(fontSize: 15),
+                  ),
                 ],
               ),
             ],
           ),
         ),
       ),
+    )
+      )
     );
   }
 }
