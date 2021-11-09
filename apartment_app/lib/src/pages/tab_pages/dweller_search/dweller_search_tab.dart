@@ -1,35 +1,34 @@
-import 'dart:async';
-import 'dart:async';
-import 'apartment_detail.dart';
-import 'model/apartment_model.dart';
-
-import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
+import 'package:apartment_app/src/pages/dweller/view/detail_dweller_page.dart';
 import 'package:apartment_app/src/style/my_style.dart';
-import 'package:apartment_app/src/widgets/cards/apartment_card.dart';
-import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
+import 'package:apartment_app/src/widgets/cards/dweller_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dweller_detail.dart';
 
 
-class ApartmentSearchTab extends StatefulWidget {
-  const ApartmentSearchTab({Key? key}) : super(key: key);
+
+class DwellerSearchTab extends StatefulWidget {
+  const DwellerSearchTab({Key? key}) : super(key: key);
 
   @override
-  _ApartmentSearchTabState createState() {
-   final temp=_ApartmentSearchTabState();
+  _DwellerSearchTabState createState() {
+    final temp=_DwellerSearchTabState();
     return temp;
   }
 }
 
-class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
+class _DwellerSearchTabState extends State<DwellerSearchTab> {
   TextEditingController searchController = new TextEditingController();
-   List<ApartmentModel>listApartmentCache =[];
-  FloorInfoFB floorInfoFB = new FloorInfoFB();
+  List<Dweller>Cache =[];
+  DwellersFB fb= new DwellersFB();
   int radioValue = 1;
   bool option= true;
-  List<String> stateindex = ['Trống', 'Đang thuê', 'Đã bán','Tất cả'];
-  String hitText= 'Tên căn hộ';
+
+  String hitText= 'Họ và tên';
   String? state='Tất cả';
+  bool check=false;
 
   //  Future<List<ApartmentModel>>? _init() async {
   //   List<ApartmentModel> listApartment = [];
@@ -43,38 +42,28 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
   //   return listApartment;
   // }
 
-  _dropDownList() => DropdownButton(
-        hint: Text(this.state.toString()),
-        iconSize: 36,
-        onChanged: (temp) {
-          setState(() {
-            this.state = temp.toString();
-          });
-        },
-        items: this.stateindex.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      );
- bool _filter(ApartmentModel temp){
-  print(this.radioValue.toString());
-   if((temp.status==this.state||this.state==null||this.state=='Tất cả')&&
-       ((this.option&&(temp.id!.contains(this.searchController.text)||this.searchController.text.isEmpty))
-        ||(!this.option&&(temp.floorid!.contains(this.searchController.text)||this.searchController.text.isEmpty)))
-   )
-     return true;
-     return false;
- }
+  bool chechInfo(Dweller temp){
+    if(temp.homeTown!.isEmpty||temp.phoneNumber!.isEmpty||temp.gender!.isEmpty
+        ||temp.email!.isEmpty||temp.name!.isEmpty||temp.birthday!.isEmpty)
+      return false;
+    return true;
+  }
+  bool _filter(Dweller temp){
+    if((!check||!this.chechInfo(temp))&&
+        ((this.option&&(temp.name!.contains(this.searchController.text)||this.searchController.text.isEmpty))
+            ||(!this.option&&(temp.cmnd!.contains(this.searchController.text)||this.searchController.text.isEmpty)))
+    )
+      return true;
+    return false;
+  }
   _SearchBar() => TextField(
-        style: MyStyle().style_text_tff(),
-        controller: this.searchController,
-        decoration: InputDecoration(
-          hintText: this.hitText,
-        ),
-        keyboardType: TextInputType.name,
-      );
+    style: MyStyle().style_text_tff(),
+    controller: this.searchController,
+    keyboardType: this.option? TextInputType.name: TextInputType.phone,
+    decoration: InputDecoration(
+      hintText: this.hitText,
+    ),
+  );
   @override
   void didChangeDependencies()  async {
     super.didChangeDependencies();
@@ -82,8 +71,8 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
     //try to load all your data in this method :)
 
   }
-@override
-void initState() {
+  @override
+  void initState() {
     // TODO: implement initState
     super.initState();
   }
@@ -122,7 +111,7 @@ void initState() {
                       groupValue: this.radioValue,
                       onChanged: (value) {
                         setState(() {
-                          hitText= 'Tên căn hộ';
+                          hitText= 'Họ và tên';
                           this.radioValue = 1;
                           this.searchController.text='';
                           option=true;
@@ -134,7 +123,7 @@ void initState() {
                 ),
                 Expanded(
                   child: ListTile(
-                    title: Text('Theo tầng'),
+                    title: Text('Theo số CMND'),
                     leading: Radio(
                       value: 2,
                       groupValue: this.radioValue,
@@ -142,7 +131,7 @@ void initState() {
                         setState(() {
                           this.radioValue=2;
                           this.searchController.text='';
-                          this.hitText='Thông tin tầng của của căn hộ';
+                          this.hitText='số CMND của dân cư';
                           this.option= false;
                         });
                       },
@@ -153,37 +142,41 @@ void initState() {
               ],
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Trạng thái căn hộ:',
+                  'Chưa đầy đủ thông tin:',
                   style: MyStyle().style_text_tff(),
                 ),
-                _dropDownList()
+                Checkbox(value: check,
+                    onChanged: (value){
+                      setState(() {
+                        this.check=value!;
+                      });
+                    })
               ],
             ),
             Expanded(
                 child: StreamBuilder(
-                    stream: this.floorInfoFB.collectionReference.snapshots(),
+                    stream: this.fb.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return CircularProgressIndicator();
                       }
-                      this.listApartmentCache.clear();
+                      this.Cache.clear();
                       snapshot.data!.docs.forEach((element) {
-                        ApartmentModel temp= ApartmentModel.fromDocument(element);
+                        Dweller temp= Dweller.fromDocument(element);
                         if(this._filter(temp))
-                        this.listApartmentCache.add(temp);
+                          this.Cache.add(temp);
                       }
                       );
                       return ListView.builder(
-                          itemCount: this.listApartmentCache.length,
+                          itemCount: this.Cache.length,
                           itemBuilder: (context, index) {
-                            return ApartmentCard( apartment: this.listApartmentCache[index], funtion: ()async{
-                              await this.listApartmentCache[index].setInfo();
-                              Route route = MaterialPageRoute(builder: (context) => ApartmentDetail( apartemt: this.listApartmentCache[index]));
+                            return DwellerCard(dweller: this.Cache[index], funtion: (){
+                              Route route = MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: this.Cache[index], ));
                               Navigator.push(context,route);
-                            },);
+                            });
                           });
                     })
             ),
