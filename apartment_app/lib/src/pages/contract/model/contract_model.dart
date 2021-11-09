@@ -40,6 +40,7 @@ class Contract {
       roomCharge: doc['roomCharge'],
       deposit: doc['deposit'],
       renter: doc["renter"],
+      rules:  doc["rules"],
       isVisible: doc["isVisible"],
     );
   }

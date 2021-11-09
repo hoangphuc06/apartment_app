@@ -57,15 +57,18 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
                               return Card(
                                 elevation: 2,
                                 child: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pop(context,x["id"]);
+                                  onTap: () {
+                                    Navigator.pop(context, x["id"]);
                                   },
                                   child: Container(
                                     margin: EdgeInsets.all(16),
                                     child: Row(
                                       children: [
-                                        Icon(Icons.group_outlined,size: 40,),
-                                        SizedBox(width:10),
+                                        Icon(
+                                          Icons.group_outlined,
+                                          size: 40,
+                                        ),
+                                        SizedBox(width: 10),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -76,7 +79,7 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
                                                   fontSize: 17,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            SizedBox( height:10),
+                                            SizedBox(height: 10),
                                             Text(
                                               x['phoneNumber'],
                                               style: TextStyle(
