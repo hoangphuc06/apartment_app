@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CategotyApartmentDetailPage extends StatefulWidget {
-  final CategoryApartment categoryApartment;
-  const CategotyApartmentDetailPage({Key? key,
+  late CategoryApartment categoryApartment;
+  CategotyApartmentDetailPage({Key? key,
   required this.categoryApartment}) : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
         elevation: 0,
         centerTitle: true,
         title:  Text(
-          widget.categoryApartment.name.toString(),
+          "Thông tin",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
@@ -42,7 +42,9 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10,),
-                    Text("Thông tin chi tiết", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    Text("CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 20,),
+                    _detailInfo(Icons.drive_file_rename_outline, "Tên loại căn hộ", widget.categoryApartment.name.toString()),
                     SizedBox(height: 20,),
                     _detailInfo(Icons.crop_square_rounded, "Diện tích", widget.categoryApartment.area.toString() + " m2"),
                     SizedBox(height: 20,),
@@ -64,21 +66,11 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10,),
-                    Text("Giá cả giao động", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    Text("GIÁ CẢ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                     SizedBox(height: 20,),
-                    _priceInfo(
-                        Icons.money,
-                        "Giá thuê",
-                        widget.categoryApartment.minRentalPrice.toString(),
-                        widget.categoryApartment.maxRentalPrice.toString()
-                    ),
+                    _detailInfo(Icons.money, "Giá bán", widget.categoryApartment.price.toString() + " VNĐ"),
                     SizedBox(height: 20,),
-                    _priceInfo(
-                        Icons.money,
-                        "Giá bán",
-                        widget.categoryApartment.minPrice.toString(),
-                        widget.categoryApartment.maxPrice.toString()
-                    ),
+                    _detailInfo(Icons.money, "Giá thuê", widget.categoryApartment.rentalPrice.toString() + " VNĐ"),
                     SizedBox(height: 10,)
                   ],
                 ),
@@ -129,12 +121,21 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
     return FloatActionButtonText(
       onPressed: (){
         fabKey.currentState!.animate();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => EditCategoryApartmentPage(this.widget.categoryApartment)));
+        _gotoPage();
       },
       icon: Icons.mode_edit,
       text: "Sửa",
       textLeft: -80,
     );
+  }
+
+  void _gotoPage() async {
+    final CategoryApartment c = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditCategoryApartmentPage(this.widget.categoryApartment)));
+    if (c!=null) {
+      setState(() {
+        this.widget.categoryApartment = c;
+      });
+    }
   }
 
   Widget delete() {

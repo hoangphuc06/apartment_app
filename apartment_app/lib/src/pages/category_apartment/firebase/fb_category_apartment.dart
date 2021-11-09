@@ -8,7 +8,7 @@ class CategoryApartmentFB {
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("category_apartment");
 
   Future<void> add(String name, String area, String amountBedroom, String amountWc, String ammountDweller,
-      String minPrice, String maxPrice, String minRentalPrice, String maxRentalPrice) async {
+      String price, String rentalPrice) async {
     String id = (new DateTime.now().millisecondsSinceEpoch).toString();
     return FirebaseFirestore.instance.collection("category_apartment").doc(id).set({
       "id": id,
@@ -17,27 +17,23 @@ class CategoryApartmentFB {
       "amountBedroom": amountBedroom,
       "amountWc": amountWc,
       "amountDweller": ammountDweller,
-      "minPrice": minPrice,
-      "maxPrice": maxPrice,
-      "minRentalPrice": minRentalPrice,
-      "maxRentalPrice": maxRentalPrice,
+      "price": price,
+      "rentalPrice": rentalPrice,
     })
         .then((value) => print("completed"))
         .catchError((error)=>print("fail"));
   }
 
   Future<void> update(String id, String name, String area, String amountBedroom, String amountWc, String ammountDweller,
-      String minPrice, String maxPrice, String minRentalPrice, String maxRentalPrice) async {
+      String price, String rentalPrice) async {
     return FirebaseFirestore.instance.collection("category_apartment").doc(id).update({
       "name": name,
       "area": area,
       "amountBedroom": amountBedroom,
       "amountWc": amountWc,
       "amountDweller": ammountDweller,
-      "minPrice": minPrice,
-      "maxPrice": maxPrice,
-      "minRentalPrice": minRentalPrice,
-      "maxRentalPrice": maxRentalPrice,
+      "price": price,
+      "rentalPrice": rentalPrice,
     })
         .then((value) => print("completed"))
         .catchError((error)=>print("fail"));

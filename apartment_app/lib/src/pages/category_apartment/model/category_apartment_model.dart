@@ -8,10 +8,8 @@ class CategoryApartment {
   String? amountBedroom;
   String? amountWc;
   String? amountDweller;
-  String? maxPrice;
-  String? minPrice;
-  String? maxRentalPrice;
-  String? minRentalPrice;
+  String? price;
+  String? rentalPrice;
 
   CategoryApartment({
     this.id,
@@ -20,10 +18,8 @@ class CategoryApartment {
     this.amountBedroom,
     this.amountWc,
     this.amountDweller,
-    this.maxPrice,
-    this.minPrice,
-    this.maxRentalPrice,
-    this.minRentalPrice
+    this.price,
+    this.rentalPrice,
   });
 
   // Không cần viết
@@ -35,10 +31,10 @@ class CategoryApartment {
     amountBedroom: json['amountBedroom']! as String,
     amountWc: json['amountWc']! as String,
     amountDweller: json['amountDweller']! as String,
-    maxPrice: json['maxPrice']! as String,
-    minPrice: json['minPrice']! as String,
-    maxRentalPrice: json['maxRentalPrice']! as String,
-    minRentalPrice: json['minRentalPrice']! as String,
+    // maxPrice: json['maxPrice']! as String,
+    // minPrice: json['minPrice']! as String,
+    // maxRentalPrice: json['maxRentalPrice']! as String,
+    // minRentalPrice: json['minRentalPrice']! as String,
   );
 
   // Không cần viết
@@ -50,10 +46,8 @@ class CategoryApartment {
       'amountBedroom': amountBedroom,
       'amountWc': amountWc,
       'amountDweller': amountDweller,
-      'maxPrice': maxPrice,
-      'minPrice': minPrice,
-      'maxRentalPrice': maxRentalPrice,
-      'minRentalPrice': minRentalPrice,
+      'price': price,
+      'retalPrice': rentalPrice,
     };
   }
 
@@ -66,10 +60,8 @@ class CategoryApartment {
       amountBedroom: doc['amountBedroom'],
       amountWc: doc['amountWc'],
       amountDweller: doc['amountDweller'],
-      maxPrice: doc['maxPrice'],
-      minPrice: doc['minPrice'],
-      maxRentalPrice: doc['maxRentalPrice'],
-      minRentalPrice: doc['minRentalPrice'],
+      price: doc['price'],
+      rentalPrice: doc['rentalPrice'],
     );
   }
 }

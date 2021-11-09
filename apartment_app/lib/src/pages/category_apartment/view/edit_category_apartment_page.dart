@@ -26,10 +26,8 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
   final TextEditingController _amountBedroomController = TextEditingController();
   final TextEditingController _amountWcController = TextEditingController();
   final TextEditingController _amountDwellerController = TextEditingController();
-  final TextEditingController _minPriceController = TextEditingController();
-  final TextEditingController _maxPriceController = TextEditingController();
-  final TextEditingController _minRentalPriceController = TextEditingController();
-  final TextEditingController _maxRentalPriceController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _rentalPriceController = TextEditingController();
 
   @override
   void initState() {
@@ -44,10 +42,8 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     _amountBedroomController.text = widget.categoryApartment.amountBedroom.toString();
     _amountWcController.text = widget.categoryApartment.amountWc.toString();
     _amountDwellerController.text = widget.categoryApartment.amountWc.toString();
-    _minPriceController.text = widget.categoryApartment.minPrice.toString();
-    _maxPriceController.text = widget.categoryApartment.maxPrice.toString();
-    _minRentalPriceController.text = widget.categoryApartment.minRentalPrice.toString();
-    _maxRentalPriceController.text = widget.categoryApartment.maxRentalPrice.toString();
+    _priceController.text = widget.categoryApartment.price.toString();
+    _rentalPriceController.text = widget.categoryApartment.rentalPrice.toString();
   }
 
   @override
@@ -123,36 +119,12 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
                       //Giá bán
                       SizedBox(height: 20,),
                       TitleInfoNotNull(text: "Giá bán (VNĐ)"),
-                      Row(children: [
-                        Container(
-                            width: 130,
-                            child: _minPriceTextField()
-                        ),
-                        Spacer(),
-                        Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
-                        Spacer(),
-                        Container(
-                            width: 130,
-                            child: _maxPriceTextField()
-                        ),
-                      ],),
+                      _priceTextField(),
 
                       //Giá thuê
                       SizedBox(height: 20,),
                       TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
-                      Row(children: [
-                        Container(
-                            width: 130,
-                            child: _minRentalPriceTextField()
-                        ),
-                        Spacer(),
-                        Text("-", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),),
-                        Spacer(),
-                        Container(
-                            width: 130,
-                            child: _maxRentalPriceTextField()
-                        ),
-                      ],),
+                      _rentalPriceTextField(),
 
                       SizedBox(height: 10,),
                     ],
@@ -182,12 +154,22 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
           _amountBedroomController.text,
           _amountWcController.text,
           _amountDwellerController.text,
-          _minPriceController.text,
-          _maxPriceController.text,
-          _minRentalPriceController.text,
-          _maxRentalPriceController.text)
+          _priceController.text,
+          _rentalPriceController.text
+      )
           .then((value) => {
-        Navigator.pop(context),
+            Navigator.pop(
+                context,
+                CategoryApartment(
+                  id: widget.categoryApartment.id.toString(),
+                  name: _nameController.text,
+                  area: _areaController.text,
+                  amountBedroom: _amountBedroomController.text,
+                  amountWc: _amountWcController.text,
+                  amountDweller: _amountDwellerController.text,
+                  price: _priceController.text,
+                  rentalPrice: _rentalPriceController.text
+                )),
       });
     }
   }
@@ -267,11 +249,11 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     },
   );
 
-  _minPriceTextField() => TextFormField(
+  _priceTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
-    controller: _minPriceController,
+    controller: _priceController,
     decoration: InputDecoration(
-      hintText: "Từ",
+      hintText: "Nhập giá bán",
     ),
     keyboardType: TextInputType.number,
     validator: (val) {
@@ -282,69 +264,16 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     },
   );
 
-  _maxPriceTextField() => TextFormField(
+  _rentalPriceTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
-    controller: _maxPriceController,
+    controller: _rentalPriceController,
     decoration: InputDecoration(
-      hintText: "Đến",
+      hintText: "Nhập giá thuê",
     ),
     keyboardType: TextInputType.number,
     validator: (val) {
       if (val!.isEmpty) {
         return "Vui lòng nhập giá";
-      }
-
-      if (_minPriceController.text.isEmpty) {
-        return null;
-      }
-
-      double min = double.parse(_minPriceController.text);
-      double max = double.parse(val.toString());
-
-      if (min >= max) {
-        return "Giá không phù hợp";
-      }
-
-      return null;
-    },
-  );
-
-  _minRentalPriceTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _minRentalPriceController,
-    decoration: InputDecoration(
-      hintText: "Từ",
-    ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập giá";
-      }
-      return null;
-    },
-  );
-
-  _maxRentalPriceTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _maxRentalPriceController,
-    decoration: InputDecoration(
-      hintText: "Đến",
-    ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập giá";
-      }
-
-      if (_minRentalPriceController.text.isEmpty) {
-        return null;
-      }
-
-      double min = double.parse(_minRentalPriceController.text);
-      double max = double.parse(val.toString());
-
-      if (min >= max) {
-        return "Giá không phù hợp";
       }
 
       return null;
