@@ -26,19 +26,9 @@ class ServiceCard extends StatelessWidget {
               SizedBox(height: 10,),
               Row(
                 children: [
-                  Icon(Icons.wysiwyg),
-                  SizedBox(width: 5,),
-                  Text("Ghi chú", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(serviceInfo.detail.toString() , style: TextStyle(fontSize: 15),maxLines: 4,),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
                   Icon(Icons.attach_money ),
                   SizedBox(width: 5,),
-                  Text("Phí dịch vụ:", style: TextStyle(fontSize: 15),),
+                  Text("Phí dịch vụ", style: TextStyle(fontSize: 15),),
                   Spacer(),
                   Text(serviceInfo.charge.toString()+" VNĐ", style: TextStyle(fontSize: 15),),
                 ],
@@ -48,7 +38,7 @@ class ServiceCard extends StatelessWidget {
                 children: [
                   Icon(Icons.credit_card),
                   SizedBox(width: 5,),
-                  Text("Thu phí dự trên:", style: TextStyle(fontSize: 15),),
+                  Text("Đơn vị", style: TextStyle(fontSize: 15),),
                   Spacer(),
                   Text(serviceInfo.type.toString(), style: TextStyle(fontSize: 15),),
                 ],
