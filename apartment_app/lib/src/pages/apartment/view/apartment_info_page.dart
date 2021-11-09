@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
+import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
+import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_apartment.dart';
 
 class ApartmentInfoPage extends StatefulWidget {
@@ -19,6 +22,8 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
 
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
+  ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
+
   final TextEditingController _categorynamecontroler = TextEditingController();
   final TextEditingController _notecontroler = TextEditingController();
   final TextEditingController _areacontroler = TextEditingController();
@@ -29,6 +34,8 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
   final TextEditingController _maxRentalcontroler = TextEditingController();
   final TextEditingController _minPricecontroler = TextEditingController();
   final TextEditingController _maxPricecontroler = TextEditingController();
+  final TextEditingController _Servicenamecontroler = TextEditingController();
+  final TextEditingController _chargecontroler = TextEditingController();
 
   // void getNamebyid(String id)
   // {
@@ -38,6 +45,22 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
   //     print(_flooridcontroler.text),
   //   });
   // }
+  String getServicenamebyID(String id){
+    final servicefb = FirebaseFirestore.instance.collection('ServiceInfo');
+      servicefb.doc(id).get().then((value) => {
+        _Servicenamecontroler.text = value['name'].toString(),
+        print(_Servicenamecontroler.text)
+      });
+      return _Servicenamecontroler.text;
+  }
+  String getChargebyID(String id){
+    final servicefb = FirebaseFirestore.instance.collection('ServiceInfo');
+    servicefb.doc(id).get().then((value) => {
+      _chargecontroler.text = value['charge'].toString(),
+    });
+    return _chargecontroler.text;
+  }
+
   void _getCategorybyid(String id)
   {
     final categoryfb = FirebaseFirestore.instance.collection('category_apartment');
@@ -58,7 +81,7 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.9),
+        backgroundColor: Colors.white.withOpacity(0.1),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
           child: StreamBuilder(
@@ -193,94 +216,70 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                       //       crossAxisAlignment: CrossAxisAlignment.start,
                       //       children: [
                       //         SizedBox(height: 10,),
-                      //         Text("Giá cả giao động", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                      //         SizedBox(height: 20,),
-                      //         Column(
-                      //         children: [
-                      //           Row(
-                      //             children: [
-                      //               Icon(Icons.money),
-                      //               SizedBox(width: 5,),
-                      //               Text("Giá thuê", style: TextStyle(fontSize: 15),),
-                      //               Spacer(),
-                      //               Container(width: 60,
-                      //                   child: TextField(
-                      //                     decoration: InputDecoration(
-                      //                         border: InputBorder.none
-                      //                     ),
-                      //                     textAlign: TextAlign.right,
-                      //                     controller: _minRentalcontroler, style: TextStyle(fontSize: 15),)),
-                      //               Text(" - ", style: TextStyle(fontSize: 15),),
-                      //               Container(width: 60,
-                      //                   child: TextField(
-                      //                     decoration: InputDecoration(
-                      //                         border: InputBorder.none
-                      //                     ),
-                      //                     textAlign: TextAlign.right,
-                      //                     controller: _maxRentalcontroler, style: TextStyle(fontSize: 15),)),
-                      //               Text(" VNĐ", style: TextStyle(fontSize: 15),),
-                      //             ],
-                      //             ),
+                      //         Text("Thông tin dịch vụ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                      //         Container(
+                      //           child: StreamBuilder(
+                      //           stream: serviceApartmentFB.collectionReference.where('idRoom', isEqualTo: widget.id).snapshots(),
+                      //               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      //                 if (!snapshot.hasData) {
+                      //                   return Center(child: Text("No Data"));
+                      //                 } else {
+                      //                   return ListView.builder(
+                      //                     shrinkWrap: true,
+                      //                     physics: ScrollPhysics(),
+                      //                     itemCount: snapshot.data!.docs.length,
+                      //                     itemBuilder: (context, i) {
+                      //                       QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                      //                       return ServiceApartmentCard(
+                      //                           name: getServicenamebyID(x['idService']),
+                      //                           Charge: getChargebyID(x['idService']),
+                      //                           funtion: (){
                       //
-                      //         ],
-                      //         ),
-                      //         Column(
-                      //           children: [
-                      //             Row(
-                      //               children: [
-                      //                 Icon(Icons.money),
-                      //                 SizedBox(width: 5,),
-                      //                 Text("Giá bán", style: TextStyle(fontSize: 15),),
-                      //                 Spacer(),
-                      //                 Container(width: 60,
-                      //                     child: TextField(
-                      //                       decoration: InputDecoration(
-                      //                           border: InputBorder.none
-                      //                       ),
-                      //                       textAlign: TextAlign.right,
-                      //                       controller: _minPricecontroler, style: TextStyle(fontSize: 15),)),
-                      //                 Text(" - ", style: TextStyle(fontSize: 15),),
-                      //                 Container(width: 60,
-                      //                     child: TextField(
-                      //                       decoration: InputDecoration(
-                      //                           border: InputBorder.none
-                      //                       ),
-                      //                       textAlign: TextAlign.right,
-                      //                       controller: _maxPricecontroler, style: TextStyle(fontSize: 15),)),
-                      //                 Text(" VNĐ", style: TextStyle(fontSize: 15),),
-                      //               ],
-                      //             ),
-                      //
-                      //           ],
-                      //         ),
-                      //         SizedBox(height: 10,)
+                      //                           });
+                      //                     },
+                      //                   );
+                      //                 }
+                      //               }
+                      //           )
+                      //         )
                       //       ],
                       //     ),
                       //   ),
                       // ),
-                      SizedBox(height: size.height * 0.015,),
-                      Container(
-                        width: size.width,
-                        child: Text('Ghi chú',
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
-                      ),
-                      SizedBox(height: size.height * 0.015,),
 
-                      Container(
-                        //padding: EdgeInsets.only(left: 16),
-                        width: size.width,
-                        child: TextField(
-                          controller: _notecontroler,
-                          enabled: false,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          maxLines: 4,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+                      SizedBox(height: size.height * 0.015,),
+                      Card(
+                        elevation: 2,
+                        child: Container(
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: size.width,
+                                child: Text('Ghi chú',
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                              ),
+                              SizedBox(height: size.height * 0.015,),
+
+                              Container(
+                                //padding: EdgeInsets.only(left: 16),
+                                width: size.width,
+                                child: TextField(
+                                  controller: _notecontroler,
+                                  enabled: false,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  maxLines: 4,
+                                  style: TextStyle(
+                                      color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
+                    ),
                     ],
                   );
                 }

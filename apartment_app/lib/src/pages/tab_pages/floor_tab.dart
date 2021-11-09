@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
@@ -15,6 +16,10 @@ class FloorTab extends StatefulWidget {
 class _FloorTabState extends State<FloorTab> {
 
   FloorFB floorFB = new FloorFB();
+
+  late int a;
+
+  bool _isAdd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +44,7 @@ class _FloorTabState extends State<FloorTab> {
                         return Center(child: Text("No Data"),);
                       }
                       else {
+                        a = snapshot.data!.docs.length;
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
@@ -62,10 +68,42 @@ class _FloorTabState extends State<FloorTab> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {  },
-      //   label: Text("Thêm tầng"),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: myGreen,
+        onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
+      ),
     );
+  }
+
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn thêm tầng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    floorFB.add((a+1).toString(), "0");
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }
