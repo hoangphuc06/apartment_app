@@ -161,7 +161,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                     stream: this.fb.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Center(child: Text("No Data"));
                       }
                       this.Cache.clear();
                       snapshot.data!.docs.forEach((element) {

@@ -133,20 +133,23 @@ void initState() {
                   ),
                 ),
                 Expanded(
-                  child: ListTile(
-                    title: Text('Theo tầng'),
-                    leading: Radio(
-                      value: 2,
-                      groupValue: this.radioValue,
-                      onChanged: (value) {
-                        setState(() {
-                          this.radioValue=2;
-                          this.searchController.text='';
-                          this.hitText='Thông tin tầng của của căn hộ';
-                          this.option= false;
-                        });
-                      },
-                      activeColor: Colors.green,
+                  
+                  child: SingleChildScrollView(
+                    child: ListTile(
+                      title: Text('Theo tầng'),
+                      leading: Radio(
+                        value: 2,
+                        groupValue: this.radioValue,
+                        onChanged: (value) {
+                          setState(() {
+                            this.radioValue=2;
+                            this.searchController.text='';
+                            this.hitText='Thông tin tầng của của căn hộ';
+                            this.option= false;
+                          });
+                        },
+                        activeColor: Colors.green,
+                      ),
                     ),
                   ),
                 )
@@ -167,7 +170,7 @@ void initState() {
                     stream: this.floorInfoFB.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Center(child: Text("No Data"));
                       }
                       this.listApartmentCache.clear();
                       snapshot.data!.docs.forEach((element) {
