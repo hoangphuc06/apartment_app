@@ -73,60 +73,58 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
                       //Loại phòng
                       SizedBox(height: 20,),
                       TitleInfoNotNull(text: "Loại phòng"),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance.collection('category_apartment').snapshots(),
-                        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if(!snapshot.hasData){
-                            return Center(child: Text("No Data"),);
-                          }
-                          else{
-                            List<DropdownMenuItem> currentItem=[];
-                            for(int i=0; i<snapshot.data!.docs.length; i++)
-                            {
-                              DocumentSnapshot snap= snapshot.data!.docs[i];
-                              currentItem.add(
-                                DropdownMenuItem(child: Text(
-                                  snap['name'],
-                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),),
-                                  value: "${snap.id.toString()}",
-                                ),
-                              );
+                      Container(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance.collection('category_apartment').snapshots(),
+                          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if(!snapshot.hasData){
+                              return Center(child: Text("No Data"),);
                             }
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget> [
-                                Icon(Icons.house_sharp,
-                                    color: const Color(0xFF000000),
-                                    size: 24.0),
-                                SizedBox(width: 20),
-                                DropdownButton<Object?>(
-                                  items: currentItem,
-                                  onChanged: (currencyValue){
-                                    setState(() {
-                                      selectedCurrency = currencyValue;
-                                      _categoryController.text = '$currencyValue';
-                                    });
-                                  },
-                                  style: const TextStyle(color: Colors.deepPurple),
-                                  value: selectedCurrency,
-                                  underline: Container(
-                                    height: 2,
-                                    color: myGreen,
+                            else{
+                              List<DropdownMenuItem> currentItem=[];
+                              for(int i=0; i<snapshot.data!.docs.length; i++)
+                              {
+                                DocumentSnapshot snap= snapshot.data!.docs[i];
+                                currentItem.add(
+                                  DropdownMenuItem(child: Text(
+                                    snap['name'],
+                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),),
+                                    value: "${snap.id.toString()}",
                                   ),
-                                  isExpanded: false,
-                                  hint: new Text('Chọn loại phòng                              ',
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
-                                  ),
-                                ),
-                              ],
-                            );
-                          }
-                        },
+                                );
+                              }
+                              return
+                                  Container(
+                                    child: DropdownButtonFormField<Object?>(
+                                      items: currentItem,
+                                      onChanged: (currencyValue){
+                                        setState(() {
+                                          selectedCurrency = currencyValue;
+                                          _categoryController.text = '$currencyValue';
+                                        });
+                                      },
+                                      style: const TextStyle(color: Colors.deepPurple),
+                                      value: selectedCurrency,
+                                      // underline: Container(
+                                      //   height: 2,
+                                      //   color: myGreen,
+                                      // ),
+                                      validator: (value) => value == null ? 'vui lòng chọn loại căn hộ' : null,
+                                      isExpanded: false,
+                                      hint: new Text('Chọn loại phòng                                ',
+                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
+                                      ),
+                                    ),
+                                  );
+                            }
+                          },
+                        ),
                       ),
 
                       //Ghi chú
                       SizedBox(height: 20,),
                       TitleInfoNull(text: "Ghi chú"),
+                      SizedBox(height: 10,),
                       _noteTextField(),
 
                       SizedBox(height: 10,),
@@ -170,7 +168,7 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     decoration: InputDecoration(
       hintText: "101, 102,...",
     ),
-    keyboardType: TextInputType.name,
+    keyboardType: TextInputType.number,
     validator: (val) {
       if (val!.isEmpty) {
         return "Vui lòng nhập tên";
@@ -183,23 +181,20 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     style: MyStyle().style_text_tff(),
     controller: _floorController,
     enabled: false,
-    keyboardType: TextInputType.number,
+    keyboardType: TextInputType.text,
   );
 
   _noteTextField() => TextFormField(
     style: MyStyle().style_text_tff(),
-    maxLines: 4,
+    maxLines: 5,
+    minLines: 2,
     controller: _noteController,
     decoration: InputDecoration(
       hintText: "ghi chú...",
+      border: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),)
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập số lượng người ở";
-      }
-      return null;
-    },
+    keyboardType: TextInputType.text,
   );
 
 }

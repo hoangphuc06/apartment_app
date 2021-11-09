@@ -21,6 +21,7 @@ class FloorInfoPage extends StatefulWidget{
 
 class _FloorInfoPageState  extends State<FloorInfoPage>{
   FloorInfoFB floorInfoFB = new FloorInfoFB();
+  FloorFB floorFB = new FloorFB();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,8 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                   if (!snapshot.hasData) {
                     return Center(child: Text("No Data"));
                   } else {
+                    _updateNumofApm(snapshot.data!.docs.length);
+                    _updateNumofUse(snapshot.data!.docs.length);
                     return ListView.builder(
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
@@ -76,5 +79,13 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
     );
   }
 
+  void _updateNumofApm(int a){
+    floorFB.update(widget.floorid, a.toString());
+  }
+
+  void _updateNumofUse(int a){
+    final floor = FirebaseFirestore.instance.collection('floorinfo').where('status', isEqualTo: 'trống').snapshots();
+
+  }
 }
 

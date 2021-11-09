@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
@@ -19,6 +20,8 @@ class ListDwellersPage extends StatefulWidget {
 class _ListDwellersPageState extends State<ListDwellersPage> {
 
   DwellersFB dwellersFB = new DwellersFB();
+  FloorInfoFB floorInfoFB = new FloorInfoFB();
+  late int num;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,8 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
                 if (!snapshot.hasData) {
                   return Center(child: Text("No Data"));
                 } else {
+                  num = snapshot.data!.docs.length;
+                  floorInfoFB.updateDweller(widget.id_apartment, num );
                   return ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -53,12 +58,12 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () {
-      //       Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
-      //     },
-      //     label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
-      // ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
+          },
+          label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
+      ),
     );
   }
 }
