@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/model/card.dart';
 import 'package:apartment_app/src/widgets/cards/otherListItem.dart';
 import 'package:flutter/material.dart';
@@ -46,12 +47,12 @@ class _OthersTabState extends State<OthersTab> {
     return Scaffold(
        backgroundColor: Colors.grey.withOpacity(0.1),
         appBar: AppBar(
+          backgroundColor: myGreen,
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Khác",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
         ),
         body: SingleChildScrollView(

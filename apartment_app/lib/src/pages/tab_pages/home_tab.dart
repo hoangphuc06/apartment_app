@@ -17,7 +17,7 @@ class HomeTab extends StatelessWidget {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            "Trang chính",
+            "Trang chủ",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           bottom: TabBar(

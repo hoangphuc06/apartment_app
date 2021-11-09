@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'apartment_search/apartment_search_tab.dart';
 import 'dweller_search/dweller_search_tab.dart';
@@ -17,11 +18,12 @@ class _SearchTabState extends State<SearchTab> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: myGreen,
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Tìm kiếm",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           bottom: TabBar(
             labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),

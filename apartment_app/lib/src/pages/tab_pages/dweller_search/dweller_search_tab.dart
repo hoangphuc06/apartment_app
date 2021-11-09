@@ -30,18 +30,6 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   String? state='Tất cả';
   bool check=false;
 
-  //  Future<List<ApartmentModel>>? _init() async {
-  //   List<ApartmentModel> listApartment = [];
-  //   QuerySnapshot eventsQuery = await floorInfoFB.collectionReference.get();
-  //   eventsQuery.docs.forEach((element) async {
-  //     ApartmentModel temp = ApartmentModel.fromDocument(element);
-  //     await temp.setInfo();
-  //     listApartment.add(temp);
-  //   });
-  //   this.listApartmentCache=listApartment;
-  //   return listApartment;
-  // }
-
   bool chechInfo(Dweller temp){
     if(temp.homeTown!.isEmpty||temp.phoneNumber!.isEmpty||temp.gender!.isEmpty
         ||temp.email!.isEmpty||temp.name!.isEmpty||temp.birthday!.isEmpty)
@@ -81,81 +69,86 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: Colors.white.withOpacity(0.9),
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: _SearchBar(),
-                ),
-                IconButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    iconSize: 50,
-                    icon: Icon(Icons.search)),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: Text('Theo tên'),
-                    leading: Radio(
-                      value: 1,
-                      groupValue: this.radioValue,
-                      onChanged: (value) {
-                        setState(() {
-                          hitText= 'Họ và tên';
-                          this.radioValue = 1;
-                          this.searchController.text='';
-                          option=true;
-                        });
-                      },
-                      activeColor: Colors.green,
+            Card(
+              elevation: 2,
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _SearchBar(),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {});
+                              },
+                              iconSize: 35,
+                              icon: Icon(Icons.search)),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: ListTile(
-                    title: Text('Theo số CMND'),
-                    leading: Radio(
-                      value: 2,
-                      groupValue: this.radioValue,
-                      onChanged: (value) {
-                        setState(() {
-                          this.radioValue=2;
-                          this.searchController.text='';
-                          this.hitText='số CMND của dân cư';
-                          this.option= false;
-                        });
-                      },
-                      activeColor: Colors.green,
+                    ListTile(
+                      title: Text('Họ tên'),
+                      leading: Radio(
+                        value: 1,
+                        groupValue: this.radioValue,
+                        onChanged: (value) {
+                          setState(() {
+                            hitText= 'Họ và tên';
+                            this.radioValue = 1;
+                            this.searchController.text='';
+                            option=true;
+                          });
+                        },
+                        activeColor: Colors.green,
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Chưa đầy đủ thông tin:',
-                  style: MyStyle().style_text_tff(),
+                    ListTile(
+                      title: Text('CMND/CCCD'),
+                      leading: Radio(
+                        value: 2,
+                        groupValue: this.radioValue,
+                        onChanged: (value) {
+                          setState(() {
+                            this.radioValue=2;
+                            this.searchController.text='';
+                            this.hitText='Số CMND/CCCD';
+                            this.option= false;
+                          });
+                        },
+                        activeColor: Colors.green,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Chưa đầy đủ thông tin:',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          Checkbox(value: check,
+                              onChanged: (value){
+                                setState(() {
+                                  this.check=value!;
+                                });
+                              })
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Checkbox(value: check,
-                    onChanged: (value){
-                      setState(() {
-                        this.check=value!;
-                      });
-                    })
-              ],
+              ),
             ),
+
             Expanded(
                 child: StreamBuilder(
                     stream: this.fb.collectionReference.snapshots(),
