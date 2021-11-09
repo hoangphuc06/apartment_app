@@ -1,7 +1,12 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -19,7 +24,9 @@ class EditContractPage extends StatefulWidget {
 
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
-
+  RenterFB renterFB = new RenterFB();
+  FloorInfoFB floorInfoFB = new FloorInfoFB();
+  CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   String? _roomPaymentPeriodController;
 
   final TextEditingController _idController = TextEditingController();
@@ -35,6 +42,8 @@ class _EditContractPageState extends State<EditContractPage> {
   final TextEditingController _renterController = TextEditingController();
   final TextEditingController _rulesController = TextEditingController();
   final TextEditingController _serviceController = TextEditingController();
+
+    final TextEditingController _nameRenter = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -79,6 +88,10 @@ class _EditContractPageState extends State<EditContractPage> {
       _depositController.text = this.widget.contract.deposit.toString();
       _renterController.text = this.widget.contract.renter.toString();
       _rulesController.text = this.widget.contract.rules.toString();
+       renterFB.collectionReference
+            .doc(_renterController.text)
+            .get()
+            .then((value) => {_nameRenter.text = value["name"]});
     });
   }
 
@@ -128,8 +141,16 @@ class _EditContractPageState extends State<EditContractPage> {
 
                         //Chọn phòng
                         TitleInfoNotNull(text: "Chọn phòng"),
-                        _textformField(
-                            _roomController, "A18-312...", "chọn phòng"),
+                        GestureDetector(
+                            onTap: () {
+                              _gotoPageRoom();
+                            },
+                            child: AbsorbPointer(
+                                child: _textformField(
+                              _roomController,
+                              "312_A18...",
+                              "Chọn phòng",
+                            ))),
                         SizedBox(
                           height: 20,
                         ),
@@ -298,8 +319,13 @@ class _EditContractPageState extends State<EditContractPage> {
 
                         //người thuê nhà
                         TitleInfoNotNull(text: "Người thuê nhà"),
-                        _textformField(_renterController, "Lê Hoàng Phúc...",
-                            "người thuê nhà"),
+                          GestureDetector(
+                            onTap: () {
+                              _gotoPageRenter();
+                            },
+                            child: AbsorbPointer(
+                                child: _textformField(_nameRenter,
+                                    "Lê Hoàng Phúc...", "người thuê nhà"))),
                         SizedBox(
                           height: 10,
                         ),
@@ -382,6 +408,11 @@ class _EditContractPageState extends State<EditContractPage> {
   }
 
   void _updateContract() {
+    if(_roomController.text!=this.widget.contract.room)
+    {
+      floorInfoFB.updateStatus(this.widget.contract.room!, "Trống");
+      floorInfoFB.updateStatus(_roomController.text, "Đang thuê");
+    }
     contractFB
         .update(
             widget.contract.id!,
@@ -449,4 +480,34 @@ class _EditContractPageState extends State<EditContractPage> {
         text,
         style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
       );
+  void _gotoPageRoom() async {
+    var id = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SelectRoomContract()));
+    if (id != null) {
+      setState(() {
+        _roomController.text = id;
+        floorInfoFB.collectionReference.doc(id).get().then((value) => {
+              categoryApartmentFB.collectionReference
+                  .doc(value["categoryid"])
+                  .get()
+                  .then(
+                      (data) => {_roomChargeController.text = data["minPrice"]})
+            });
+      });
+    }
+  }
+
+  void _gotoPageRenter() async {
+    var id = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SelectRenterContract()));
+    if (id != null) {
+      setState(() {
+        _renterController.text = id;
+        renterFB.collectionReference
+            .doc(id)
+            .get()
+            .then((value) => {_nameRenter.text = value["name"]});
+      });
+    }
+  }
 }

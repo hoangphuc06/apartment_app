@@ -4,14 +4,14 @@ import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class SelectRoom extends StatefulWidget {
-  const SelectRoom({Key? key}) : super(key: key);
+class SelectRoomContract extends StatefulWidget {
+  const SelectRoomContract({Key? key}) : super(key: key);
 
   @override
-  _SelectRoomState createState() => _SelectRoomState();
+  _SelectRoomContractState createState() => _SelectRoomContractState();
 }
 
-class _SelectRoomState extends State<SelectRoom> {
+class _SelectRoomContractState extends State<SelectRoomContract> {
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
   @override
@@ -40,11 +40,11 @@ class _SelectRoomState extends State<SelectRoom> {
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder(
-                    stream: floorInfoFB.collectionReference.where('status').snapshots(),
+                    stream: floorInfoFB.collectionReference.where('status',isEqualTo: 'Trống').snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
-                          child: Text("No Data"),
+                          child: Text("Dữ liệu trống"),
                         );
                       } else {
                         return ListView.builder(
@@ -58,11 +58,7 @@ class _SelectRoomState extends State<SelectRoom> {
                                 numOfDweller: x["numOfDweller"],
                                 status: x["status"],
                                 funtion: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             FloorInfoPage(floorid: x["id"])));
+                                   Navigator.pop(context,x["id"]);
                                 },
                               );
                             });

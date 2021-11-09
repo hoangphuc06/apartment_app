@@ -30,6 +30,13 @@ class FloorInfoFB{
     ).then((value) => print("completed"))
         .catchError((error)=>print("fail"));
   }
+   Future<void> updateStatus(String id,String status) async{
+    return FirebaseFirestore.instance.collection("floorinfo").doc(id).update({ 
+      "status" : status,   
+    }
+    ).then((value) => print("completed"))
+        .catchError((error)=>print("fail"));
+  }
   Future<void> delete(String id) async{
     return FirebaseFirestore.instance.collection("floorinfo").doc(id).delete();
   }
