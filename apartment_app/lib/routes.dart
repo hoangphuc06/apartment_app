@@ -9,7 +9,7 @@ import 'package:apartment_app/src/pages/introduction/view/edit_introduction_page
 import 'package:apartment_app/src/pages/introduction/view/introduction_page.dart';
 import 'package:apartment_app/src/pages/login_page.dart';
 import 'package:apartment_app/src/pages/service/view/manage_service_page.dart';
-import 'package:apartment_app/src/pages/notification/view/notification_detail.dart';
+import 'package:apartment_app/src/pages/notification/view/add_notification.dart';
 import 'package:apartment_app/src/pages/notification/view/notification_page.dart';
 import 'package:apartment_app/src/pages/register_page.dart';
 import 'package:apartment_app/src/pages/reset_password/view/reset_password_page.dart';
@@ -49,7 +49,7 @@ final routes = <String, WidgetBuilder>{
   "edit_introduction_page":(BuildContext context) =>EditIntroductionPage(),
   //thong bao
   "notification_page":(BuildContext context) =>NotificationPage(),
-  "notification_detail_page":(BuildContext context) =>NotificationDetailPage(),
+  "notification_detail_page":(BuildContext context) =>AddNotificationPage(),
   //doi mat khảu
   "update_password_page":(BuildContext context) =>UpdatePassWordPage(),
 };
