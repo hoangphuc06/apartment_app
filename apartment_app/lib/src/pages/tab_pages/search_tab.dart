@@ -1,8 +1,6 @@
-import 'package:apartment_app/src/pages/tab_pages/dweller_search/dweller_search_tab.dart';
 import 'package:flutter/material.dart';
 import 'apartment_search/apartment_search_tab.dart';
-import 'contract_tab.dart';
-import 'floor_tab.dart';
+
 
 class SearchTab extends StatefulWidget {
   const SearchTab({Key? key}) : super(key: key);
@@ -38,7 +36,7 @@ class _SearchTabState extends State<SearchTab> {
         body: TabBarView(
           children: [
             ApartmentSearchTab(),
-            DwellerSearchTab(),
+            //DwellerSearchTab(),
           ],
         ),
       ),
