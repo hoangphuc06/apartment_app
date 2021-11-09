@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/notification/firebase/fb_notification.dart';
 import 'package:apartment_app/src/pages/notification/model/notification_info.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
@@ -75,7 +76,14 @@ class _NotificationState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Thông báo')),
+        appBar: AppBar(
+          backgroundColor: myGreen,
+          elevation: 0,
+          centerTitle: true,
+          title:  Text(
+            "Thông báo",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             Route route = MaterialPageRoute(
