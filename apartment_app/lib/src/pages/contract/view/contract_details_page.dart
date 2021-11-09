@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/liquidation_contract_page.dart';
 import 'package:apartment_app/src/pages/contract/view/edit_contract_page.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
@@ -65,6 +66,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                   );
                 } else {
                   QueryDocumentSnapshot x = snapshot.data!.docs[0];
+                  Contract contract = Contract.fromDocument(x);
                   return Column(
                     children: [
                       Card(
@@ -272,8 +274,8 @@ class _ContractDetailsState extends State<ContractDetails> {
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
                                                                     EditContractPage(
-                                                                        id: widget
-                                                                            .id)))
+                                                                        contract:
+                                                                            contract)))
                                                       },
                                                   color: myYellow),
                                             ),

@@ -1,6 +1,12 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
+import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -8,7 +14,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class AddContractPage extends StatefulWidget {
-  const AddContractPage({Key? key}) : super(key: key);
+  // const AddContractPage({Key? key}) : super(key: key);
+  late String id;
+
+  AddContractPage({required this.id});
 
   @override
   _AddContractPageState createState() => _AddContractPageState();
@@ -16,7 +25,10 @@ class AddContractPage extends StatefulWidget {
 
 class _AddContractPageState extends State<AddContractPage> {
   ContractFB contractFB = new ContractFB();
-
+  RenterFB renterFB = new RenterFB();
+  FloorInfoFB floorInfoFB = new FloorInfoFB();
+  CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
+  CategoryApartment? categoryApartment;
   String? _roomPaymentPeriodController = "1 Tháng";
 
   final TextEditingController _idController = TextEditingController();
@@ -32,6 +44,9 @@ class _AddContractPageState extends State<AddContractPage> {
   final TextEditingController _renterController = TextEditingController();
   final TextEditingController _rulesController = TextEditingController();
   final TextEditingController _serviceController = TextEditingController();
+
+  final TextEditingController _nameRenter = TextEditingController();
+
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -102,8 +117,16 @@ class _AddContractPageState extends State<AddContractPage> {
 
                         //Chọn phòng
                         TitleInfoNotNull(text: "Chọn phòng"),
-                        _textformField(
-                            _roomController, "A18-312...", "chọn phòng"),
+                        GestureDetector(
+                            onTap: () {
+                              _gotoPageRoom();
+                            },
+                            child: AbsorbPointer(
+                                child: _textformField(
+                              _roomController,
+                              "312_A18...",
+                              "Chọn phòng",
+                            ))),
                         SizedBox(
                           height: 20,
                         ),
@@ -237,8 +260,9 @@ class _AddContractPageState extends State<AddContractPage> {
                         ),
                         //tiền nhà
                         TitleInfoNotNull(text: "Tiền nhà"),
-                        _textformField(
+                        _textformFieldDisable(
                             _roomChargeController, "100000000...", "tiền nhà"),
+
                         SizedBox(
                           height: 20,
                         ),
@@ -269,8 +293,14 @@ class _AddContractPageState extends State<AddContractPage> {
                         ),
                         //người thuê nhà
                         TitleInfoNotNull(text: "Người thuê nhà"),
-                        _textformField(_renterController, "Lê Hoàng Phúc...",
-                            "người thuê nhà"),
+                        GestureDetector(
+                            onTap: () {
+                              _gotoPageRenter();
+                            },
+                            child: AbsorbPointer(
+                                child: _textformField(_nameRenter,
+                                    "Lê Hoàng Phúc...", "người thuê nhà"))),
+
                         SizedBox(
                           height: 10,
                         ),
@@ -348,7 +378,9 @@ class _AddContractPageState extends State<AddContractPage> {
   }
 
   void _onClick() {
-    if (_formKey.currentState!.validate()) _addContract();
+    if (_formKey.currentState!.validate()) {
+      _addContract();
+    }
   }
 
   void _addContract() {
@@ -366,6 +398,7 @@ class _AddContractPageState extends State<AddContractPage> {
             _rulesController.text,
             true)
         .then((value) => {
+              floorInfoFB.updateStatus(_roomController.text, "Đang thuê"),
               _hostController.clear(),
               _roomController.clear(),
               _startDayController.clear(),
@@ -383,6 +416,23 @@ class _AddContractPageState extends State<AddContractPage> {
       TextFormField(
         style: MyStyle().style_text_tff(),
         controller: controller,
+        decoration: InputDecoration(
+          hintText: hint,
+        ),
+        keyboardType: TextInputType.name,
+        validator: (val) {
+          if (val!.isEmpty) {
+            return "Vui lòng nhập " + text;
+          }
+          return null;
+        },
+      );
+  _textformFieldDisable(
+          TextEditingController controller, String hint, String text) =>
+      TextFormField(
+        style: MyStyle().style_text_tff(),
+        controller: controller,
+        readOnly: true,
         decoration: InputDecoration(
           hintText: hint,
         ),
@@ -417,4 +467,34 @@ class _AddContractPageState extends State<AddContractPage> {
       );
   _title(String text) =>
       Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
+  void _gotoPageRoom() async {
+    var id = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SelectRoomContract()));
+    if (id != null) {
+      setState(() {
+        _roomController.text = id;
+        floorInfoFB.collectionReference.doc(id).get().then((value) => {
+              categoryApartmentFB.collectionReference
+                  .doc(value["categoryid"])
+                  .get()
+                  .then(
+                      (data) => {_roomChargeController.text = data["minPrice"]})
+            });
+      });
+    }
+  }
+
+  void _gotoPageRenter() async {
+    var id = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SelectRenterContract()));
+    if (id != null) {
+      setState(() {
+        _renterController.text = id;
+        renterFB.collectionReference
+            .doc(id)
+            .get()
+            .then((value) => {_nameRenter.text = value["name"]});
+      });
+    }
+  }
 }

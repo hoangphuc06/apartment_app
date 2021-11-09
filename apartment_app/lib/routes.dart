@@ -1,4 +1,6 @@
+import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/add_icon_page.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
@@ -17,6 +19,8 @@ import 'package:apartment_app/src/pages/splash_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:flutter/material.dart';
+
+import 'src/pages/Bill/view/selectRoom.dart';
 
 final routes = <String, WidgetBuilder>{
   "register_page": (BuildContext context) => RegisterPage(),
@@ -37,7 +41,7 @@ final routes = <String, WidgetBuilder>{
   //"add_dweller_page": (BuildContext context) => AddDwellerPage(),
 
   //"edit_apartment_info_page": (BuildContext context) => EditApartmentInfo(),
-  "add_contract_page": (BuildContext context) => AddContractPage(),
+
 
   //Dich vu
   "service_page": (BuildContext context) => ServicePage(),
@@ -52,4 +56,9 @@ final routes = <String, WidgetBuilder>{
   "notification_detail_page":(BuildContext context) =>AddNotificationPage(),
   //doi mat khảu
   "update_password_page":(BuildContext context) =>UpdatePassWordPage(),
+  //Hoa don
+  "add_new_bill_page":(BuildContext context) =>AddBillPage(),
+  "select_room":(BuildContext context) =>SelectRoom(),
+  //Hop dong
+  "select_room_contract":(BuildContext context) =>SelectRoomContract(),
 };
