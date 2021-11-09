@@ -57,7 +57,7 @@ class _ContractDetailsState extends State<ContractDetails> {
           padding: EdgeInsets.all(8),
           child: StreamBuilder(
               stream: contractFB.collectionReference
-                  .where('id', isEqualTo: widget.id)
+                  .where('id', isEqualTo: this.widget.id)
                   .snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
@@ -134,7 +134,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                                 Text(
                                                   "Từ ngày " +
                                                       x["startDay"] +
-                                                      " đến " +
+                                                      " - " +
                                                       x["expirationDate"],
                                                   style: TextStyle(
                                                     fontSize: 16,
