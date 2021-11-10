@@ -473,7 +473,7 @@ class _AddContractPageState extends State<AddContractPage> {
                   .doc(value["categoryid"])
                   .get()
                   .then(
-                      (data) => {_roomChargeController.text = data["minPrice"]})
+                      (data) => {_roomChargeController.text = data["rentalPrice"]})
             });
       });
     }
