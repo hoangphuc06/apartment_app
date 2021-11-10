@@ -4,6 +4,7 @@ import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
 import 'package:apartment_app/src/widgets/cards/floor_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FloorTab extends StatefulWidget {
@@ -51,6 +52,12 @@ class _FloorTabState extends State<FloorTab> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context,i) {
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                              // int dem = 0;
+                              // var a = FirebaseFirestore.instance.collection("floorinfo").where("floorid", isEqualTo: x["id"]).where("status",isEqualTo: "Trống").snapshots();
+                              // a.forEach((element) {
+                              //   dem++;
+                              // });
+                              // print(dem);
                               return FloorCard(
                                 name: x["id"],
                                 numOfApm: x["numOfApm"],

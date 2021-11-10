@@ -27,7 +27,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
         elevation: 0,
         centerTitle: true,
         title:  Text(
-          widget.service.name.toString(),
+          "Thông tin dịch vụ",
+          //widget.service.name.toString(),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
@@ -42,19 +43,43 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10,),
-                    Text("Thông tin dich vụ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    Text("CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                     SizedBox(height: 20,),
-                    _detailInfo(Icons.attach_money , "Phí dịch vụ:", widget.service.charge.toString()+" VNĐ"),
+                    _detailInfo(Icons.drive_file_rename_outline , "Tên dịch vụ", widget.service.name.toString()),
                     SizedBox(height: 20,),
-                    _detailInfo(Icons.credit_card, "Thu phí dự trên", widget.service.type.toString()),
+                    _detailInfo(Icons.attach_money , "Phí dịch vụ", widget.service.charge.toString()+" VNĐ"),
                     SizedBox(height: 20,),
-                    _detailInfo(Icons.wysiwyg, "Ghi chú", widget.service.detail.toString() ),
+                    _detailInfo(Icons.credit_card, "Đơn vị", widget.service.type.toString()),
                     SizedBox(height: 10,),
                   ],
                 ),
               ),
             ),
-
+            Card(
+              elevation: 2,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10,),
+                    Text("GHI CHÚ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                    SizedBox(height: 20,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            widget.service.detail.toString(),
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

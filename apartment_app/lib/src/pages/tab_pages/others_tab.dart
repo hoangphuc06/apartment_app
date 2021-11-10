@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/model/card.dart';
 import 'package:apartment_app/src/widgets/cards/otherListItem.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/fire_base/fb_optionsmanager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -64,8 +65,14 @@ class _OthersTabState extends State<OthersTab> {
                       text: card[i].title!,
                       icon: card[i].icon!,
                       function: () {
-                        Navigator.pushNamed(context, card[i].nextPage!);
+                        card[i].title == "Đăng xuất"? _logout()
+                        : Navigator.pushNamed(context, card[i].nextPage!);
                       });
                 })));
+  }
+
+  _logout() {
+    Navigator.pushReplacementNamed(context, "login_page");
+    FirebaseAuth.instance.signOut();
   }
 }
