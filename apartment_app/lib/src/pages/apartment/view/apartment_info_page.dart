@@ -83,7 +83,7 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
     return Scaffold(
         backgroundColor: Colors.white.withOpacity(0.1),
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+          padding: EdgeInsets.all(8),
           child: StreamBuilder(
               stream: floorInfoFB.collectionReference.where('id', isEqualTo: widget.id).snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -104,14 +104,14 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 10,),
-                              Text("Thông tin chi tiết căn hộ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              Text("THÔNG TIN CHI TIẾT CĂN HỘ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
                               SizedBox(height: 20,),
                               _detailInfo(Icons.house_sharp, "Căn hộ" , x['id']),
                               SizedBox(height: 20,),
                               _detailInfo(Icons.apartment, "Tầng ", x['floorid']),
                               SizedBox(height: 20,),
                               _detailInfo(Icons.wysiwyg_rounded, "Trạng thái phòng",x['status']),
-                              SizedBox(height: 20,),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -125,8 +125,8 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 10,),
-                              Text("Thông tin chi tiết loại phòng", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                              SizedBox(height: 20,),
+                              Text("THÔNG TIN CHI TIẾT LOẠI CĂN HỘ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                              SizedBox(height: 5,),
                               Row(
                                   children: [
                                     Icon(Icons.house_rounded),
@@ -172,7 +172,6 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                                           controller: _bedroomtroler, style: TextStyle(fontSize: 15),)),
                                   ]
                               ),
-                              //
                               Row(
                                   children: [
                                     Icon(Icons.wc),
@@ -203,7 +202,6 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                                           controller: _dwellercontroler, style: TextStyle(fontSize: 15),)),
                                   ]
                               ),
-                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -247,35 +245,37 @@ class _ApartmentInfoPageState extends State<ApartmentInfoPage> {
                       //   ),
                       // ),
 
-                      SizedBox(height: size.height * 0.015,),
+                      // SizedBox(height: size.height * 0.015,),
                       Card(
                         elevation: 2,
                         child: Container(
                           padding: EdgeInsets.all(8),
                           child: Column(
                             children: [
+                              SizedBox(height: 10,),
                               Container(
                                 width: size.width,
-                                child: Text('Ghi chú',
+                                child: Text('GHI CHÚ',
                                   style: TextStyle(
                                       color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
                               ),
                               SizedBox(height: size.height * 0.015,),
-
                               Container(
                                 //padding: EdgeInsets.only(left: 16),
                                 width: size.width,
                                 child: TextField(
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none
+                                  ),
                                   controller: _notecontroler,
                                   enabled: false,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  maxLines: 4,
+                                  maxLines: 20,
+                                  minLines: 5,
                                   style: TextStyle(
                                       color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
                                 ),
                               ),
+                              SizedBox(height: 10,),
                           ],
                         ),
                       ),

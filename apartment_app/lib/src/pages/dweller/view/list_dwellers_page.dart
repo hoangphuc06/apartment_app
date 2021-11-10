@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
@@ -58,11 +59,13 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
           },
-          label: Text("Thêm thành viên", style: TextStyle(color: Colors.black),)
+          backgroundColor: myGreen,
+
       ),
     );
   }

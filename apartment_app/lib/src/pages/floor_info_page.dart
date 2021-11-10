@@ -37,7 +37,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
       body: Container(
         height: double.infinity,
         color: Colors.grey.withOpacity(0.1),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Expanded(
           child: SingleChildScrollView(
             child: StreamBuilder(
@@ -74,7 +74,8 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
         child: Icon(Icons.add),
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddApartmentPage(widget.floorid)));
-        }
+        },
+        backgroundColor: myGreen,
       ),
     );
   }
