@@ -170,7 +170,7 @@ void initState() {
                     stream: this.floorInfoFB.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(child: Text("No Data"));
+                        return Center(child: Text("No Data"),);
                       }
                       this.listApartmentCache.clear();
                       snapshot.data!.docs.forEach((element) {

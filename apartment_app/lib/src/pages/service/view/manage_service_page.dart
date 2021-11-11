@@ -82,8 +82,12 @@ class StateServicePage extends State<ServicePage> {
         },
       ),
       appBar: AppBar(
-          title: Text("Dịch Vụ",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "Dịch vụ",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: Container(
         padding: EdgeInsets.all(8),
@@ -91,7 +95,7 @@ class StateServicePage extends State<ServicePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            //SizedBox(height: 20),
             Expanded(
                 child: StreamBuilder(
                     stream: fb.collectionReference.snapshots(),
