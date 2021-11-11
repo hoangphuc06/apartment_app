@@ -1,5 +1,4 @@
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
-import 'package:apartment_app/src/pages/add_icon_page.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
@@ -46,7 +45,7 @@ final routes = <String, WidgetBuilder>{
   //Dich vu
   "service_page": (BuildContext context) => ServicePage(),
   "add_service": (BuildContext context) => AddServicPage(),
-  "add_icon": (BuildContext context) => IconList(),
+  //"add_icon": (BuildContext context) => IconList(),
 
   // Giới thiệu
   "introduction_page":(BuildContext context) =>IntroductionPage(),

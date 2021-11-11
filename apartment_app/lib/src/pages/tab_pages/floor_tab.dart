@@ -1,8 +1,10 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
 import 'package:apartment_app/src/widgets/cards/floor_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class FloorTab extends StatefulWidget {
@@ -15,6 +17,10 @@ class FloorTab extends StatefulWidget {
 class _FloorTabState extends State<FloorTab> {
 
   FloorFB floorFB = new FloorFB();
+
+  late int a;
+
+  bool _isAdd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +45,19 @@ class _FloorTabState extends State<FloorTab> {
                         return Center(child: Text("No Data"),);
                       }
                       else {
+                        a = snapshot.data!.docs.length;
                         return ListView.builder(
                             shrinkWrap: true,
                             physics: ScrollPhysics(),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context,i) {
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                              // int dem = 0;
+                              // var a = FirebaseFirestore.instance.collection("floorinfo").where("floorid", isEqualTo: x["id"]).where("status",isEqualTo: "Trống").snapshots();
+                              // a.forEach((element) {
+                              //   dem++;
+                              // });
+                              // print(dem);
                               return FloorCard(
                                 name: x["id"],
                                 numOfApm: x["numOfApm"],
@@ -62,10 +75,42 @@ class _FloorTabState extends State<FloorTab> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton.extended(
-      //   onPressed: () {  },
-      //   label: Text("Thêm tầng"),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: myGreen,
+        onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
+      ),
     );
+  }
+
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn thêm tầng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    floorFB.add((a+1).toString(), "0");
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }

@@ -7,6 +7,7 @@ import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -24,6 +25,8 @@ class AddContractPage extends StatefulWidget {
 }
 
 class _AddContractPageState extends State<AddContractPage> {
+  DwellersFB dwellersFB = new DwellersFB();
+  
   ContractFB contractFB = new ContractFB();
   RenterFB renterFB = new RenterFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
@@ -46,7 +49,6 @@ class _AddContractPageState extends State<AddContractPage> {
   final TextEditingController _serviceController = TextEditingController();
 
   final TextEditingController _nameRenter = TextEditingController();
-
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -307,33 +309,6 @@ class _AddContractPageState extends State<AddContractPage> {
                       ],
                     )),
               ),
-
-              Card(
-                elevation: 2,
-                child: Container(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        _title("DỊCH VỤ "),
-                        SizedBox(
-                          height: 20,
-                        ),
-
-                        // dịch vụ
-                        TitleInfoNotNull(text: "Dịch vụ"),
-                        _textformField(
-                            _serviceController, "Giặt ủi...", "dịch vụ"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )),
-              ),
-
               Card(
                 elevation: 2,
                 child: Container(
@@ -386,19 +361,39 @@ class _AddContractPageState extends State<AddContractPage> {
   void _addContract() {
     contractFB
         .add(
-            _hostController.text,
-            _roomController.text,
-            _startDayController.text,
-            _expirationDateController.text,
-            _billingStartDateController.text,
-            _roomPaymentPeriodController!,
-            _roomChargeController.text,
-            _depositController.text,
-            _renterController.text,
-            _rulesController.text,
-            true)
+          _hostController.text,
+          _roomController.text,
+          _startDayController.text,
+          _expirationDateController.text,
+          _billingStartDateController.text,
+          _roomPaymentPeriodController!,
+          _roomChargeController.text,
+          _depositController.text,
+          _renterController.text,
+          _rulesController.text,
+          true,
+        )
         .then((value) => {
+             
               floorInfoFB.updateStatus(_roomController.text, "Đang thuê"),
+              renterFB.updateIdApartment(_renterController.text,_roomController.text),
+              renterFB.collectionReference
+                  .doc(_renterController.text)
+                  .get()
+                  .then((value) => {
+                        dwellersFB.add(
+                            value['idApartment'],
+                            value['name'],
+                            value['birthday'],
+                            value['gender'],
+                            value['cmnd'],
+                            value['homeTown'],
+                            value["job"],
+                            value["role"],
+                            value["phoneNumber"],
+                            value['email']
+                            )
+                      }),
               _hostController.clear(),
               _roomController.clear(),
               _startDayController.clear(),
@@ -489,6 +484,7 @@ class _AddContractPageState extends State<AddContractPage> {
         MaterialPageRoute(builder: (context) => SelectRenterContract()));
     if (id != null) {
       setState(() {
+      
         _renterController.text = id;
         renterFB.collectionReference
             .doc(id)

@@ -7,6 +7,7 @@ import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -24,6 +25,7 @@ class EditContractPage extends StatefulWidget {
 
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
+  DwellersFB dwellersFB=new DwellersFB();
   RenterFB renterFB = new RenterFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
@@ -321,7 +323,7 @@ class _EditContractPageState extends State<EditContractPage> {
                         TitleInfoNotNull(text: "Người thuê nhà"),
                           GestureDetector(
                             onTap: () {
-                              _gotoPageRenter();
+                             
                             },
                             child: AbsorbPointer(
                                 child: _textformField(_nameRenter,
@@ -332,32 +334,7 @@ class _EditContractPageState extends State<EditContractPage> {
                       ],
                     )),
               ),
-              Card(
-                elevation: 2,
-                child: Container(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        _title("DỊCH VỤ "),
-                        SizedBox(
-                          height: 20,
-                        ),
-
-                        // dịch vụ
-                        TitleInfoNotNull(text: "Dịch vụ"),
-                        _textformField(
-                            _serviceController, "Giặt ủi...", "dịch vụ"),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    )),
-              ),
-
+            
               Card(
                 elevation: 2,
                 child: Container(
@@ -411,7 +388,13 @@ class _EditContractPageState extends State<EditContractPage> {
     if(_roomController.text!=this.widget.contract.room)
     {
       floorInfoFB.updateStatus(this.widget.contract.room!, "Trống");
-      floorInfoFB.updateStatus(_roomController.text, "Đang thuê");
+      floorInfoFB.updateStatus(_roomController.text, "Đang thuê");      
+    }
+    if(_renterController.text!=this.widget.contract.renter)
+    {
+      renterFB.updateIdApartment(this.widget.contract.renter!, "ss");
+      renterFB.updateIdApartment(_renterController.text, _roomController.text);
+      
     }
     contractFB
         .update(
