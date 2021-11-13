@@ -25,7 +25,7 @@ class EditContractPage extends StatefulWidget {
 
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
-  DwellersFB dwellersFB=new DwellersFB();
+  DwellersFB dwellersFB = new DwellersFB();
   RenterFB renterFB = new RenterFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
@@ -45,7 +45,7 @@ class _EditContractPageState extends State<EditContractPage> {
   final TextEditingController _rulesController = TextEditingController();
   final TextEditingController _serviceController = TextEditingController();
 
-    final TextEditingController _nameRenter = TextEditingController();
+  final TextEditingController _nameRenter = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -90,10 +90,10 @@ class _EditContractPageState extends State<EditContractPage> {
       _depositController.text = this.widget.contract.deposit.toString();
       _renterController.text = this.widget.contract.renter.toString();
       _rulesController.text = this.widget.contract.rules.toString();
-       renterFB.collectionReference
-            .doc(_renterController.text)
-            .get()
-            .then((value) => {_nameRenter.text = value["name"]});
+      renterFB.collectionReference
+          .doc(_renterController.text)
+          .get()
+          .then((value) => {_nameRenter.text = value["name"]});
     });
   }
 
@@ -321,10 +321,8 @@ class _EditContractPageState extends State<EditContractPage> {
 
                         //người thuê nhà
                         TitleInfoNotNull(text: "Người thuê nhà"),
-                          GestureDetector(
-                            onTap: () {
-                             
-                            },
+                        GestureDetector(
+                            onTap: () {},
                             child: AbsorbPointer(
                                 child: _textformField(_nameRenter,
                                     "Lê Hoàng Phúc...", "người thuê nhà"))),
@@ -334,7 +332,7 @@ class _EditContractPageState extends State<EditContractPage> {
                       ],
                     )),
               ),
-            
+
               Card(
                 elevation: 2,
                 child: Container(
@@ -385,17 +383,13 @@ class _EditContractPageState extends State<EditContractPage> {
   }
 
   void _updateContract() {
-    if(_roomController.text!=this.widget.contract.room)
-    {
+    if (_roomController.text != this.widget.contract.room) {
       floorInfoFB.updateStatus(this.widget.contract.room!, "Trống");
-      floorInfoFB.updateStatus(_roomController.text, "Đang thuê");      
+      floorInfoFB.updateStatus(_roomController.text, "Đang thuê");
+      renterFB.updateIdApartment(
+          this.widget.contract.renter!, _roomController.text);
     }
-    if(_renterController.text!=this.widget.contract.renter)
-    {
-      renterFB.updateIdApartment(this.widget.contract.renter!, "ss");
-      renterFB.updateIdApartment(_renterController.text, _roomController.text);
-      
-    }
+
     contractFB
         .update(
             widget.contract.id!,
