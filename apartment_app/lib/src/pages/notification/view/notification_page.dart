@@ -85,6 +85,7 @@ class _NotificationState extends State<NotificationPage> {
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
         ),
         floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
           onPressed: () async {
             Route route = MaterialPageRoute(
                 builder: (context) => AddNotificationPage());

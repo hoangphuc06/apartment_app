@@ -25,11 +25,14 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   DwellersFB fb= new DwellersFB();
   int radioValue = 1;
   bool option= true;
-
   String hitText= 'Họ và tên';
   String? state='Tất cả';
   bool check=false;
-
+  String? gioiTinh= 'Tất cả';
+  String role='Tất cả';
+  List<String> roleindex=['Tất cả','Chủ hộ','Người thân chủ hộ','Người thuê lại'];
+  bool setVisible= true;
+  List<String> gt=['Tất cả','Nam','Nữ'];
   bool chechInfo(Dweller temp){
     if(temp.homeTown!.isEmpty||temp.phoneNumber!.isEmpty||temp.gender!.isEmpty
         ||temp.email!.isEmpty||temp.name!.isEmpty||temp.birthday!.isEmpty)
@@ -37,7 +40,15 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
     return true;
   }
   bool _filter(Dweller temp){
-    if((!check||!this.chechInfo(temp))&&
+    bool KTGioiTinh= true ;
+    if(this.gioiTinh=='Tất cả'||(this.gioiTinh=='Nam'&&temp.gender=='0')||(this.gioiTinh=='Nữ'&&temp.gender=='1'))
+      KTGioiTinh=true;
+    else KTGioiTinh=false;
+    bool chekRole= true;
+    if(this.role=='Tất cả'||(this.role=='Chủ hộ'&&temp.role=='1')||(this.role=='Người thân chủ hộ'&&temp.role=='2')||(this.role=='Người thuê lại'&&temp.role=='3'))
+      chekRole=true;
+    else chekRole=false;
+    if((!check||!this.chechInfo(temp))&&KTGioiTinh&&chekRole&&
         ((this.option&&(temp.name!.contains(this.searchController.text)||this.searchController.text.isEmpty))
             ||(!this.option&&(temp.cmnd!.contains(this.searchController.text)||this.searchController.text.isEmpty)))
     )
@@ -52,12 +63,41 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
       hintText: this.hitText,
     ),
   );
+  _dropDownList() => DropdownButton(
+    hint: Text(this.gioiTinh.toString()),
+    iconSize: 36,
+    onChanged: (temp) {
+      setState(() {
+        this.gioiTinh = temp.toString();
+      });
+    },
+    items: this.gt.map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+  );
+  _roleDownList() => DropdownButton(
+    hint: Text(this.role),
+    iconSize: 36,
+    onChanged: (temp) {
+      setState(() {
+        this.role = temp.toString();
+      });
+    },
+    items: this.roleindex.map<DropdownMenuItem<String>>((String value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(value),
+      );
+    }).toList(),
+  );
   @override
   void didChangeDependencies()  async {
     super.didChangeDependencies();
 
     //try to load all your data in this method :)
-
   }
   @override
   void initState() {
@@ -69,7 +109,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.grey.withOpacity(0.2),
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -78,72 +118,122 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
               elevation: 2,
               child: Container(
                 child: Column(
+
                   children: [
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 16),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: _SearchBar(),
-                          ),
+                          Text('Tìm kiếm dân cư',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
+                          Spacer(),
                           IconButton(
                               onPressed: () {
+                                this.setVisible=!this.setVisible;
                                 setState(() {});
                               },
                               iconSize: 35,
-                              icon: Icon(Icons.search)),
+                              icon: Icon(this.setVisible? Icons.arrow_drop_up_outlined:Icons.arrow_drop_down_outlined)),
                         ],
                       ),
                     ),
-                    ListTile(
-                      title: Text('Họ tên'),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: this.radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            hitText= 'Họ và tên';
-                            this.radioValue = 1;
-                            this.searchController.text='';
-                            option=true;
-                          });
-                        },
-                        activeColor: Colors.green,
+                    Visibility(
+                        visible:  this.setVisible,
+                        child:Column(
+                      children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _SearchBar(),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {});
+                                },
+                                iconSize: 35,
+                                icon: Icon(Icons.search)),
+                          ],
+                        ),
                       ),
-                    ),
-                    ListTile(
-                      title: Text('CMND/CCCD'),
-                      leading: Radio(
-                        value: 2,
-                        groupValue: this.radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            this.radioValue=2;
-                            this.searchController.text='';
-                            this.hitText='Số CMND/CCCD';
-                            this.option= false;
-                          });
-                        },
-                        activeColor: Colors.green,
+                      ListTile(
+                        title: Text('Họ tên'),
+                        leading: Radio(
+                          value: 1,
+                          groupValue: this.radioValue,
+                          onChanged: (value) {
+                            setState(() {
+                              hitText= 'Họ và tên';
+                              this.radioValue = 1;
+                              this.searchController.text='';
+                              option=true;
+                            });
+                          },
+                          activeColor: Colors.green,
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 16, right: 16),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Chưa đầy đủ thông tin:',
-                            style: TextStyle(fontSize: 17),
+                      ListTile(
+                        title: Text('CMND/CCCD'),
+                        leading: Radio(
+                          value: 2,
+                          groupValue: this.radioValue,
+                          onChanged: (value) {
+                            setState(() {
+                              this.radioValue=2;
+                              this.searchController.text='';
+                              this.hitText='Số CMND/CCCD';
+                              this.option= false;
+                            });
+                          },
+                          activeColor: Colors.green,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Giới tính:',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Spacer(),
+                            _dropDownList()
+                          ],
+                        ),
+                      ),
+                        Container(
+                          padding: EdgeInsets.only(left: 16, right: 16),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Vai trò:',
+                                style: TextStyle(fontSize: 17),
+                              ),
+                              Spacer(),
+                              _roleDownList()
+                            ],
                           ),
-                          Checkbox(value: check,
-                              onChanged: (value){
-                                setState(() {
-                                  this.check=value!;
-                                });
-                              })
-                        ],
+                        ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Chưa đầy đủ thông tin:',
+                              style: TextStyle(fontSize: 17),
+                            ),
+                            Checkbox(value: check,
+                                onChanged: (value){
+                                  setState(() {
+                                    this.check=value!;
+                                  });
+                                })
+                          ],
+                        ),
                       ),
-                    ),
+
+                    ],)),
+
                   ],
                 ),
               ),
