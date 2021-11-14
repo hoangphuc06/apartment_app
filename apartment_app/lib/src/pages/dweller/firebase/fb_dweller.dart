@@ -5,10 +5,10 @@ class DwellersFB {
 
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("dweller");
 
-  Future<void> add(String idApartment, String name, String birthday, String gender, String cmnd,
+  Future<void> add(String id, String idApartment, String name, String birthday, String gender, String cmnd,
       String homeTown, String job, String role, String phoneNumber, String email) async {
 
-    String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+        
 
     return collectionReference.doc(id).set({
       "id": id,
@@ -46,6 +46,15 @@ class DwellersFB {
         .then((value) => print("completed"))
         .catchError((error)=>print("fail"));
   }
+ Future<void> updateIdApartment(String id, String idApartment) async {
 
+    return collectionReference.doc(id).update({
+     
+      "idApartment": idApartment,
+      
+    })
+        .then((value) => print("completed"))
+        .catchError((error)=>print("fail"));
+  }
 
 }

@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
@@ -19,9 +20,10 @@ class ListDwellersPage extends StatefulWidget {
 }
 
 class _ListDwellersPageState extends State<ListDwellersPage> {
-
   DwellersFB dwellersFB = new DwellersFB();
+  RentedRoomFB rentedRoomFB = new RentedRoomFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
+
   late int num;
 
   @override
@@ -32,13 +34,13 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
         padding: EdgeInsets.all(8),
         child: SingleChildScrollView(
           child: StreamBuilder(
-              stream: dwellersFB.collectionReference.where('idApartment', isEqualTo: widget.id_apartment).snapshots(),
+              stream: dwellersFB.collectionReference.where('idApartment',isEqualTo: this.widget.id_apartment).snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: Text("No Data"));
                 } else {
                   num = snapshot.data!.docs.length;
-                  floorInfoFB.updateDweller(widget.id_apartment, num );
+                  floorInfoFB.updateDweller(widget.id_apartment, num.toString());
                   return ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -49,23 +51,27 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
                         return DwellerCard(
                           dweller: dweller,
                           funtion: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: dweller)));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailDwellerPage(dweller: dweller)));
                           },
                         );
-                      }
-                  );
+                      });
                 }
-              }
-          ),
+              }),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => AddDwellerPage(widget.id_apartment)));
-          },
-          backgroundColor: myGreen,
-
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddDwellerPage(widget.id_apartment)));
+        },
+        backgroundColor: myGreen,
       ),
     );
   }

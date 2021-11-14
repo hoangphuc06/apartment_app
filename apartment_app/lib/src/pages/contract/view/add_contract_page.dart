@@ -4,7 +4,8 @@ import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
-import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
+
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
@@ -13,6 +14,7 @@ import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 class AddContractPage extends StatefulWidget {
   // const AddContractPage({Key? key}) : super(key: key);
@@ -26,9 +28,11 @@ class AddContractPage extends StatefulWidget {
 
 class _AddContractPageState extends State<AddContractPage> {
   DwellersFB dwellersFB = new DwellersFB();
-  
+
   ContractFB contractFB = new ContractFB();
-  RenterFB renterFB = new RenterFB();
+
+  RentedRoomFB rentedRoomFB = new RentedRoomFB();
+
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   CategoryApartment? categoryApartment;
@@ -45,14 +49,35 @@ class _AddContractPageState extends State<AddContractPage> {
   final TextEditingController _roomChargeController = TextEditingController();
   final TextEditingController _depositController = TextEditingController();
   final TextEditingController _renterController = TextEditingController();
-  final TextEditingController _rulesController = TextEditingController();
-  final TextEditingController _serviceController = TextEditingController();
+  final TextEditingController _rulesAController = TextEditingController();
+  final TextEditingController _rulesBController = TextEditingController();
+  final TextEditingController _rulesCController = TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
 
   final TextEditingController _nameRenter = TextEditingController();
+  final List<Map<String, dynamic>> _items = [
+    {
+      'value': '0',
+      'label': 'Hợp đồng cho thuê',
+    },
+    {
+      'value': '1',
+      'label': 'Hợp đồng bán',
+    },
+  ];
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
   DateTime selectedDate = DateTime.now();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var date =
+        "${DateTime.now().toLocal().day}/${DateTime.now().toLocal().month}/${DateTime.now().toLocal().year}";
+    _startDayController.text = date;
+    _typeController.text = "0";
+  }
 
   //Chọn ngày
   _selectDate(
@@ -109,10 +134,25 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 20,
                         ),
+
+                        TitleInfoNotNull(text: "Loại hợp đồng"),
+                        SelectFormField(
+                          initialValue: _typeController.text,
+                          type:
+                              SelectFormFieldType.dropdown, // or can be dialog
+                          items: _items,
+                          onChanged: (val) => _typeController.text = val,
+                          onSaved: (val) => _typeController.text = val!,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         //Đại diện cho thuê
-                        TitleInfoNotNull(text: "Đại diện cho thuê"),
-                        _textformField(_hostController, "Đại diện cho thuê...",
-                            "đại diện cho thuê"),
+                        TitleInfoNotNull(text: "Đại diện cho thuê/bán"),
+                        _textformField(
+                            _hostController,
+                            "Đại diện cho thuê/bán...",
+                            "đại diện cho thuê/bán"),
                         SizedBox(
                           height: 20,
                         ),
@@ -126,7 +166,7 @@ class _AddContractPageState extends State<AddContractPage> {
                             child: AbsorbPointer(
                                 child: _textformField(
                               _roomController,
-                              "312_A18...",
+                              "Chọn phòng",
                               "Chọn phòng",
                             ))),
                         SizedBox(
@@ -149,7 +189,7 @@ class _AddContractPageState extends State<AddContractPage> {
                                       child: AbsorbPointer(
                                         child: _textformFieldwithIcon(
                                             _startDayController,
-                                            "20/04/2021...",
+                                            _startDayController.text,
                                             "ngày bắt đầu",
                                             height,
                                             Icons.calendar_today_outlined),
@@ -172,7 +212,7 @@ class _AddContractPageState extends State<AddContractPage> {
                                       child: AbsorbPointer(
                                         child: _textformFieldwithIcon(
                                             _expirationDateController,
-                                            "20/04/2021...",
+                                            "Chọn ngày",
                                             "ngày kết thúc",
                                             height,
                                             Icons.calendar_today_outlined),
@@ -196,7 +236,7 @@ class _AddContractPageState extends State<AddContractPage> {
                                   child: AbsorbPointer(
                                     child: _textformFieldwithIcon(
                                         _billingStartDateController,
-                                        "20/04/2021...",
+                                        "Chọn ngày bắt đầu tính tiền",
                                         "ngày bắt đầu tính tiền",
                                         height,
                                         Icons.calendar_today_outlined),
@@ -263,7 +303,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         //tiền nhà
                         TitleInfoNotNull(text: "Tiền nhà"),
                         _textformFieldDisable(
-                            _roomChargeController, "100000000...", "tiền nhà"),
+                            _roomChargeController, "Nhập tiền nhà", "tiền nhà"),
 
                         SizedBox(
                           height: 20,
@@ -271,7 +311,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         //tiền cọc
                         TitleInfoNotNull(text: "Tiền cọc"),
                         _textformField(
-                            _depositController, "10000000...", "tiền cọc"),
+                            _depositController, "Nhập tiền cọc", "tiền cọc"),
                         SizedBox(
                           height: 10,
                         ),
@@ -289,19 +329,19 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        _title("NGƯỜI THUÊ"),
+                        _title("NGƯỜI THUÊ/MUA"),
                         SizedBox(
                           height: 20,
                         ),
                         //người thuê nhà
-                        TitleInfoNotNull(text: "Người thuê nhà"),
+                        TitleInfoNotNull(text: "Người thuê/mua nhà"),
                         GestureDetector(
                             onTap: () {
                               _gotoPageRenter();
                             },
                             child: AbsorbPointer(
                                 child: _textformField(_nameRenter,
-                                    "Lê Hoàng Phúc...", "người thuê nhà"))),
+                                    "Chọn người thuê nhà", "người thuê nhà"))),
 
                         SizedBox(
                           height: 10,
@@ -319,14 +359,35 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        _title("ĐIỂU KHOẢN"),
+                        _title("ĐIỀU KHOẢN"),
                         SizedBox(
                           height: 20,
                         ),
                         // dịch vụ
-                        TitleInfoNotNull(text: "Điều khoản"),
-                        _textformField(_rulesController, "Giảm tiền nhà...",
-                            "điều khoản thuê nhà"),
+                        TitleInfoNotNull(
+                            text: "Điều khoản bên A(Người cho thuê/bán)"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesAController, "Điều khoản bên A"),
+
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TitleInfoNotNull(
+                            text: "Điều khoản bên B(Người thuê/mua)"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesBController, "Điều khoản bên B"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TitleInfoNotNull(text: "Điều khoản chung"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesCController, "Điều khoản chung"),
                         SizedBox(
                           height: 10,
                         ),
@@ -370,30 +431,22 @@ class _AddContractPageState extends State<AddContractPage> {
           _roomChargeController.text,
           _depositController.text,
           _renterController.text,
-          _rulesController.text,
+          _rulesAController.text,
+          _rulesBController.text,
+          _rulesCController.text,
+          _typeController.text,
+          false,
           true,
         )
         .then((value) => {
-             
-              floorInfoFB.updateStatus(_roomController.text, "Đang thuê"),
-              renterFB.updateIdApartment(_renterController.text,_roomController.text),
-              renterFB.collectionReference
-                  .doc(_renterController.text)
-                  .get()
-                  .then((value) => {
-                        dwellersFB.add(
-                            value['idApartment'],
-                            value['name'],
-                            value['birthday'],
-                            value['gender'],
-                            value['cmnd'],
-                            value['homeTown'],
-                            value["job"],
-                            value["role"],
-                            value["phoneNumber"],
-                            value['email']
-                            )
-                      }),
+              _typeController.text == 0
+                  ? floorInfoFB.updateStatus(_roomController.text, "Đang thuê")
+                  : floorInfoFB.updateStatus(_roomController.text, "Đã bán"),
+              rentedRoomFB.add(
+                  _renterController.text, _roomController.text, false),
+              dwellersFB.updateIdApartment(
+                  _renterController.text, _roomController.text),
+              floorInfoFB.updateDweller(_roomController.text, '1'),
               _hostController.clear(),
               _roomController.clear(),
               _startDayController.clear(),
@@ -402,7 +455,9 @@ class _AddContractPageState extends State<AddContractPage> {
               _roomChargeController.clear(),
               _depositController.clear(),
               _renterController.clear(),
-              _rulesController.clear(),
+              _rulesAController.clear(),
+              _rulesBController.clear(),
+              _rulesCController.clear(),
               Navigator.pop(context),
             });
   }
@@ -472,8 +527,8 @@ class _AddContractPageState extends State<AddContractPage> {
               categoryApartmentFB.collectionReference
                   .doc(value["categoryid"])
                   .get()
-                  .then(
-                      (data) => {_roomChargeController.text = data["rentalPrice"]})
+                  .then((data) =>
+                      {_roomChargeController.text = data["rentalPrice"]})
             });
       });
     }
@@ -484,13 +539,32 @@ class _AddContractPageState extends State<AddContractPage> {
         MaterialPageRoute(builder: (context) => SelectRenterContract()));
     if (id != null) {
       setState(() {
-      
         _renterController.text = id;
-        renterFB.collectionReference
+        dwellersFB.collectionReference
             .doc(id)
             .get()
             .then((value) => {_nameRenter.text = value["name"]});
       });
     }
+  }
+
+  _ruleField(TextEditingController controller, String hint) {
+    return TextFormField(
+      minLines: 2,
+      maxLines: 5,
+
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(
+            fontWeight: FontWeight.w400, fontSize: 16, color: Colors.grey),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 1, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+    );
   }
 }

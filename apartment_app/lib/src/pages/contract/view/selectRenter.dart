@@ -1,9 +1,14 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
+
 import 'package:apartment_app/src/pages/contract/view/add_renter.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
+import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class SelectRenterContract extends StatefulWidget {
@@ -14,8 +19,10 @@ class SelectRenterContract extends StatefulWidget {
 }
 
 class _SelectRenterContractState extends State<SelectRenterContract> {
+  DwellersFB dwellersFB = new DwellersFB();
   RenterFB renterFB = new RenterFB();
-
+  String name = '';
+  String phoneNumber = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,37 +61,64 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, i) {
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                              return Card(
-                                elevation: 2,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.pop(context, x["id"]);
-                                  },
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context, x["idRenter"]);
+                                },
+                                child: Card(
+                                  elevation: 2,
                                   child: Container(
                                     margin: EdgeInsets.all(16),
-                                    child: Row(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(
-                                          Icons.group_outlined,
-                                          size: 40,
+                                        Text(
+                                          x['name'],
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
                                           children: [
-                                            Text(
-                                              x['name'],
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold),
+                                            Icon(Icons.wc),
+                                            SizedBox(
+                                              width: 5,
                                             ),
-                                            SizedBox(height: 10),
                                             Text(
-                                              x['phoneNumber'],
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                              "Giới tính",
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              x['gender'] == "0" ? "Nam" : "Nữ",
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.phone),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "Số điện thoại",
+                                              style: TextStyle(fontSize: 15),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              x['phoneNumber'] == ""
+                                                  ? "Trống"
+                                                  : x['phoneNumber'],
+                                              style: TextStyle(fontSize: 15),
                                             ),
                                           ],
                                         ),
@@ -110,5 +144,14 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
         },
       ),
     );
+  }
+
+  String getName(String id) {
+    String name = '';
+    dwellersFB.collectionReference
+        .doc(id)
+        .get()
+        .then((value) => {name = value['name']});
+    return name;
   }
 }

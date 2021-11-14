@@ -1,7 +1,7 @@
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Dweller {
-
   String? id;
   String? idApartment;
   String? name;
@@ -14,8 +14,18 @@ class Dweller {
   String? job;
   String? role;
 
-  Dweller({this.id, this.idApartment, this.name, this.birthday, this.gender,
-      this.cmnd, this.homeTown, this.job, this.role, this.phoneNumber, this.email});
+  Dweller(
+      {this.id,
+      this.idApartment,
+      this.name,
+      this.birthday,
+      this.gender,
+      this.cmnd,
+      this.homeTown,
+      this.job,
+      this.role,
+      this.phoneNumber,
+      this.email});
 
   factory Dweller.fromDocument(DocumentSnapshot doc) {
     return Dweller(
@@ -32,4 +42,6 @@ class Dweller {
       role: doc["role"],
     );
   }
+
+ 
 }

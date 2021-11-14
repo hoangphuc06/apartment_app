@@ -4,6 +4,7 @@ import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/liquidation_contract_page.dart';
 import 'package:apartment_app/src/pages/contract/view/edit_contract_page.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
+import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,26 @@ class ContractDetails extends StatefulWidget {
 
 class _ContractDetailsState extends State<ContractDetails> {
   ContractFB contractFB = new ContractFB();
+  final TextEditingController _rulesAController = TextEditingController();
+  final TextEditingController _rulesBController = TextEditingController();
+  final TextEditingController _rulesCController = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    binding();
+  }
+
+  void binding() {
+    setState(() {
+      contractFB.collectionReference.doc(this.widget.id).get().then((value) => {
+            _rulesAController.text = value["rulesA"],
+            _rulesBController.text = value["rulesB"],
+            _rulesCController.text = value["rulesC"]
+          });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -324,33 +345,22 @@ class _ContractDetailsState extends State<ContractDetails> {
                                 height: 10,
                               ),
                               Text(
-                                "DỊCH VỤ",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Card(
-                        elevation: 2,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
                                 "ĐIỀU KHOẢN",
                                 style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _items("Điều khoản bên A", _rulesAController,x['rulesA']),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _items("Điều khoản bên B", _rulesBController,x['rulesB']),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              _items("Điều khoản chung", _rulesCController,x['rulesC']),
                               SizedBox(
                                 height: 10,
                               ),
@@ -373,5 +383,32 @@ class _ContractDetailsState extends State<ContractDetails> {
         .then((value) => {
               Navigator.pop(context),
             });
+  }
+
+  _items(String text, TextEditingController controller,String init) {
+    controller.text=init;
+    return Column(
+      children: [
+        TitleInfoNull(text: text),
+        SizedBox(
+          height: 10,
+        ),
+        TextFormField(
+         
+          minLines: 2,
+          maxLines: 7,
+          enabled: false,
+          controller: controller,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Colors.black, width: 1, style: BorderStyle.solid),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

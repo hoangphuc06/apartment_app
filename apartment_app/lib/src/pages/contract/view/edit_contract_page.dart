@@ -3,7 +3,8 @@ import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
-import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
+
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
@@ -25,8 +26,8 @@ class EditContractPage extends StatefulWidget {
 
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
+  RentedRoomFB rentedRoomFB = new RentedRoomFB();
   DwellersFB dwellersFB = new DwellersFB();
-  RenterFB renterFB = new RenterFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   String? _roomPaymentPeriodController;
@@ -42,10 +43,14 @@ class _EditContractPageState extends State<EditContractPage> {
   final TextEditingController _roomChargeController = TextEditingController();
   final TextEditingController _depositController = TextEditingController();
   final TextEditingController _renterController = TextEditingController();
-  final TextEditingController _rulesController = TextEditingController();
+  final TextEditingController _rulesAController = TextEditingController();
+  final TextEditingController _rulesBController = TextEditingController();
+  final TextEditingController _rulesCController = TextEditingController();
   final TextEditingController _serviceController = TextEditingController();
 
   final TextEditingController _nameRenter = TextEditingController();
+
+  final TextEditingController _temp = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   Task task = new Task();
@@ -89,8 +94,10 @@ class _EditContractPageState extends State<EditContractPage> {
       _roomChargeController.text = this.widget.contract.roomCharge.toString();
       _depositController.text = this.widget.contract.deposit.toString();
       _renterController.text = this.widget.contract.renter.toString();
-      _rulesController.text = this.widget.contract.rules.toString();
-      renterFB.collectionReference
+      _rulesAController.text = this.widget.contract.rulesA.toString();
+      _rulesBController.text = this.widget.contract.rulesB.toString();
+      _rulesCController.text = this.widget.contract.rulesC.toString();
+      dwellersFB.collectionReference
           .doc(_renterController.text)
           .get()
           .then((value) => {_nameRenter.text = value["name"]});
@@ -322,7 +329,9 @@ class _EditContractPageState extends State<EditContractPage> {
                         //người thuê nhà
                         TitleInfoNotNull(text: "Người thuê nhà"),
                         GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              _gotoPageRenter();
+                            },
                             child: AbsorbPointer(
                                 child: _textformField(_nameRenter,
                                     "Lê Hoàng Phúc...", "người thuê nhà"))),
@@ -347,11 +356,31 @@ class _EditContractPageState extends State<EditContractPage> {
                         SizedBox(
                           height: 20,
                         ),
-
                         // dịch vụ
-                        TitleInfoNotNull(text: "Điều khoản"),
-                        _textformField(_rulesController, "Giảm tiền nhà...",
-                            "điều khoản thuê nhà"),
+                        TitleInfoNotNull(
+                            text: "Điều khoản bên A(Người cho thuê/bán)"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesAController, "Điều khoản bên A"),
+
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TitleInfoNotNull(
+                            text: "Điều khoản bên B(Người thuê/mua)"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesBController, "Điều khoản bên B"),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TitleInfoNotNull(text: "Điều khoản chung"),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _ruleField(_rulesCController, "Điều khoản chung"),
                         SizedBox(
                           height: 10,
                         ),
@@ -386,8 +415,14 @@ class _EditContractPageState extends State<EditContractPage> {
     if (_roomController.text != this.widget.contract.room) {
       floorInfoFB.updateStatus(this.widget.contract.room!, "Trống");
       floorInfoFB.updateStatus(_roomController.text, "Đang thuê");
-      renterFB.updateIdApartment(
-          this.widget.contract.renter!, _roomController.text);
+      _upDateDweler(this.widget.contract.room!, _roomController.text);
+
+      floorInfoFB.updateDweller(this.widget.contract.room!, '0');
+
+      _upDateRoom(this.widget.contract.room!, _roomController.text);
+    }
+    if (_renterController.text != this.widget.contract.renter) {
+      _upDateRenter(this.widget.contract.renter!, _renterController.text);
     }
 
     contractFB
@@ -402,7 +437,9 @@ class _EditContractPageState extends State<EditContractPage> {
             _roomChargeController.text,
             _depositController.text,
             _renterController.text,
-            _rulesController.text)
+            _rulesAController.text,
+            _rulesBController.text,
+            _rulesCController.text)
         .then((value) => {
               _hostController.clear(),
               _roomController.clear(),
@@ -412,9 +449,38 @@ class _EditContractPageState extends State<EditContractPage> {
               _roomChargeController.clear(),
               _depositController.clear(),
               _renterController.clear(),
-              _rulesController.clear(),
+              _rulesAController.clear(),
+              _rulesBController.clear(),
+              _rulesCController.clear(),
               Navigator.pop(context),
             });
+  }
+
+  void _upDateDweler(String idBefore, String idAfter) async {
+    var result = await dwellersFB.collectionReference
+        .where("idApartment", isEqualTo: idBefore)
+        .get();
+    result.docs.forEach((res) {
+      dwellersFB.updateIdApartment(res.id, idAfter);
+    });
+  }
+
+  void _upDateRenter(String idBefore, String idAfter) async {
+    var result = await rentedRoomFB.collectionReference
+        .where("idRenter", isEqualTo: idBefore)
+        .get();
+    result.docs.forEach((res) {
+      rentedRoomFB.updateIdRenter(res.id, idAfter);
+    });
+  }
+
+  void _upDateRoom(String idBefore, String idAfter) async {
+    var result = await rentedRoomFB.collectionReference
+        .where("idRoom", isEqualTo: idBefore)
+        .get();
+    result.docs.forEach((res) {
+      rentedRoomFB.updateIdRoom(res.id, idAfter);
+    });
   }
 
   _textformField(TextEditingController controller, String hint, String text) =>
@@ -480,11 +546,30 @@ class _EditContractPageState extends State<EditContractPage> {
     if (id != null) {
       setState(() {
         _renterController.text = id;
-        renterFB.collectionReference
+        dwellersFB.collectionReference
             .doc(id)
             .get()
             .then((value) => {_nameRenter.text = value["name"]});
       });
     }
+  }
+
+  _ruleField(TextEditingController controller, String hint) {
+    return TextFormField(
+      minLines: 2,
+      maxLines: 5,
+      controller: controller,
+      keyboardType: TextInputType.multiline,
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: TextStyle(
+            fontWeight: FontWeight.w400, fontSize: 16, color: Colors.grey),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Colors.black, width: 1, style: BorderStyle.solid),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+    );
   }
 }

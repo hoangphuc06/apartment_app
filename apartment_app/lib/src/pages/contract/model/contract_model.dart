@@ -11,7 +11,10 @@ class Contract {
   String? roomCharge;
   String? deposit;
   String? renter;
-  String? rules;
+  String? rulesA;
+  String? rulesB;
+  String? rulesC;
+  String? type;
   bool? isVisible;
   Contract({
     this.id,
@@ -24,7 +27,10 @@ class Contract {
     this.roomCharge,
     this.deposit,
     this.renter,
-    this.rules,
+    this.rulesA,
+    this.rulesB,
+    this.rulesC,
+    this.type,
     this.isVisible,
   });
 
@@ -40,7 +46,10 @@ class Contract {
       roomCharge: doc['roomCharge'],
       deposit: doc['deposit'],
       renter: doc["renter"],
-      rules:  doc["rules"],
+      rulesA: doc["rulesA"],
+      rulesB: doc["rulesB"],
+      rulesC: doc["rulesC"],
+      type: doc['type'],
       isVisible: doc["isVisible"],
     );
   }

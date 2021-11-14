@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContractFB {
@@ -17,7 +16,11 @@ class ContractFB {
       String roomCharge,
       String deposit,
       String renter,
-      String rules,
+      String rulesA,
+      String rulesB,
+      String rulesC,
+      String type,
+      bool liquidation,
       bool isVisible) async {
     String id = (new DateTime.now().millisecondsSinceEpoch).toString();
     return FirebaseFirestore.instance
@@ -34,7 +37,11 @@ class ContractFB {
           "roomCharge": roomCharge,
           "deposit": deposit,
           "renter": renter,
-          "rules": rules,
+          "rulesA": rulesA,
+          "rulesB": rulesB,
+          "rulesC": rulesC,
+          "type": type,
+          "liquidation": liquidation,
           "isVisible": isVisible
         })
         .then((value) => print("completed"))
@@ -52,7 +59,9 @@ class ContractFB {
     String roomCharge,
     String deposit,
     String renter,
-    String rules,
+    String rulesA,
+    String rulesB,
+    String rulesC,
   ) async {
     return FirebaseFirestore.instance
         .collection("contract")
@@ -67,7 +76,9 @@ class ContractFB {
           "roomCharge": roomCharge,
           "deposit": deposit,
           "renter": renter,
-          "rules": rules,
+          "rulesA": rulesA,
+          "rulesB": rulesB,
+          "rulesC": rulesC,
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));

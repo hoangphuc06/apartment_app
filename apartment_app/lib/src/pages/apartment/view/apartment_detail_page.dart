@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/apartment/view/apartment_info_page.dart';
+import 'package:apartment_app/src/pages/apartment/view/listServicePage.dart';
 import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
 import 'package:apartment_app/src/pages/Bill/view/list_bill_info_page.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: myGreen,
@@ -34,6 +35,7 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
             tabs: [
               Tab(text: "Thông tin",),
               Tab(text: "Thành viên",),
+              Tab(text: "Dịch vụ",),
             ],
           ),
         ),
@@ -41,6 +43,7 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
           children: [
             ApartmentInfoPage(widget.id_apartment),
             ListDwellersPage(widget.id_apartment),
+            ListServicePage(id:widget.id_apartment),
           ],
         ),
       ),
