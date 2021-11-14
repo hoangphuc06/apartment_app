@@ -64,7 +64,7 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
 
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.pop(context, x["idRenter"]);
+                                  Navigator.pop(context, x["id"]);
                                 },
                                 child: Card(
                                   elevation: 2,

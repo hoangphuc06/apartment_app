@@ -4,6 +4,7 @@ import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
@@ -12,6 +13,7 @@ import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
+import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +29,7 @@ class EditContractPage extends StatefulWidget {
 class _EditContractPageState extends State<EditContractPage> {
   ContractFB contractFB = new ContractFB();
   RentedRoomFB rentedRoomFB = new RentedRoomFB();
+  RenterFB renterFB = new RenterFB();
   DwellersFB dwellersFB = new DwellersFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
@@ -97,7 +100,7 @@ class _EditContractPageState extends State<EditContractPage> {
       _rulesAController.text = this.widget.contract.rulesA.toString();
       _rulesBController.text = this.widget.contract.rulesB.toString();
       _rulesCController.text = this.widget.contract.rulesC.toString();
-      dwellersFB.collectionReference
+      renterFB.collectionReference
           .doc(_renterController.text)
           .get()
           .then((value) => {_nameRenter.text = value["name"]});
@@ -329,9 +332,7 @@ class _EditContractPageState extends State<EditContractPage> {
                         //người thuê nhà
                         TitleInfoNotNull(text: "Người thuê nhà"),
                         GestureDetector(
-                            onTap: () {
-                              _gotoPageRenter();
-                            },
+                            onTap: () {},
                             child: AbsorbPointer(
                                 child: _textformField(_nameRenter,
                                     "Lê Hoàng Phúc...", "người thuê nhà"))),
@@ -357,7 +358,7 @@ class _EditContractPageState extends State<EditContractPage> {
                           height: 20,
                         ),
                         // dịch vụ
-                        TitleInfoNotNull(
+                        TitleInfoNull(
                             text: "Điều khoản bên A(Người cho thuê/bán)"),
                         SizedBox(
                           height: 10,
@@ -367,7 +368,7 @@ class _EditContractPageState extends State<EditContractPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        TitleInfoNotNull(
+                        TitleInfoNull(
                             text: "Điều khoản bên B(Người thuê/mua)"),
                         SizedBox(
                           height: 10,
@@ -376,7 +377,7 @@ class _EditContractPageState extends State<EditContractPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        TitleInfoNotNull(text: "Điều khoản chung"),
+                        TitleInfoNull(text: "Điều khoản chung"),
                         SizedBox(
                           height: 10,
                         ),
@@ -418,7 +419,7 @@ class _EditContractPageState extends State<EditContractPage> {
       _upDateDweler(this.widget.contract.room!, _roomController.text);
 
       floorInfoFB.updateDweller(this.widget.contract.room!, '0');
-
+      floorInfoFB.updateDweller(_roomController.text, '1');
       _upDateRoom(this.widget.contract.room!, _roomController.text);
     }
     if (_renterController.text != this.widget.contract.renter) {

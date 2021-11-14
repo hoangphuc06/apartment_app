@@ -213,8 +213,8 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
-       String id = (new DateTime.now().millisecondsSinceEpoch).toString();
-      dwellersFB.add(id,widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email)
+
+      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email)
           .then((value) => {
         Navigator.pop(context),
       });

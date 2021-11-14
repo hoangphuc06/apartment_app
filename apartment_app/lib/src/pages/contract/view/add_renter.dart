@@ -208,14 +208,13 @@ class _AddRenterState extends State<AddRenter> {
       String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
-       String id = (new DateTime.now().millisecondsSinceEpoch).toString();
-       renterFB.add(id,name,gender,phoneNumber);
-      dwellersFB
-          .add(id,"", name, birthday, gender, cmnd, homeTown, job, "1",
-              phoneNumber, email)
-          .then((value) => {
+       
+       renterFB.add("", name, birthday, gender, cmnd, homeTown, job, "1",
+              phoneNumber, email,false).then((value) => {
                 Navigator.pop(context),
-              });
+              });;
+     
+         
       
     }
   }

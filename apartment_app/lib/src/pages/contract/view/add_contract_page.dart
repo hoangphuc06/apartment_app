@@ -5,6 +5,7 @@ import 'package:apartment_app/src/pages/category_apartment/model/category_apartm
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
@@ -12,6 +13,7 @@ import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
+import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:select_form_field/select_form_field.dart';
@@ -32,6 +34,8 @@ class _AddContractPageState extends State<AddContractPage> {
   ContractFB contractFB = new ContractFB();
 
   RentedRoomFB rentedRoomFB = new RentedRoomFB();
+
+  RenterFB renterFB = new RenterFB();
 
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
@@ -76,7 +80,7 @@ class _AddContractPageState extends State<AddContractPage> {
     var date =
         "${DateTime.now().toLocal().day}/${DateTime.now().toLocal().month}/${DateTime.now().toLocal().year}";
     _startDayController.text = date;
-    _typeController.text = "0";
+    _typeController.text='0';
   }
 
   //Chọn ngày
@@ -136,7 +140,9 @@ class _AddContractPageState extends State<AddContractPage> {
                         ),
 
                         TitleInfoNotNull(text: "Loại hợp đồng"),
+
                         SelectFormField(
+                          hintText: "Chọn loại hợp đồng",
                           initialValue: _typeController.text,
                           type:
                               SelectFormFieldType.dropdown, // or can be dialog
@@ -296,7 +302,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        _title("TIỀN THUÊ NHÀ"),
+                        _title("TIỀN THUÊ/MUA NHÀ"),
                         SizedBox(
                           height: 20,
                         ),
@@ -364,7 +370,7 @@ class _AddContractPageState extends State<AddContractPage> {
                           height: 20,
                         ),
                         // dịch vụ
-                        TitleInfoNotNull(
+                        TitleInfoNull(
                             text: "Điều khoản bên A(Người cho thuê/bán)"),
                         SizedBox(
                           height: 10,
@@ -374,7 +380,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        TitleInfoNotNull(
+                        TitleInfoNull(
                             text: "Điều khoản bên B(Người thuê/mua)"),
                         SizedBox(
                           height: 10,
@@ -383,7 +389,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        TitleInfoNotNull(text: "Điều khoản chung"),
+                        TitleInfoNull(text: "Điều khoản chung"),
                         SizedBox(
                           height: 10,
                         ),
@@ -439,13 +445,29 @@ class _AddContractPageState extends State<AddContractPage> {
           true,
         )
         .then((value) => {
-              _typeController.text == 0
+              _typeController.text == '0'
                   ? floorInfoFB.updateStatus(_roomController.text, "Đang thuê")
                   : floorInfoFB.updateStatus(_roomController.text, "Đã bán"),
               rentedRoomFB.add(
                   _renterController.text, _roomController.text, false),
-              dwellersFB.updateIdApartment(
+              renterFB.updateIdApartment(
                   _renterController.text, _roomController.text),
+              renterFB.collectionReference
+                  .doc(_renterController.text)
+                  .get()
+                  .then((value) => {
+                        dwellersFB.add(
+                            value['idApartment'],
+                            value['name'],
+                            value['birthday'],
+                            value['gender'],
+                            value['cmnd'],
+                            value['homeTown'],
+                            value['job'],
+                            value['role'],
+                            value['role'],
+                            value['email'])
+                      }),
               floorInfoFB.updateDweller(_roomController.text, '1'),
               _hostController.clear(),
               _roomController.clear(),
@@ -540,7 +562,7 @@ class _AddContractPageState extends State<AddContractPage> {
     if (id != null) {
       setState(() {
         _renterController.text = id;
-        dwellersFB.collectionReference
+        renterFB.collectionReference
             .doc(id)
             .get()
             .then((value) => {_nameRenter.text = value["name"]});
@@ -552,7 +574,6 @@ class _AddContractPageState extends State<AddContractPage> {
     return TextFormField(
       minLines: 2,
       maxLines: 5,
-
       controller: controller,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
