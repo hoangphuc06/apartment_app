@@ -94,13 +94,13 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
       //     colorEndAnimation: myGreen,
       //     animatedIconData: AnimatedIcons.menu_close //To principal button
       // ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     _gotoPage();
-      //   },
-      //   child: Icon(Icons.menu, color: Colors.white,),
-      //   backgroundColor: myGreen,
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          _gotoPage();
+        },
+        child: Icon(Icons.menu, color: Colors.white,),
+        backgroundColor: myGreen,
+      ),
     );
   }
 
