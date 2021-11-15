@@ -5,6 +5,7 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/service/model/service_info.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
@@ -80,45 +81,58 @@ class StateAddPage extends State<AddServicPage> {
 
     print(this.sv?.name != null?this.sv?.name.toString():'');
   }
-  _nameTextField() => TextFormField(
+  _nameTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: this.nameController,
+      decoration: MyStyle().style_decoration_tff("Nhập tên dịch vụ"),
+      keyboardType: TextInputType.name,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập tên";
+        }
 
-    style: MyStyle().style_text_tff(),
-    controller: this.nameController,
-    decoration: InputDecoration(
-      hintText:  'Nhập tên dịch vụ',
+        return null;
+      },
     ),
-    keyboardType: TextInputType.name,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập tên";
-      }
-
-      return null;
-    },
   );
-  _dropDownList()=> DropdownButtonFormField(
-    value: type,
-    iconSize: 36 ,
-    onChanged: (String? temp){
-      setState(() {
-        this.type=temp.toString();
-      });
-    },
-    items:this.chargeType.map(( type) {
-      return DropdownMenuItem<String>(
-        value: type,
-        child: Text(type,style: MyStyle().style_text_tff(),),
-      );
-    }).toList(),
-
-  );
-  _chargeTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: this.chargeController,
-    decoration: InputDecoration(
-      hintText:  'Nhập số tiền',
+  _dropDownList()=> Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.grey.withOpacity(0.1)
     ),
-    keyboardType: TextInputType.number,
+    child: DropdownButtonFormField(
+      decoration: InputDecoration(
+          border: InputBorder.none
+      ),
+      value: type,
+      //iconSize: 36 ,
+      onChanged: (String? temp){
+        setState(() {
+          this.type=temp.toString();
+        });
+      },
+      items:this.chargeType.map(( type) {
+        return DropdownMenuItem<String>(
+          value: type,
+          child: Text(type,style: MyStyle().style_text_tff(),),
+        );
+      }).toList(),
+
+    ),
+  );
+  _chargeTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: this.chargeController,
+      decoration: MyStyle().style_decoration_tff("Nhập phí dịch vụ"),
+      keyboardType: TextInputType.number,
+    ),
   );
   @override
   void initState() {
@@ -136,74 +150,44 @@ class StateAddPage extends State<AddServicPage> {
     // TODO: implement build
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          buttonText,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar(buttonText),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
         child: Form(
           key: _formkey,
           child: Column(
             children: [
-              Card(
-                child: Container(
+              Container(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      _title("Thông tin chi tiết"),
                       SizedBox(height: 10,),
-                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 20,),
 
                       TitleInfoNotNull(text: "Tên dịch vụ"),
+                      SizedBox(height: 10,),
                       _nameTextField(),
-                      SizedBox(height: 20,),
+                      SizedBox(height: 10,),
 
                       TitleInfoNotNull(text: "Thu phí dựa trên"),
+                      SizedBox(height: 10,),
                       _dropDownList(),
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text:  'Phi dịch vụ'),
+                      SizedBox(height: 10,),
+                      TitleInfoNotNull(text:  "Phí dịch vụ"),
+                      SizedBox(height: 10,),
                       _chargeTextField(),
-
+                      SizedBox(height: 30,),
+                      _title("Khác"),
                       SizedBox(height: 10,),
+                      TitleInfoNull(text: "Ghi chú"),
+                      SizedBox(height: 10,),
+                      _note(),
+                      SizedBox(height: 30,),
+                      MainButton(name:buttonText, onpressed: this.addButtonPressed ),
                     ],
                   ),
                 ),
-              ),
-
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10,),
-                      Text("GHI CHÚ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                      SizedBox(height: 20,),
-
-                      TextField(
-                        style: MyStyle().style_text_tff(),
-                        decoration: InputDecoration(
-                          hintText: 'Nhập ghi chú',
-                        ),
-                        minLines: 5,
-                        maxLines: 8,
-                        controller: this.noteController,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                      SizedBox(height: 10,),
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 20,),
-              MainButton(name:buttonText, onpressed: this.addButtonPressed ),
             ],
           ),
         ),
@@ -211,4 +195,38 @@ class StateAddPage extends State<AddServicPage> {
     );
     throw UnimplementedError();
   }
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
+  _note() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.withOpacity(0.1),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: this.nameController,
+          maxLines: 10,
+          minLines: 3,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Nhập ghi chú"
+          ),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
 }

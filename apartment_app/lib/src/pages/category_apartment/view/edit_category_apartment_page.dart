@@ -59,82 +59,60 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: Form(
           key: _formkey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10,),
+              _title("Thông tin chi tiết"),
 
-                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                      // Tên loại căn hộ
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Tên loại căn hộ"),
-                      _nameTextField(),
-
-                      // Diện tích căn hộ
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Diện tích (m2)"),
-                      _areaTextField(),
-
-                      //Số lượng phòng ngủ
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Số phòng ngủ"),
-                      _amountBedroomTextField(),
-
-                      //Số lượng phòng vệ sinh
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Số phòng vệ sinh"),
-                      _amountWcTextField(),
-
-                      //Số lượng người ở
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Số lượng người ở"),
-                      _amountDwellerTextField(),
-
-                      SizedBox(height: 10,),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10,),
-
-                      Text("GIÁ CẢ GIAO ĐỘNG", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
-                      //Giá bán
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Giá bán (VNĐ)"),
-                      _priceTextField(),
-
-                      //Giá thuê
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
-                      _rentalPriceTextField(),
-
-                      SizedBox(height: 10,),
-                    ],
-                  ),
-                ),
-              ),
-              // Nút bấm
+              // Tên loại căn hộ
               SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Tên loại căn hộ"),
+              SizedBox(height: 10,),
+              _nameTextField(),
+
+              // Diện tích căn hộ
+              SizedBox(height: 20,),
+              TitleInfoNotNull(text: "Diện tích (m2)"),
+              SizedBox(height: 10,),
+              _areaTextField(),
+
+              //Số lượng phòng ngủ
+              SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Số phòng ngủ"),
+              SizedBox(height: 10,),
+              _amountBedroomTextField(),
+
+              //Số lượng phòng vệ sinh
+              SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Số phòng vệ sinh"),
+              SizedBox(height: 10,),
+              _amountWcTextField(),
+
+              //Số lượng người ở
+              SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Số lượng người ở"),
+              SizedBox(height: 10,),
+              _amountDwellerTextField(),
+              SizedBox(height: 30,),
+
+              _title("Giá cả giao động"),
+
+              //Giá bán
+              SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Giá bán (VNĐ)"),
+              _priceTextField(),
+
+              //Giá thuê
+              SizedBox(height: 10,),
+              TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
+              _rentalPriceTextField(),
+              SizedBox(height: 30,),
+
               MainButton(
-                name: "Thêm",
+                name: "Sửa",
                 onpressed: _editCategoty,
               ),
               SizedBox(height: 50,),
@@ -174,109 +152,130 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     }
   }
 
-  _nameTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _nameController,
-    decoration: InputDecoration(
-      hintText: "Căn hộ loại A...",
+  _nameTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _nameController,
+      decoration: MyStyle().style_decoration_tff("Căn hộ loại A"),
+      keyboardType: TextInputType.name,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập tên";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.name,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập tên";
-      }
-      return null;
-    },
   );
 
-  _areaTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _areaController,
-    decoration: InputDecoration(
-      hintText: "50, 60...",
+  _areaTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _areaController,
+      decoration: MyStyle().style_decoration_tff("50, 60,..."),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập diện tích";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập diện tích";
-      }
-      return null;
-    },
   );
 
-  _amountBedroomTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _amountBedroomController,
-    decoration: InputDecoration(
-      hintText: "1, 2...",
+  _amountBedroomTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _amountBedroomController,
+      decoration: MyStyle().style_decoration_tff("1, 2,..."),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập số phòng ngủ";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập số phòng ngủ";
-      }
-      return null;
-    },
   );
 
-  _amountWcTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _amountWcController,
-    decoration: InputDecoration(
-      hintText: "1, 2...",
+  _amountWcTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _amountWcController,
+      decoration: MyStyle().style_decoration_tff("1, 2,..."),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập số phòng vệ sinh";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập số phòng vệ sinh";
-      }
-      return null;
-    },
   );
 
-  _amountDwellerTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _amountDwellerController,
-    decoration: InputDecoration(
-      hintText: "1, 2...",
+  _amountDwellerTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _amountDwellerController,
+      decoration: MyStyle().style_decoration_tff("1, 2,..."),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập số lượng người ở";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập số lượng người ở";
-      }
-      return null;
-    },
   );
 
-  _priceTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _priceController,
-    decoration: InputDecoration(
-      hintText: "Nhập giá bán",
+  _priceTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _priceController,
+      decoration: MyStyle().style_decoration_tff("Nhập giá bán"),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập giá";
+        }
+        return null;
+      },
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập giá";
-      }
-      return null;
-    },
   );
 
-  _rentalPriceTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _rentalPriceController,
-    decoration: InputDecoration(
-      hintText: "Nhập giá thuê",
-    ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập giá";
-      }
+  _rentalPriceTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      style: MyStyle().style_text_tff(),
+      controller: _rentalPriceController,
+      decoration: MyStyle().style_decoration_tff("Nhập giá thuê"),
+      keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập giá";
+        }
 
-      return null;
-    },
+        return null;
+      },
+    ),
+  );
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
   );
 }
