@@ -3,6 +3,7 @@ import 'package:animated_float_action_button/float_action_button_text.dart';
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'add_service_page.dart';
@@ -21,67 +22,30 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Thông tin dịch vụ",
-          //widget.service.name.toString(),
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Thông tin dịch vụ"),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.drive_file_rename_outline , "Tên dịch vụ", widget.service.name.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.attach_money , "Phí dịch vụ", widget.service.charge.toString()+" VNĐ"),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.credit_card, "Đơn vị", widget.service.type.toString()),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Thông tin chi tiết
+                _title("Thông tin chi tiết"),
+                SizedBox(height: 10,),
+                _detail("Tên dịch vụ", widget.service.name.toString()),
+                SizedBox(height: 10,),
+                _detail("Loại dịch vụ", widget.service.type.toString()),
+                SizedBox(height: 10,),
+                _detail("Phí dịch vụ", widget.service.charge.toString()),
+                SizedBox(height: 30,),
+                _title("Khác"),
+                SizedBox(height: 10,),
+                _note(widget.service.detail.toString()),
+                SizedBox(height: 50,)
+              ],
             ),
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("GHI CHÚ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            widget.service.detail.toString(),
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
       ),
       floatingActionButton: AnimatedFloatingActionButton(
           key: fabKey,
@@ -152,4 +116,71 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
       text: "Xóa",
     );
   }
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
+
+  _detail(String name, String detail) => Container(
+    padding: EdgeInsets.all(8),
+    height: 50,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.grey.withOpacity(0.1)
+    ),
+    child: Row(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        Spacer(),
+        Text(
+          detail,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+      ],
+    ),
+  );
+
+  _note(String text) => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.withOpacity(0.1),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Ghi chú",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        SizedBox(height: 10,),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            height: 1.2,
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
 }

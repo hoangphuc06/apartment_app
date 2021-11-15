@@ -15,10 +15,13 @@ class ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
-      child: Card(
-        elevation: 2,
         child: Container(
-          margin: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.2),
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          padding: EdgeInsets.all(16),
+          margin: EdgeInsets.only(bottom: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -46,7 +49,7 @@ class ServiceCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
+
     );
   }
   // @override

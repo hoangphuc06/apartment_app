@@ -2,6 +2,7 @@ import 'package:animated_float_action_button/animated_floating_action_button.dar
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/category_apartment/view/edit_category_apartment_page.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,61 +22,31 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Thông tin",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Thông tin"),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.drive_file_rename_outline, "Tên loại căn hộ", widget.categoryApartment.name.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.crop_square_rounded, "Diện tích", widget.categoryApartment.area.toString() + " m2"),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.bed, "Số phòng ngủ", widget.categoryApartment.amountBedroom.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.wc, "Số phòng vệ sinh", widget.categoryApartment.amountWc.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.person, "Số người ở", widget.categoryApartment.amountDweller.toString()),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("GIÁ CẢ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.money, "Giá bán", widget.categoryApartment.price.toString() + " VNĐ"),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.money, "Giá thuê", widget.categoryApartment.rentalPrice.toString() + " VNĐ"),
-                    SizedBox(height: 10,)
-                  ],
-                ),
-              ),
-            ),
+            _title("Thông tin chi tiết"),
+            SizedBox(height: 10,),
+            _detail("Tên loại căn hộ", widget.categoryApartment.name.toString()),
+            SizedBox(height: 10,),
+            _detail("Diện tích", widget.categoryApartment.area.toString()),
+            SizedBox(height: 10,),
+            _detail("Số phòng ngủ", widget.categoryApartment.amountBedroom.toString()),
+            SizedBox(height: 10,),
+            _detail("Số phòng vệ sinh", widget.categoryApartment.amountWc.toString()),
+            SizedBox(height: 10,),
+            _detail("Số người tối đa", widget.categoryApartment.amountDweller.toString()),
+            SizedBox(height: 30,),
+            _title("Giá cả"),
+            SizedBox(height: 10,),
+            _detail("Giá bán", widget.categoryApartment.rentalPrice.toString() + "  VND"),
+            SizedBox(height: 10,),
+            _detail("Giá thuê", widget.categoryApartment.price.toString() + "  VND"),
+            SizedBox(height: 30,),
           ],
         ),
       ),
@@ -148,4 +119,71 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
       text: "Xóa",
     );
   }
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
+
+  _detail(String name, String detail) => Container(
+    padding: EdgeInsets.all(8),
+    height: 50,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.grey.withOpacity(0.1)
+    ),
+    child: Row(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        Spacer(),
+        Text(
+          detail,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+      ],
+    ),
+  );
+
+  _note(String text) => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.withOpacity(0.1),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Ghi chú",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        SizedBox(height: 10,),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            height: 1.2,
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
 }
