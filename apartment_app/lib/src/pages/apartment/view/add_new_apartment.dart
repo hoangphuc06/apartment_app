@@ -24,19 +24,31 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
 
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
+  int dem = 0;
+
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
-  String getName() {
-    int dem = 0;
-    FirebaseFirestore.instance.collection('floorinfo').where("floorid",isEqualTo: this.widget.floorid).get().then((value) => {
-        dem++
+  getName() async {
+    await FirebaseFirestore.instance.collection('floorinfo').where("floorid",isEqualTo: this.widget.floorid).get().then((value) => {
+      dem = value.size,
+      print("vi tri 1:" + dem.toString()),
     });
-    return (int.parse(this.widget.floorid)*100 + dem + 5).toString();
+
+    print("vi tri 2:" + dem.toString());
+    return (int.parse(this.widget.floorid)*100 + dem + 1);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getName();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("trong ham main" + getName().toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: myAppBar("Thêm căn hộ"),
@@ -139,7 +151,7 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     if (_formkey.currentState!.validate()) {
       floorInfoFB.add(
         widget.floorid,
-        getName(),
+        getName().toString(),
         _categoryController.text,
         '0',
         'Trống',
@@ -166,7 +178,7 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     child: TextFormField(
       decoration: MyStyle().style_decoration_tff(""),
       style: MyStyle().style_text_tff(),
-      initialValue: getName(),
+      initialValue: (int.parse(this.widget.floorid)*100 + dem + 1).toString(),
       readOnly: true,
     ),
   );
