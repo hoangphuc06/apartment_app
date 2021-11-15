@@ -1,4 +1,4 @@
-import 'package:apartment_app/src/pages/Bill/firebase/fb_list_bill_info.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class BillDetailPage extends StatefulWidget {
 }
 
 class _BillInfoPageState extends State<BillDetailPage> {
-  ApartmentBillInfo apartmentBillInfo = new ApartmentBillInfo();
+  BillFB apartmentBillInfo = new BillFB();
 
   final TextEditingController _idcontroler = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();

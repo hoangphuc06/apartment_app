@@ -34,7 +34,7 @@ class _EditContractPageState extends State<EditContractPage> {
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   String? _roomPaymentPeriodController;
-
+  int numDweller=0;
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _hostController = TextEditingController();
   final TextEditingController _roomController = TextEditingController();
@@ -74,6 +74,20 @@ class _EditContractPageState extends State<EditContractPage> {
         _startDayController.text = date;
         selectedDate = DateTime.now();
       });
+  }
+
+  Future<void> getNumdweller() async {
+    DwellersFB dwellersFB = new DwellersFB();
+    Stream<QuerySnapshot> query = dwellersFB.collectionReference
+        .where('idApartment', isEqualTo: _roomController)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        setState(() {
+          numDweller++;
+        });
+      });
+    });
   }
 
   @override
@@ -417,9 +431,9 @@ class _EditContractPageState extends State<EditContractPage> {
       floorInfoFB.updateStatus(this.widget.contract.room!, "Trống");
       floorInfoFB.updateStatus(_roomController.text, "Đang thuê");
       _upDateDweler(this.widget.contract.room!, _roomController.text);
-
+      getNumdweller();
       floorInfoFB.updateDweller(this.widget.contract.room!, '0');
-      floorInfoFB.updateDweller(_roomController.text, '1');
+      floorInfoFB.updateDweller(_roomController.text, numDweller.toString());
       _upDateRoom(this.widget.contract.room!, _roomController.text);
     }
     if (_renterController.text != this.widget.contract.renter) {
@@ -526,7 +540,7 @@ class _EditContractPageState extends State<EditContractPage> {
       );
   void _gotoPageRoom() async {
     var id = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SelectRoomContract()));
+        context, MaterialPageRoute(builder: (context) => SelectRoomContract(status: 'Trống',)));
     if (id != null) {
       setState(() {
         _roomController.text = id;

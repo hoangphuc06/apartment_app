@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:apartment_app/src/colors/colors.dart';
-import 'package:apartment_app/src/pages/Bill/firebase/fb_list_bill_info.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
 import 'package:apartment_app/src/pages/Bill/model/sevice_model.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -18,10 +23,9 @@ class AddBillPage extends StatefulWidget {
 }
 
 class _AddBillPageState extends State<AddBillPage> {
-  ApartmentBillInfo apartmentBillInfo = new ApartmentBillInfo();
-
-  late String _selectedID;
+  late String _id;
   List<Sevice> SeviceItem = [];
+  ContractFB contractFB = new ContractFB();
 
   Object? selectedCurrency;
 
@@ -32,6 +36,8 @@ class _AddBillPageState extends State<AddBillPage> {
   final _fomkey = GlobalKey<FormState>();
 
   final TextEditingController _idcontroler = TextEditingController();
+  final TextEditingController _temp = TextEditingController();
+  final TextEditingController _chargeRoom = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
   final TextEditingController _billdatecontroler = TextEditingController();
   final TextEditingController _billmonthcontroler = TextEditingController();
@@ -41,9 +47,9 @@ class _AddBillPageState extends State<AddBillPage> {
   final TextEditingController _startDayController = TextEditingController();
   final TextEditingController _expirationDateController =
       TextEditingController();
-
+  bool isSelectRoom = false;
   DateTime selectedDate = new DateTime.now();
-
+  Contract contract = new Contract();
   _selectDate(
       BuildContext context, TextEditingController _startDayController) async {
     final DateTime? picked = await showDatePicker(
@@ -61,6 +67,14 @@ class _AddBillPageState extends State<AddBillPage> {
       });
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    var date =
+        "${DateTime.now().toLocal().day}/${DateTime.now().toLocal().month}/${DateTime.now().toLocal().year}";
+    _billdatecontroler.text = date;
+    super.initState();
+  }
   // void _AddBil() {
   //   if (_fomkey.currentState!.validate()) {
   //     String billdate = _billdatecontroler.text.trim();
@@ -114,11 +128,9 @@ class _AddBillPageState extends State<AddBillPage> {
                             Container(
                               child: Column(
                                 children: [
-                                  TitleInfoNotNull(
-                                      text: "Hóa đơn tiền nhà tháng"),
+                                  TitleInfoNotNull(text: "Ngày lập hóa đơn"),
                                   GestureDetector(
-                                      onTap: () => _selectDate(
-                                          context, _billdatecontroler),
+                                      onTap: () {},
                                       child: AbsorbPointer(
                                         child: _textformFieldwithIcon(
                                             _billdatecontroler,
@@ -129,58 +141,6 @@ class _AddBillPageState extends State<AddBillPage> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 20),
-                            Column(
-                              children: [
-                                TitleInfoNull(text: "Khoảng thời gian"),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    //Chọn ngày bắt đầu
-                                    Container(
-                                      width: width * 0.4,
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: AbsorbPointer(
-                                                child: _textformFieldwithIcon(
-                                                    _startDayController,
-                                                    "Chọn ngày",
-                                                    "ngày thanh toán",
-                                                    Icons
-                                                        .calendar_today_outlined),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    //Chọn ngày kết thúc
-                                    Container(
-                                      width: width * 0.4,
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: AbsorbPointer(
-                                                child: _textformFieldwithIcon(
-                                                    _expirationDateController,
-                                                    "Chọn ngày",
-                                                    "hạn thanh toán",
-                                                    Icons
-                                                        .calendar_today_outlined),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
                             SizedBox(
                               height: 20,
                             ),
@@ -189,77 +149,191 @@ class _AddBillPageState extends State<AddBillPage> {
                                 children: [
                                   TitleInfoNotNull(text: "Chọn phòng"),
                                   GestureDetector(
-                                      onTap: () => {
-                                            Navigator.pushNamed(
-                                                context, "select_room")
-                                          },
+                                      onTap: () => {_gotoPageRoom()},
                                       child: AbsorbPointer(
                                         child: _textformFieldwithIcon(
-                                            _billdatecontroler,
+                                            _roomidcontroler,
                                             "Chọn phòng",
                                             "phòng",
-                                            Icons.calendar_today_outlined),
+                                            Icons.home),
                                       )),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                //Chọn ngày bắt đầu
-                                Container(
-                                  width: width * 0.4,
-                                  child: Column(
-                                    children: [
-                                      TitleInfoNotNull(text: "Ngày thanh toán"),
-                                      GestureDetector(
-                                          onTap: () => _selectDate(
-                                              context, _startDayController),
-                                          child: AbsorbPointer(
-                                            child: _textformFieldwithIcon(
-                                                _startDayController,
-                                                "Chọn ngày",
-                                                "ngày thanh toán",
-                                                Icons.calendar_today_outlined),
-                                          )),
-                                    ],
-                                  ),
-                                ),
 
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                //Chọn ngày kết thúc
-                                Container(
-                                    width: width * 0.4,
-                                    child: Column(
-                                      children: [
-                                        TitleInfoNotNull(
-                                            text: "Hạn thanh toán"),
-                                        GestureDetector(
-                                            onTap: () => _selectDate(context,
-                                                _expirationDateController),
-                                            child: AbsorbPointer(
-                                              child: _textformFieldwithIcon(
-                                                  _expirationDateController,
-                                                  "Chọn ngày",
-                                                  "hạn thanh toán",
-                                                  Icons
-                                                      .calendar_today_outlined),
-                                            )),
-                                      ],
-                                    )),
-                              ],
-                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     //Chọn ngày bắt đầu
+                            //     Container(
+                            //       width: width * 0.4,
+                            //       child: Column(
+                            //         children: [
+                            //           TitleInfoNotNull(text: "Ngày thanh toán"),
+                            //           GestureDetector(
+                            //               onTap: () => _selectDate(
+                            //                   context, _startDayController),
+                            //               child: AbsorbPointer(
+                            //                 child: _textformFieldwithIcon(
+                            //                     _startDayController,
+                            //                     "Chọn ngày",
+                            //                     "ngày thanh toán",
+                            //                     Icons.calendar_today_outlined),
+                            //               )),
+                            //         ],
+                            //       ),
+                            //     ),
+
+                            //     SizedBox(
+                            //       height: 20,
+                            //     ),
+                            //     //Chọn ngày kết thúc
+                            //     Container(
+                            //         width: width * 0.4,
+                            //         child: Column(
+                            //           children: [
+                            //             TitleInfoNotNull(
+                            //                 text: "Hạn thanh toán"),
+                            //             GestureDetector(
+                            //                 onTap: () => _selectDate(context,
+                            //                     _expirationDateController),
+                            //                 child: AbsorbPointer(
+                            //                   child: _textformFieldwithIcon(
+                            //                       _expirationDateController,
+                            //                       "Chọn ngày",
+                            //                       "hạn thanh toán",
+                            //                       Icons
+                            //                           .calendar_today_outlined),
+                            //                 )),
+                            //           ],
+                            //         )),
+                            //   ],
+                            // ),
+                            // isSelectRoom
+                            //     ? Card(
+                            //         elevation: 2,
+                            //         child: Container(
+                            //           padding: EdgeInsets.all(16),
+                            //           child: Column(
+                            //             crossAxisAlignment:
+                            //                 CrossAxisAlignment.center,
+                            //             children: [
+                            //               SizedBox(
+                            //                 height: 10,
+                            //               ),
+                            //               Text('Hợp đồng',
+                            //               style: TextStyle(color: myRed,fontWeight: FontWeight.w500),),
+                            //               SizedBox(
+                            //                 height: 10,
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       )
+                            //     : Container(),
                             SizedBox(
                               height: 10,
                             ),
                           ]))),
-              _CardNull("Tiền phòng"),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("Tiền phòng"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                        children: [
+                          TitleInfoNull(text: "Khoảng thời gian"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              //Chọn ngày bắt đầu
+                              Container(
+                                width: width * 0.4,
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {},
+                                        child: AbsorbPointer(
+                                          child: _textformFieldwithIcon(
+                                              _startDayController,
+                                              "Chọn ngày",
+                                              "ngày thanh toán",
+                                              Icons.calendar_today_outlined),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              //Chọn ngày kết thúc
+                              Container(
+                                width: width * 0.4,
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {},
+                                        child: AbsorbPointer(
+                                          child: _textformFieldwithIcon(
+                                              _expirationDateController,
+                                              "Chọn ngày",
+                                              "hạn thanh toán",
+                                              Icons.calendar_today_outlined),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Tiền phòng',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17,
+                                ),
+                              ),
+                              Container(
+                                width: width * 0.3,
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: TextFormField(
+                                    controller: _chargeRoom,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               _CardNull("Dịch vụ"),
               Card(
                 elevation: 2,
@@ -356,6 +430,42 @@ class _AddBillPageState extends State<AddBillPage> {
         ),
       ),
     );
+  }
+
+  void _gotoPageRoom() async {
+    var id = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SelectRoomContract(
+                  status: 'Đang thuê',
+                )));
+    if (id != null) {
+      setState(() {
+        _roomidcontroler.text = id;
+        isSelectRoom = true;
+        contractFB.collectionReference
+            .where("room", isEqualTo: id)
+            .get()
+            .then((value) => {
+                  _startDayController.text = value.docs[0]['startDay'],
+                  _chargeRoom.text = value.docs[0]['roomCharge']
+                });
+        // contractFB.collectionReference
+        //     .doc(_id)
+        //     .get()
+        //     .then((value) => {_startDayController.text = value['startDay']});
+      
+        var now = DateTime.now();
+        var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+        var date =
+            "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
+        _expirationDateController.text = date;
+        var temp = _startDayController.text.substring(0, 2);
+        var x =  (lastDayOfMonth.toLocal().day-int.parse(temp)+1)/lastDayOfMonth.toLocal().day;
+      
+   
+      });
+    }
   }
 }
 

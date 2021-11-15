@@ -62,5 +62,5 @@ final routes = <String, WidgetBuilder>{
   "add_new_bill_page":(BuildContext context) =>AddBillPage(),
   "select_room":(BuildContext context) =>SelectRoom(),
   //Hop dong
-  "select_room_contract":(BuildContext context) =>SelectRoomContract(),
+
 };

@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SelectRoomContract extends StatefulWidget {
-  const SelectRoomContract({Key? key}) : super(key: key);
-
+  // const SelectRoomContract({Key? key}) : super(key: key);
+  final String status;
+  SelectRoomContract({required this.status});
   @override
   _SelectRoomContractState createState() => _SelectRoomContractState();
 }
@@ -40,7 +41,7 @@ class _SelectRoomContractState extends State<SelectRoomContract> {
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder(
-                    stream: floorInfoFB.collectionReference.where('status',isEqualTo: 'Trống').snapshots(),
+                    stream: floorInfoFB.collectionReference.where('status',isEqualTo: this.widget.status).snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
