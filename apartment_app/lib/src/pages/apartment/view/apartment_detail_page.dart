@@ -15,30 +15,35 @@ class ApartmentDetailPage extends StatefulWidget {
 }
 
 class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: myGreen,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "Thông tin căn hộ",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+          iconTheme: IconThemeData(
+            color: myGreen, //change your color here
           ),
-          bottom: TabBar(
-            labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            indicatorColor: Colors.white,
-            indicatorWeight: 5,
-            tabs: [
-              Tab(text: "Thông tin",),
-              Tab(text: "Thành viên",),
-              Tab(text: "Dịch vụ",),
-            ],
+          backgroundColor: Colors.white,
+          elevation: 1,
+          title: Text("Thông tin căn hộ", style: TextStyle(color: myGreen,),),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: TabBar(
+              labelColor: Colors.black,
+              indicatorColor: myGreen,
+              indicatorWeight: 3,
+              tabs: [
+                Tab(text: "Thông tin",),
+                Tab(text: "Thành viên",),
+                Tab(text: "Dịch vụ",),
+              ],
+            ),
           ),
         ),
+
         body: TabBarView(
           children: [
             ApartmentInfoPage(widget.id_apartment),

@@ -18,43 +18,45 @@ class FloorInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: funtion,
-      child: Card(
-        elevation: 2,
-        child: Container(
-          margin: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Căn hộ " + id, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 5,),
-                  Text("Số người đang ở:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(numOfDweller, style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.wysiwyg_rounded),
-                  SizedBox(width: 5,),
-                  Text("Trạng thái:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(
-                    status,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: status == "Trống"? myRed : status == "Đã bán"? myGreen : myYellow,
-                      fontWeight: FontWeight.bold
-                    ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10))
+        ),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Căn hộ " + id, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Icon(Icons.person),
+                SizedBox(width: 5,),
+                Text("Số người đang ở:", style: TextStyle(fontSize: 15),),
+                Spacer(),
+                Text(numOfDweller, style: TextStyle(fontSize: 15),),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Icon(Icons.wysiwyg_rounded),
+                SizedBox(width: 5,),
+                Text("Trạng thái:", style: TextStyle(fontSize: 15),),
+                Spacer(),
+                Text(
+                  status,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: status == "Trống"? myRed : status == "Đã bán"? myGreen : Colors.orange,
+                    fontWeight: FontWeight.bold
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

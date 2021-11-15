@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
+import 'package:apartment_app/src/pages/home/view/home_page.dart';
 import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/list_dwellers_page.dart';
@@ -15,6 +16,7 @@ import 'package:apartment_app/src/pages/notification/view/notification_page.dart
 import 'package:apartment_app/src/pages/register_page.dart';
 import 'package:apartment_app/src/pages/reset_password/view/reset_password_page.dart';
 import 'package:apartment_app/src/pages/splash_page.dart';
+import 'package:apartment_app/src/pages/tab_pages/floor_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,7 @@ final routes = <String, WidgetBuilder>{
 
   //"edit_apartment_info_page": (BuildContext context) => EditApartmentInfo(),
 
+  'home_page':(BuildContext context)=>HomePage(),
 
   //Dich vu
   "service_page": (BuildContext context) => ServicePage(),
