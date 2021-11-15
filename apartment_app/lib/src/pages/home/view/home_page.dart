@@ -1,6 +1,9 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor.dart';
+import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
+import 'package:apartment_app/src/pages/category_apartment/view/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
+import 'package:apartment_app/src/pages/service/view/manage_service_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/floor_card.dart';
 import 'package:apartment_app/src/widgets/navbar/navbar.dart';
@@ -159,10 +162,10 @@ class _HomePageState extends State<HomePage> {
 
                   }),
                   _lableButton(size, Icons.wifi, "Dịch vụ", (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ServicePage()));
                   }),
                   _lableButton(size, Icons.apartment, "Loại căn hộ", (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryApartmentPage()));
                   }),
                   _lableButton(size, Icons.mail, "Thông báo", (){
 

@@ -4,6 +4,7 @@ import 'package:apartment_app/src/pages/service/model/service_info.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/pages/service/view/service_detail.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/service_card.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
@@ -67,7 +68,7 @@ class StateServicePage extends State<ServicePage> {
     // TODO: implement build
     print('BUILD FUNTION');
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
+      backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         backgroundColor: myGreen,
         child: Icon(Icons.add),
@@ -81,16 +82,9 @@ class StateServicePage extends State<ServicePage> {
           setState(() {});
         },
       ),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Dịch vụ",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      appBar: myAppBar("Danh sách dịch vụ"),
       body: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
