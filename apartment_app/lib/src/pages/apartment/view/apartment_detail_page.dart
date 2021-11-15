@@ -29,6 +29,12 @@ class _ApartmentDetailPageState extends State<ApartmentDetailPage> {
           elevation: 1,
           title: Text("Thông tin căn hộ", style: TextStyle(color: myGreen,),),
           centerTitle: true,
+          actions:[
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {},
+            ),
+          ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: TabBar(

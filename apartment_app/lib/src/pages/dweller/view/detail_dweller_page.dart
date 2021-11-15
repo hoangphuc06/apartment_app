@@ -1,7 +1,10 @@
 import 'package:animated_float_action_button/animated_floating_action_button.dart';
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/edit_dweller_page.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DetailDwellerPage extends StatefulWidget {
@@ -15,91 +18,70 @@ class DetailDwellerPage extends StatefulWidget {
 
 class _DetailDwellerPageState extends State<DetailDwellerPage> {
 
-  final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  //final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  DwellersFB dwellersFB = new DwellersFB();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Hồ sơ",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Hồ sơ"),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("Thông tin chi tiết", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.person, "Họ tên", widget.dweller.name.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.wc, "Giới tính", widget.dweller.gender.toString()=="0"? "Nam" : "Nữ"),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.cake, "Ngày sinh", widget.dweller.birthday.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.credit_card_rounded, "CMND", widget.dweller.cmnd.toString()==""?"Trống":widget.dweller.cmnd.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.location_on, "Quê quán", widget.dweller.homeTown.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.build, "Nghề nghiệp", widget.dweller.job.toString()),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("Cư trú", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.home, "Căn hộ", widget.dweller.idApartment.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(
-                      Icons.person_pin,
-                      "Vai trò",
-                        widget.dweller.role.toString()=="1"?"Chủ hộ" : widget.dweller.role.toString()=="2"?"Người thân chủ hộ" : "Người thuê lại"
-                    ),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 2,
-              child: Container(
-                padding: EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10,),
-                    Text("Liên hệ", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.phone, "Số điện thoại", widget.dweller.phoneNumber.toString()==""?"Trống":widget.dweller.phoneNumber.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.email, "Email", widget.dweller.email.toString()==""?"Trống":widget.dweller.email.toString()),
-                    SizedBox(height: 10,),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: StreamBuilder(
+              stream: dwellersFB.collectionReference.where('id', isEqualTo: widget.dweller.id).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: Text("No Data"),);
+                } else {
+                  QueryDocumentSnapshot x = snapshot.data!.docs[0];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Thông tin chi tiết
+                      _title("Thông tin chi tiết"),
+                      SizedBox(height: 10,),
+                      _detail("Họ tên", x["name"]),
+                      SizedBox(height: 10,),
+                      _detail("Giới tính", x["gender"]=="0"?"Nam":"Nữ"),
+                      SizedBox(height: 10,),
+                      _detail("Ngày sinh", x["birthday"]),
+                      SizedBox(height: 10,),
+                      _detail("CMND/CCCD", x["cmnd"]==""?"Trống":x["cmnd"]),
+                      SizedBox(height: 10,),
+                      _detail("Quê quán", x["homeTown"]),
+                      SizedBox(height: 10,),
+                      _detail("Nghề nghiệp", x["job"]),
+
+                      //Cư trú
+                      SizedBox(height: 30,),
+                      _title("Cư trú"),
+                      SizedBox(height: 10,),
+                      _detail("Căn hộ", x["idApartment"]),
+                      SizedBox(height: 10,),
+                      _detail("Vai trò", x["role"]=="1"?"Chủ hộ":x["role"]=="2"?"Người thân chủ hộ":"Người thuê lại"),
+
+                      //Liên hệ
+                      SizedBox(height: 30,),
+                      _title("Liên hệ"),
+                      SizedBox(height: 10,),
+                      _detail("Số điện thoại", x["phoneNumber"]==""?"Trống":x["phoneNumber"]),
+                      SizedBox(height: 10,),
+                      _detail("Email", x["email"]==""?"Trống":x["email"]),
+
+                      //Ghi chú
+                      SizedBox(height: 30,),
+                      _title("Khác"),
+                      SizedBox(height: 10,),
+                      _note(x["note"]),
+
+                      SizedBox(height: 50,)
+                    ],
+                  );
+                }
+              }
+          ),
         ),
       ),
       // floatingActionButton: AnimatedFloatingActionButton(
@@ -112,13 +94,13 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
       //     colorEndAnimation: myGreen,
       //     animatedIconData: AnimatedIcons.menu_close //To principal button
       // ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          _gotoPage();
-        },
-        child: Icon(Icons.menu, color: Colors.white,),
-        backgroundColor: myGreen,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     _gotoPage();
+      //   },
+      //   child: Icon(Icons.menu, color: Colors.white,),
+      //   backgroundColor: myGreen,
+      // ),
     );
   }
 
@@ -132,17 +114,17 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
     ],
   );
 
-  Widget edit() {
-    return FloatActionButtonText(
-      onPressed: (){
-        fabKey.currentState!.animate();
-        _gotoPage();
-      },
-      icon: Icons.mode_edit,
-      text: "Sửa",
-      textLeft: -80,
-    );
-  }
+  // Widget edit() {
+  //   return FloatActionButtonText(
+  //     onPressed: (){
+  //       fabKey.currentState!.animate();
+  //       _gotoPage();
+  //     },
+  //     icon: Icons.mode_edit,
+  //     text: "Sửa",
+  //     textLeft: -80,
+  //   );
+  // }
 
   void _gotoPage() async {
     final Dweller d = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(this.widget.dweller)));
@@ -153,14 +135,83 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
     }
   }
 
-  Widget delete() {
-    return FloatActionButtonText(
-      onPressed: (){
-        fabKey.currentState!.animate();
-      },
-      icon: Icons.delete,
-      textLeft: -80,
-      text: "Xóa",
-    );
-  }
+  // Widget delete() {
+  //   return FloatActionButtonText(
+  //     onPressed: (){
+  //       fabKey.currentState!.animate();
+  //     },
+  //     icon: Icons.delete,
+  //     textLeft: -80,
+  //     text: "Xóa",
+  //   );
+  // }
+
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
+
+  _detail(String name, String detail) => Container(
+    padding: EdgeInsets.all(8),
+    height: 50,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.grey.withOpacity(0.1)
+    ),
+    child: Row(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        Spacer(),
+        Text(
+          detail,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+      ],
+    ),
+  );
+
+  _note(String text) => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.withOpacity(0.1),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Ghi chú",
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        SizedBox(height: 10,),
+        Text(
+          text,
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+            height: 1.2,
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
+
 }

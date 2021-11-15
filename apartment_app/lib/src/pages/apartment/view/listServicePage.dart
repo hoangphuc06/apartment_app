@@ -33,19 +33,14 @@ class _ListServicePageState extends State<ListServicePage> {
                             stream: FirebaseFirestore.instance.collection("ServiceInfo").where('id', isEqualTo: x["idService"]).snapshots(),
                             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (!snapshot.hasData) {
-                                return Center(child: Text("No Data"));
-                              } else
-                              return ListView.builder(
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, i) {
-                                  QueryDocumentSnapshot y = snapshot.data!.docs[i];
-                                  return ListTile(
-                                    title: Text(y["name"]),
-                                  );
-                                }
-                              );
+                                return Center(child: Text(""));
+                              } else{
+                                QueryDocumentSnapshot y = snapshot.data!.docs[0];
+                                return ListTile(
+                                  title: Text(y["name"]),
+                                );
+                              }
+
                             }
                           ),
                         );
