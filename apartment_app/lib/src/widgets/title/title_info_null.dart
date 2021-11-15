@@ -11,7 +11,7 @@ class TitleInfoNull extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Text(text, style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400),),
+      Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
     ],);
   }
 }

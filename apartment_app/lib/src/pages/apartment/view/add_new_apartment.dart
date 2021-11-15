@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/style/my_style.dart';
@@ -23,123 +24,111 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
 
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _floorController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _numDwellerController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+
+  String getName() {
+    int dem = 0;
+    FirebaseFirestore.instance.collection('floorinfo').where("floorid",isEqualTo: this.widget.floorid).get().then((value) => {
+        dem++
+    });
+    return (int.parse(this.widget.floorid)*100 + dem + 5).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
-    _floorController.text ='Tầng ' +  widget.floorid;
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Thêm căn hộ",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Thêm căn hộ"),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
         child: Form(
           key: _formkey,
-          child: Column(
-            children: [
-              Card(
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10,),
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _title("Thông tin chi tiết"),
 
-                      Text("THÔNG TIN CHI TIẾT", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+                SizedBox(height: 10,),
+                TitleInfoNotNull(text: "Tên căn hộ"),
+                SizedBox(height: 10,),
+                _nameTextFormField(),
 
-                      // Tên căn hộ
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Tên  căn hộ"),
-                      _nameTextField(),
+                SizedBox(height: 10,),
+                TitleInfoNotNull(text: "Tầng"),
+                SizedBox(height: 10,),
+                _floorTextFormField(),
 
-                      // Tầng
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Tầng "),
-                      _floorTextField(),
-
-                      //Loại phòng
-                      SizedBox(height: 20,),
-                      TitleInfoNotNull(text: "Loại phòng"),
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance.collection('category_apartment').snapshots(),
-                          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if(!snapshot.hasData){
-                              return Center(child: Text("No Data"),);
-                            }
-                            else{
-                              List<DropdownMenuItem> currentItem=[];
-                              for(int i=0; i<snapshot.data!.docs.length; i++)
-                              {
-                                DocumentSnapshot snap= snapshot.data!.docs[i];
-                                currentItem.add(
-                                  DropdownMenuItem(child: Text(
-                                    snap['name'],
-                                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),),
-                                    value: "${snap.id.toString()}",
-                                  ),
-                                );
-                              }
-                              return
-                                  Container(
-                                    child: DropdownButtonFormField<Object?>(
-                                      items: currentItem,
-                                      onChanged: (currencyValue){
-                                        setState(() {
-                                          selectedCurrency = currencyValue;
-                                          _categoryController.text = '$currencyValue';
-                                        });
-                                      },
-                                      style: const TextStyle(color: Colors.deepPurple),
-                                      value: selectedCurrency,
-                                      // underline: Container(
-                                      //   height: 2,
-                                      //   color: myGreen,
-                                      // ),
-                                      validator: (value) => value == null ? 'vui lòng chọn loại căn hộ' : null,
-                                      isExpanded: false,
-                                      hint: new Text('Chọn loại phòng                                ',
-                                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal, fontSize: 16),
-                                      ),
-                                    ),
-                                  );
-                            }
-                          },
-                        ),
-                      ),
-
-                      //Ghi chú
-                      SizedBox(height: 20,),
-                      TitleInfoNull(text: "Ghi chú"),
-                      SizedBox(height: 10,),
-                      _noteTextField(),
-
-                      SizedBox(height: 10,),
-                    ],
-                  ),
+                SizedBox(height: 10,),
+                TitleInfoNotNull(text: "Loại căn hộ"),
+                SizedBox(height: 10,),
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection('category_apartment').snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if(!snapshot.hasData){
+                      return Center(child: Text("No Data"),);
+                    }
+                    else{
+                      List<DropdownMenuItem> currentItem=[];
+                      for(int i=0; i<snapshot.data!.docs.length; i++)
+                      {
+                        DocumentSnapshot snap= snapshot.data!.docs[i];
+                        currentItem.add(
+                          DropdownMenuItem(child: Text(
+                            snap['name'],
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),),
+                            value: "${snap.id.toString()}",
+                          ),
+                        );
+                      }
+                      return
+                        Container(
+                          padding: MyStyle().padding_container_tff(),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              color: Colors.grey.withOpacity(0.1)
+                          ),
+                          child: DropdownButtonFormField<Object?>(
+                            decoration: InputDecoration(
+                              border: InputBorder.none
+                            ),
+                            items: currentItem,
+                            onChanged: (currencyValue){
+                              setState(() {
+                                selectedCurrency = currencyValue;
+                                _categoryController.text = '$currencyValue';
+                              });
+                            },
+                            style: const TextStyle(color: Colors.deepPurple),
+                            value: selectedCurrency,
+                            validator: (value) => value == null ? 'Vui lòng chọn loại căn hộ' : null,
+                            isExpanded: false,
+                            hint: new Text('Chọn loại căn hộ                                ',
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        );
+                    }
+                  },
                 ),
-              ),
-              // Nút bấm
-              SizedBox(height: 10,),
-              MainButton(
-                name: "Thêm",
-                onpressed: _addRoom,
-              ),
-              SizedBox(height: 50,),
-            ],
+
+                SizedBox(height: 30,),
+                _title("Khác"),
+                SizedBox(height: 10,),
+                TitleInfoNull(text: "Ghi chú"),
+                SizedBox(height: 10,),
+                _note(),
+
+
+                SizedBox(height: 30,),
+                MainButton(
+                  name: "Thêm",
+                  onpressed: _addRoom,
+                ),
+                SizedBox(height: 50,),
+              ],
+            ),
           ),
         ),
       ),
@@ -149,52 +138,77 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
   void _addRoom() {
     if (_formkey.currentState!.validate()) {
       floorInfoFB.add(
-          widget.floorid,
-          _nameController.text,
-          _categoryController.text,
-          '0',
-          'Trống',
-          _noteController.text,
-          )
-          .then((value) => {
+        widget.floorid,
+        getName(),
+        _categoryController.text,
+        '0',
+        'Trống',
+        _noteController.text,
+      )
+      .then((value) => {
         Navigator.pop(context),
       });
     }
   }
 
-  _nameTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _nameController,
-    decoration: InputDecoration(
-      hintText: "101, 102,...",
+
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
     ),
-    keyboardType: TextInputType.number,
-    validator: (val) {
-      if (val!.isEmpty) {
-        return "Vui lòng nhập tên";
-      }
-      return null;
-    },
   );
 
-  _floorTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    controller: _floorController,
-    enabled: false,
-    keyboardType: TextInputType.text,
+  _nameTextFormField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      decoration: MyStyle().style_decoration_tff(""),
+      style: MyStyle().style_text_tff(),
+      initialValue: getName(),
+      readOnly: true,
+    ),
   );
 
-  _noteTextField() => TextFormField(
-    style: MyStyle().style_text_tff(),
-    maxLines: 5,
-    minLines: 2,
-    controller: _noteController,
-    decoration: InputDecoration(
-      hintText: "ghi chú...",
-      border: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),)
+  _floorTextFormField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      decoration: MyStyle().style_decoration_tff(""),
+      style: MyStyle().style_text_tff(),
+      initialValue: this.widget.floorid,
+      readOnly: true,
     ),
-    keyboardType: TextInputType.text,
   );
+
+  _note() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.withOpacity(0.1),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _noteController,
+          maxLines: 10,
+          minLines: 3,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: "Nhập ghi chú"
+          ),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w400
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
+
 
 }
