@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
           () {
             UpdatePassWordState.email=email;
                 LoadingDialog.hideLoadingDialog(context);
-                Navigator.pushReplacementNamed(context, "tab_page");
+                Navigator.pushReplacementNamed(context, "home_page");
             },
           (msg) {
                     LoadingDialog.hideLoadingDialog(context);

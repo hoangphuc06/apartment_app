@@ -14,54 +14,50 @@ class ApartmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: funtion,
-      child: Card(
-        elevation: 2,
-        child: Container(
-          margin: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Căn hộ " + this.apartment.id.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 5,),
-                  Text("Số người đang ở:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(this.apartment.numOfDweller.toString(), style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.wysiwyg_rounded),
-                  SizedBox(width: 5,),
-                  Text("Trạng thái:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(
-                    this.apartment.status.toString(),
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: this.apartment.status == "Trống"? myRed : this.apartment.status == "Đã bán"? myGreen : myYellow,
-                        fontWeight: FontWeight.bold
-                    ),
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Căn hộ " + this.apartment.id.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Icon(Icons.person),
+                SizedBox(width: 5,),
+                Text("Số người đang ở:", style: TextStyle(fontSize: 15),),
+                Spacer(),
+                Text(this.apartment.numOfDweller.toString(), style: TextStyle(fontSize: 15),),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Icon(Icons.wysiwyg_rounded),
+                SizedBox(width: 5,),
+                Text("Trạng thái:", style: TextStyle(fontSize: 15),),
+                Spacer(),
+                Text(
+                  this.apartment.status.toString(),
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: this.apartment.status == "Trống"? myRed : this.apartment.status == "Đã bán"? myGreen : myYellow,
+                      fontWeight: FontWeight.bold
                   ),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.home),
-                  SizedBox(width: 5,),
-                  Text("Tầng:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(this.apartment.floorid.toString(), style: TextStyle(fontSize: 15),),
-                ],
-              ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+              children: [
+                Icon(Icons.home),
+                SizedBox(width: 5,),
+                Text("Tầng:", style: TextStyle(fontSize: 15),),
+                Spacer(),
+                Text(this.apartment.floorid.toString(), style: TextStyle(fontSize: 15),),
+              ],
+            ),
 
-            ],
-          ),
+          ],
         ),
       ),
     );

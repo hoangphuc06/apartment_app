@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/home/view/home_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/bill_tab/bill_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/home_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/message_tab.dart';
@@ -16,7 +17,7 @@ class TabPage extends StatefulWidget {
 
 class _TabPageState extends State<TabPage> {
   List<Widget> _widgetOptions = [
-    HomeTab(),
+    HomePage(),
     SearchTab(),
     BillTab(),
     NotificationPage(),
