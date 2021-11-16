@@ -55,7 +55,6 @@ class _SelectRoomState extends State<SelectRoom> {
                               QueryDocumentSnapshot x = snapshot.data!.docs[i];
                               return FloorInfoCard(
                                 id: x["id"],
-                                numOfDweller: x["numOfDweller"],
                                 status: x["status"],
                                 funtion: () {
                                   // Navigator.push(

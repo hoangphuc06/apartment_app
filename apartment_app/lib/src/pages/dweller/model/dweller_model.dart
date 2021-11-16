@@ -13,6 +13,7 @@ class Dweller {
   String? homeTown;
   String? job;
   String? role;
+  String? note;
 
   Dweller(
       {this.id,
@@ -25,7 +26,8 @@ class Dweller {
       this.job,
       this.role,
       this.phoneNumber,
-      this.email});
+      this.email,
+      this.note});
 
   factory Dweller.fromDocument(DocumentSnapshot doc) {
     return Dweller(
@@ -40,6 +42,7 @@ class Dweller {
       homeTown: doc['homeTown'],
       job: doc["job"],
       role: doc["role"],
+      note: doc["note"]
     );
   }
 

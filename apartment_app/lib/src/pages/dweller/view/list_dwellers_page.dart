@@ -30,37 +30,47 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
-      body: Container(
-        padding: EdgeInsets.all(8),
-        child: SingleChildScrollView(
-          child: StreamBuilder(
-              stream: dwellersFB.collectionReference.where('idApartment',isEqualTo: this.widget.id_apartment).snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: Text("No Data"));
-                } else {
-                  num = snapshot.data!.docs.length;
-                  floorInfoFB.updateDweller(widget.id_apartment, num.toString());
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, i) {
-                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                        Dweller dweller = Dweller.fromDocument(x);
-                        return DwellerCard(
-                          dweller: dweller,
-                          funtion: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailDwellerPage(dweller: dweller)));
-                          },
-                        );
-                      });
-                }
-              }),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20,),
+            Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: _title("Danh sách thành viên"),
+            ),
+            Container(
+              margin: EdgeInsets.all(16),
+              child: StreamBuilder(
+                  stream: dwellersFB.collectionReference.where('idApartment',isEqualTo: this.widget.id_apartment).snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: Text("No Data"));
+                    } else {
+                      num = snapshot.data!.docs.length;
+                      floorInfoFB.updateDweller(widget.id_apartment, num.toString());
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, i) {
+                            QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                            Dweller dweller = Dweller.fromDocument(x);
+                            return DwellerCard(
+                              dweller: dweller,
+                              funtion: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailDwellerPage(dweller: dweller)));
+                              },
+                            );
+                          });
+                    }
+                  }),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -75,4 +85,12 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
       ),
     );
   }
+
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
 }

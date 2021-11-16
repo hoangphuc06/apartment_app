@@ -38,6 +38,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
   final TextEditingController _jobController = TextEditingController();
   final TextEditingController _homeTownController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
 
 
   final List<Map<String, dynamic>> _items = [
@@ -83,6 +84,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
     _roleController.text = this.widget.dweller.role.toString();
     _phoneNumberController.text = this.widget.dweller.phoneNumber.toString();
     _emailController.text = this.widget.dweller.email.toString();
+    _noteController.text = this.widget.dweller.note.toString();
   }
 
 
@@ -186,6 +188,13 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
                     TitleInfoNull(text: "Email"),
                     SizedBox(height: 10,),
                     _emailTextField(),
+
+                    SizedBox(height: 30,),
+                    _title("Khác"),
+                    SizedBox(height: 10,),
+                    TitleInfoNull(text: "Ghi chú"),
+                    SizedBox(height: 10,),
+                    _noteTextField(),
                   ],
                 ),
               ),
@@ -214,8 +223,9 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
     String role = _roleController.text.trim();
     String phoneNumber = _phoneNumberController.text.trim();
     String email = _emailController.text.trim();
+    String note = _noteController.text.trim();
 
-    dwellersFB.update(widget.dweller.id.toString(),widget.dweller.idApartment.toString(), name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email)
+    dwellersFB.update(widget.dweller.id.toString(),widget.dweller.idApartment.toString(), name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email, note)
       .then((value) => {
         Navigator.pop(context,Dweller(
           id: widget.dweller.id.toString(),
@@ -357,6 +367,19 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
         }
         return null;
       },
+    ),
+  );
+
+  _noteTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      decoration: MyStyle().style_decoration_tff("Nhập ghi chú"),
+      style: MyStyle().style_text_tff(),
+      controller: _noteController,
+      keyboardType: TextInputType.name,
+      minLines: 3,
+      maxLines: 10,
     ),
   );
 

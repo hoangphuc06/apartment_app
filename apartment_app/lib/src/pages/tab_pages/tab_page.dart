@@ -20,7 +20,6 @@ class _TabPageState extends State<TabPage> {
     HomePage(),
     SearchTab(),
     BillTab(),
-    NotificationPage(),
     OthersTab(),
   ];
 
@@ -42,6 +41,7 @@ class _TabPageState extends State<TabPage> {
 
   Widget _bottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
+      backgroundColor: myGreen,
       iconSize: 30.0,
       selectedItemColor: myGreen,
       unselectedItemColor: Colors.grey,
@@ -51,9 +51,7 @@ class _TabPageState extends State<TabPage> {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
         BottomNavigationBarItem(icon: Icon(Icons.search), label: "Tìm kiếm"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.money_off_csred), label: "Hóa đơn"),
-        BottomNavigationBarItem(icon: Icon(Icons.message), label: "Thông báo"),
+        BottomNavigationBarItem(icon: Icon(Icons.money_off_csred), label: "Hóa đơn"),
         BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: "Khác"),
       ],
     );
