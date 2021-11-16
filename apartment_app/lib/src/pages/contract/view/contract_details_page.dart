@@ -41,12 +41,13 @@ class _ContractDetailsState extends State<ContractDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.9),
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: myGreen,
+          iconTheme: IconThemeData(
+            color: myGreen, //change your color here
+          ),
+          backgroundColor:Colors.white,
           centerTitle: true,
           elevation: 1,
           actions: [
@@ -68,14 +69,10 @@ class _ContractDetailsState extends State<ContractDetails> {
             },
             icon: Icon(Icons.arrow_back_ios),
           ),
-          title: Text(
-            "Hợp đồng",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
+          title: Text("Hợp đồng", style: TextStyle(color: myGreen,),),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(16),
           child: StreamBuilder(
               stream: contractFB.collectionReference
                   .where('id', isEqualTo: this.widget.id)
@@ -89,285 +86,85 @@ class _ContractDetailsState extends State<ContractDetails> {
                   QueryDocumentSnapshot x = snapshot.data!.docs[0];
                   Contract contract = Contract.fromDocument(x);
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Card(
-                        elevation: 2,
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: 14),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            bottom: height * 0.015),
-                                        alignment: Alignment.centerLeft,
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(width: 1),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              x["id"],
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.home_outlined),
-                                                SizedBox(
-                                                  width: width * 0.02,
-                                                ),
-                                                Text(
-                                                  x["room"],
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                    Icons.calendar_today_sharp),
-                                                SizedBox(
-                                                  width: width * 0.02,
-                                                ),
-                                                Text(
-                                                  "Từ ngày " +
-                                                      x["startDay"] +
-                                                      " - " +
-                                                      x["expirationDate"],
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.people_alt_outlined),
-                                                SizedBox(
-                                                  width: width * 0.02,
-                                                ),
-                                                Text(
-                                                  "Người cho thuê: " +
-                                                      x["host"],
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 8,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                          padding: EdgeInsets.only(
-                                              top: height * 0.015,
-                                              bottom: height * 0.015),
-                                          alignment: Alignment.centerLeft,
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: BorderSide(width: 1),
-                                            ),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Tiền phòng:",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    x["roomCharge"],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Tiền cọc:",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    x["deposit"],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Kỳ thanh toán:",
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    x["roomPaymentPeriod"],
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          )),
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                          top: 20,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 15),
-                                              child: RoundedButton(
-                                                  name: 'Chỉnh sửa',
-                                                  onpressed: () => {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    EditContractPage(
-                                                                        contract:
-                                                                            contract)))
-                                                      },
-                                                  color: myYellow),
-                                            ),
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 15),
-                                              child: RoundedButton(
-                                                  name: 'Xóa',
-                                                  onpressed: () => {_onClick()},
-                                                  color: myRed),
-                                            ),
-                                            Container(
-                                              child: RoundedButton(
-                                                  name: 'Thanh lý',
-                                                  onpressed: () => {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    LiquidationContractPage(
-                                                                        id: widget
-                                                                            .id)))
-                                                      },
-                                                  color: myGreen),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                      //thông tin hợp đồng
+                      _title("Hợp đồng"),
+                      SizedBox(height: 10,),
+                      _detail("Số hợp đồng", x["id"]),
+                      SizedBox(height: 10,),
+                      _detail("Phòng",x["room"]),
+                      SizedBox(height: 10,),
+                      _detail("Từ ngày", x["startDay"]),
+                      SizedBox(height: 10,),
+                      _detail("Đến ngày", x["expirationDate"]),
+                      SizedBox(height: 10,),
+                      _detail("Người cho thuê", x["host"]),
+                      SizedBox(height: 10,),
+                      _detail("Tiền phòng", x["roomCharge"]),
+                      SizedBox(height: 10,),
+                      _detail("Tiền cọc", x["deposit"]),
+                      SizedBox(height: 10,),
+                      _detail("Kỳ thanh toán", x["roomPaymentPeriod"]),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.end,
+                        children: [
+                          // Container(
+                          //   padding:
+                          //   EdgeInsets.only(right: 8,),
+                          //   child: RoundedButton(
+                          //       name: 'Chỉnh sửa',
+                          //       onpressed: () => {
+                          //         Navigator.push(
+                          //             context,
+                          //             MaterialPageRoute(
+                          //                 builder: (context) =>
+                          //                     EditContractPage(
+                          //                         contract:
+                          //                         contract)))
+                          //       },
+                          //       color: myYellow),
+                          // ),
+                          Container(
+                            padding:
+                            EdgeInsets.only(right: 8),
+                            child: RoundedButton(
+                                name: 'Xóa',
+                                onpressed: () => {_onClick()},
+                                color: myRed),
                           ),
-                        ),
-                      ),
-                      Card(
-                        elevation: 2,
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "ĐIỀU KHOẢN",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              _items("Điều khoản bên A", _rulesAController,x['rulesA']),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              _items("Điều khoản bên B", _rulesBController,x['rulesB']),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              _items("Điều khoản chung", _rulesCController,x['rulesC']),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
+                          Container(
+                            child: RoundedButton(
+                                name: 'Thanh lý',
+                                onpressed: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LiquidationContractPage(
+                                                  id: widget
+                                                      .id)))
+                                },
+                                color: myGreen),
                           ),
-                        ),
+                        ],
                       ),
+                      SizedBox(height: 30,),
+                      _title("Điều khoản"),
+                      SizedBox(height: 10,),
+                      TitleInfoNull(text: "Điều khoản bên A"),
+                      SizedBox(height: 10,),
+                      _noteA(),
+                      SizedBox(height: 10,),
+                      TitleInfoNull(text: "Điều khoản bên B"),
+                      SizedBox(height: 10,),
+                      _noteB(),
+                      SizedBox(height: 10,),
+                      TitleInfoNull(text: "Điều khoản chung"),
+                      SizedBox(height: 10,),
+                      _note(),
                     ],
                   );
                 }
@@ -411,4 +208,123 @@ class _ContractDetailsState extends State<ContractDetails> {
       ],
     );
   }
+  _title(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5),
+        fontWeight: FontWeight.bold
+    ),
+  );
+
+
+  _detail(String name, String detail) => Container(
+    padding: EdgeInsets.all(8),
+    height: 50,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.blueGrey.withOpacity(0.2)
+    ),
+    child: Row(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        Spacer(),
+        Text(
+          detail,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+      ],
+    ),
+  );
+
+  _note() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.blueGrey.withOpacity(0.2),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _rulesCController,
+          maxLines: 10,
+          minLines: 3,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Nhập ghi chú"
+          ),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
+  _noteA() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.blueGrey.withOpacity(0.2),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _rulesAController,
+          maxLines: 10,
+          minLines: 3,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Nhập ghi chú"
+          ),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
+  _noteB() => Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.blueGrey.withOpacity(0.2),
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: _rulesBController,
+          maxLines: 10,
+          minLines: 3,
+          decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Nhập ghi chú"
+          ),
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w400
+          ),
+        ),
+        SizedBox(height: 10,),
+      ],
+    ),
+  );
+
 }

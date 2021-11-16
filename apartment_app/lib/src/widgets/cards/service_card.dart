@@ -17,7 +17,7 @@ class ServiceCard extends StatelessWidget {
       onTap: onPressed,
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.blueGrey.withOpacity(0.2),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
           padding: EdgeInsets.all(16),
@@ -25,27 +25,15 @@ class ServiceCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(serviceInfo.name.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
               Row(
                 children: [
-                  Icon(Icons.attach_money ),
+                  Icon(Icons.local_laundry_service_outlined),
                   SizedBox(width: 5,),
-                  Text("Phí dịch vụ", style: TextStyle(fontSize: 15),),
+                  Text(this.serviceInfo.name.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                   Spacer(),
-                  Text(serviceInfo.charge.toString()+" VNĐ", style: TextStyle(fontSize: 15),),
+                  Text(this.serviceInfo.charge.toString()+" VNĐ", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                 ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.credit_card),
-                  SizedBox(width: 5,),
-                  Text("Đơn vị", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(serviceInfo.type.toString(), style: TextStyle(fontSize: 15),),
-                ],
-              ),
+              )
             ],
           ),
         ),

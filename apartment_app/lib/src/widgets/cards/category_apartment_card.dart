@@ -14,7 +14,7 @@ class CategoryApartmentCard extends StatelessWidget {
       onTap: funtion,
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.2),
+              color: Colors.blueGrey.withOpacity(0.2),
               borderRadius: BorderRadius.all(Radius.circular(10))
           ),
           padding: EdgeInsets.all(16),
@@ -22,45 +22,13 @@ class CategoryApartmentCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(categoryApartment.name.toString(), style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
               Row(
                 children: [
-                  Icon(Icons.crop_square_rounded),
+                  Icon(Icons.apartment),
                   SizedBox(width: 5,),
-                  Text("Diện tích", style: TextStyle(fontSize: 15),),
+                  Text(this.categoryApartment.name.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                   Spacer(),
-                  Text(categoryApartment.area.toString() + " m2", style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.bed),
-                  SizedBox(width: 5,),
-                  Text("Số phòng ngủ:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(categoryApartment.amountBedroom.toString(), style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.wc),
-                  SizedBox(width: 5,),
-                  Text("Số phòng vệ sinh:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(categoryApartment.amountWc.toString(), style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.person),
-                  SizedBox(width: 5,),
-                  Text("Số người ở:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(categoryApartment.amountDweller.toString(), style: TextStyle(fontSize: 15),),
+                  Text(this.categoryApartment.area.toString()+" m²", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                 ],
               )
             ],

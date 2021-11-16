@@ -129,7 +129,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
     height: 50,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.grey.withOpacity(0.1)
+        color: Colors.blueGrey.withOpacity(0.2)
     ),
     child: Row(
       children: [
@@ -156,7 +156,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
     width: double.infinity,
     padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
-      color: Colors.grey.withOpacity(0.1),
+      color: Colors.blueGrey.withOpacity(0.2),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
     child: Column(

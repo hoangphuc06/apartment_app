@@ -102,7 +102,7 @@ class StateAddPage extends State<AddServicPage> {
     padding: MyStyle().padding_container_tff(),
     decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.grey.withOpacity(0.1)
+        color: Colors.blueGrey.withOpacity(0.2)
     ),
     child: DropdownButtonFormField(
       decoration: InputDecoration(
@@ -206,7 +206,7 @@ class StateAddPage extends State<AddServicPage> {
     width: double.infinity,
     padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
-      color: Colors.grey.withOpacity(0.1),
+      color: Colors.blueGrey.withOpacity(0.2),
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
     child: Column(

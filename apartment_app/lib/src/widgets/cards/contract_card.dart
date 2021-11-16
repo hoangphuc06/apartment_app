@@ -21,47 +21,28 @@ class ContractCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: funtion,
-      child: Card(
-        elevation: 2,
         child: Container(
-          margin: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.blueGrey.withOpacity(0.2),
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          padding: EdgeInsets.all(16),
+          margin: EdgeInsets.only(bottom: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(id, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
               Row(
                 children: [
-                  Icon(Icons.home),
+                  Icon(Icons.assignment),
                   SizedBox(width: 5,),
-                  Text(room, style: TextStyle(fontSize: 15),),
+                  Text(id, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                   Spacer(),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.calendar_today_outlined),
-                  SizedBox(width: 5,),
-                  Text("Từ ngày "+startDay.toString()+" đến "+expirationDate.toString(), style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.people_alt_outlined),
-                  SizedBox(width: 5,),
-                  Text("Người cho thuê "+host, style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  
+                  Text(room, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                 ],
               )
             ],
           ),
         ),
-      ),
     );
   }
 }

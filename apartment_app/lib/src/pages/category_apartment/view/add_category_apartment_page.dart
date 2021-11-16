@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +31,7 @@ class _AddCategoryApartmentPageState extends State<AddCategoryApartmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          "Thêm loại căn hộ",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      appBar: myAppBar("Thêm loại căn hộ"),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Form(
@@ -54,7 +48,7 @@ class _AddCategoryApartmentPageState extends State<AddCategoryApartmentPage> {
               _nameTextField(),
 
               // Diện tích căn hộ
-              SizedBox(height: 20,),
+              SizedBox(height: 10,),
               TitleInfoNotNull(text: "Diện tích (m2)"),
               SizedBox(height: 10,),
               _areaTextField(),
@@ -83,11 +77,13 @@ class _AddCategoryApartmentPageState extends State<AddCategoryApartmentPage> {
               //Giá bán
               SizedBox(height: 10,),
               TitleInfoNotNull(text: "Giá bán (VNĐ)"),
+              SizedBox(height: 10,),
               _priceTextField(),
 
               //Giá thuê
               SizedBox(height: 10,),
               TitleInfoNotNull(text: "Giá thuê (VNĐ)"),
+              SizedBox(height: 10,),
               _rentalPriceTextField(),
 
               // Nút bấm

@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/apartment/view/selectService.dart';
+import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class ListServicePage extends StatefulWidget {
 
 class _ListServicePageState extends State<ListServicePage> {
    List<String> listIdService = <String>[];
+   List<ServiceModel> ListServiceModel = <ServiceModel>[];
 
   Future<void> loadData() async {
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
@@ -42,7 +44,11 @@ class _ListServicePageState extends State<ListServicePage> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 10,),
+            _title("Danh sách dịch vụ"),
+            SizedBox(height: 10,),
             StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("service_apartment")
@@ -73,68 +79,30 @@ class _ListServicePageState extends State<ListServicePage> {
                                       snapshot.data!.docs[0];
                                   return GestureDetector(
                                     onTap: (){},
-                                    child: Card(
-                                      elevation: 2,
                                       child: Container(
-                                        margin: EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey.withOpacity(0.2),
+                                            borderRadius: BorderRadius.all(Radius.circular(10))
+                                        ),
+                                        padding: EdgeInsets.all(16),
+                                        margin: EdgeInsets.only(bottom: 8),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              y['name'],
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
                                             Row(
                                               children: [
-                                                Icon(Icons.attach_money),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  "Phí dịch vụ",
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                ),
+                                                Icon(Icons.local_laundry_service_outlined),
+                                                SizedBox(width: 5,),
+                                                Text(y["name"], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                                                 Spacer(),
-                                                Text(
-                                                  y['charge'] + " VNĐ",
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                ),
+                                                Text(y["charge"]+" VNĐ", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                                               ],
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.credit_card),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  "Đơn vị",
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                ),
-                                                Spacer(),
-                                                Text(
-                                                  y['type'],
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                ),
-                                              ],
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
-                                    ),
+
                                   );
                                 }
                               }),
@@ -155,4 +123,11 @@ class _ListServicePageState extends State<ListServicePage> {
       ),
     );
   }
+   _title(String text) => Text(
+     text,
+     style: TextStyle(
+         color: Colors.black.withOpacity(0.5),
+         fontWeight: FontWeight.bold
+     ),
+   );
 }

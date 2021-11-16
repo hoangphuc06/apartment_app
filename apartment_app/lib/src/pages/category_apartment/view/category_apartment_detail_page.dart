@@ -132,7 +132,7 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
     height: 50,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.grey.withOpacity(0.1)
+        color: Colors.blueGrey.withOpacity(0.2)
     ),
     child: Row(
       children: [
