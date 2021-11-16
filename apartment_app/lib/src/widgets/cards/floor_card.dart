@@ -21,7 +21,7 @@ class FloorCard extends StatelessWidget {
           color: Colors.grey.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10))
         ),
-        width: 200,
+        width: 150,
         margin: EdgeInsets.only(right: 8),
         padding: EdgeInsets.all(16),
         //alignment: Alignment.center,
