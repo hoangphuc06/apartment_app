@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
 import 'package:apartment_app/src/pages/Bill/model/sevice_model.dart';
+import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
@@ -16,7 +18,10 @@ import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class AddBillPage extends StatefulWidget {
-  const AddBillPage({Key? key}) : super(key: key);
+  // const AddBillPage({Key? key}) : super(key: key);
+  late String id;
+
+  AddBillPage({required this.id});
 
   @override
   _AddBillPageState createState() => _AddBillPageState();
@@ -26,7 +31,8 @@ class _AddBillPageState extends State<AddBillPage> {
   late String _id;
   List<Sevice> SeviceItem = [];
   ContractFB contractFB = new ContractFB();
-
+  ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
+  ServiceFB serviceFB = new ServiceFB();
   Object? selectedCurrency;
 
   void getCategory(String id) {
@@ -35,8 +41,9 @@ class _AddBillPageState extends State<AddBillPage> {
 
   final _fomkey = GlobalKey<FormState>();
 
-  final TextEditingController _idcontroler = TextEditingController();
-  final TextEditingController _temp = TextEditingController();
+  final TextEditingController _fine = TextEditingController();
+  final TextEditingController _discount = TextEditingController();
+  final TextEditingController _noteControler = TextEditingController();
   final TextEditingController _chargeRoom = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
   final TextEditingController _billdatecontroler = TextEditingController();
@@ -45,11 +52,24 @@ class _AddBillPageState extends State<AddBillPage> {
   final TextEditingController _servicecontroler = TextEditingController();
   final TextEditingController _statuscontroler = TextEditingController();
   final TextEditingController _startDayController = TextEditingController();
+  final TextEditingController _startIndexW = TextEditingController();
+  final TextEditingController _endIndexW = TextEditingController();
+  final TextEditingController _startIndexE = TextEditingController();
+  final TextEditingController _endIndexE = TextEditingController();
+  final TextEditingController _totalE = TextEditingController();
+  final TextEditingController _totalW = TextEditingController();
+  final TextEditingController _chargeE = TextEditingController();
+  final TextEditingController _chargeW = TextEditingController();
+  final TextEditingController _Total = TextEditingController();
+  final TextEditingController _TotalWE = TextEditingController();
+  final TextEditingController _FinalTotal = TextEditingController();
   final TextEditingController _expirationDateController =
       TextEditingController();
   bool isSelectRoom = false;
+  int temp = 0;
   DateTime selectedDate = new DateTime.now();
   Contract contract = new Contract();
+  final TextEditingController serviceFee = TextEditingController();
   _selectDate(
       BuildContext context, TextEditingController _startDayController) async {
     final DateTime? picked = await showDatePicker(
@@ -67,26 +87,36 @@ class _AddBillPageState extends State<AddBillPage> {
       });
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
-    var date =
-        "${DateTime.now().toLocal().day}/${DateTime.now().toLocal().month}/${DateTime.now().toLocal().year}";
-    _billdatecontroler.text = date;
+    var now = DateTime.now();
+    var start_date =
+        "${now.toLocal().day}/${now.toLocal().month}/${now.toLocal().year}";
+    contractFB.collectionReference
+        .where('room', isEqualTo: this.widget.id)
+        .get()
+        .then((value) => {
+              _startDayController.text = value.docs[0]['startDay'],
+              _chargeRoom.text = value.docs[0]['roomCharge'],
+            });
+    var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+    var last_date =
+        "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
+    _expirationDateController.text = last_date;
+    _billdatecontroler.text = start_date;
+    _roomidcontroler.text = this.widget.id;
+    _totalW.text = '0';
+    _totalE.text = '0';
+    _Total.text = '0';
+    _TotalWE.text = '0';
+    _FinalTotal.text = '0';
+    serviceFee.text = '0';
     super.initState();
+    _discount.text = '0';
+    _fine.text = '0';
   }
-  // void _AddBil() {
-  //   if (_fomkey.currentState!.validate()) {
-  //     String billdate = _billdatecontroler.text.trim();
-
-  //     apartmentBillInfo
-  //         .add(widget.roomid, billdate, _billmonthcontroler.text.trim(),
-  //             _billyearcontroler.text.trim())
-  //         .then((value) => {
-  //               Navigator.pop(context),
-  //             });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +179,7 @@ class _AddBillPageState extends State<AddBillPage> {
                                 children: [
                                   TitleInfoNotNull(text: "Chọn phòng"),
                                   GestureDetector(
-                                      onTap: () => {_gotoPageRoom()},
+                                      onTap: () => {},
                                       child: AbsorbPointer(
                                         child: _textformFieldwithIcon(
                                             _roomidcontroler,
@@ -160,78 +190,6 @@ class _AddBillPageState extends State<AddBillPage> {
                                 ],
                               ),
                             ),
-
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: [
-                            //     //Chọn ngày bắt đầu
-                            //     Container(
-                            //       width: width * 0.4,
-                            //       child: Column(
-                            //         children: [
-                            //           TitleInfoNotNull(text: "Ngày thanh toán"),
-                            //           GestureDetector(
-                            //               onTap: () => _selectDate(
-                            //                   context, _startDayController),
-                            //               child: AbsorbPointer(
-                            //                 child: _textformFieldwithIcon(
-                            //                     _startDayController,
-                            //                     "Chọn ngày",
-                            //                     "ngày thanh toán",
-                            //                     Icons.calendar_today_outlined),
-                            //               )),
-                            //         ],
-                            //       ),
-                            //     ),
-
-                            //     SizedBox(
-                            //       height: 20,
-                            //     ),
-                            //     //Chọn ngày kết thúc
-                            //     Container(
-                            //         width: width * 0.4,
-                            //         child: Column(
-                            //           children: [
-                            //             TitleInfoNotNull(
-                            //                 text: "Hạn thanh toán"),
-                            //             GestureDetector(
-                            //                 onTap: () => _selectDate(context,
-                            //                     _expirationDateController),
-                            //                 child: AbsorbPointer(
-                            //                   child: _textformFieldwithIcon(
-                            //                       _expirationDateController,
-                            //                       "Chọn ngày",
-                            //                       "hạn thanh toán",
-                            //                       Icons
-                            //                           .calendar_today_outlined),
-                            //                 )),
-                            //           ],
-                            //         )),
-                            //   ],
-                            // ),
-                            // isSelectRoom
-                            //     ? Card(
-                            //         elevation: 2,
-                            //         child: Container(
-                            //           padding: EdgeInsets.all(16),
-                            //           child: Column(
-                            //             crossAxisAlignment:
-                            //                 CrossAxisAlignment.center,
-                            //             children: [
-                            //               SizedBox(
-                            //                 height: 10,
-                            //               ),
-                            //               Text('Hợp đồng',
-                            //               style: TextStyle(color: myRed,fontWeight: FontWeight.w500),),
-                            //               SizedBox(
-                            //                 height: 10,
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       )
-                            //     : Container(),
                             SizedBox(
                               height: 10,
                             ),
@@ -311,18 +269,16 @@ class _AddBillPageState extends State<AddBillPage> {
                               ),
                               Container(
                                 width: width * 0.3,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: TextFormField(
-                                    controller: _chargeRoom,
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 17,
-                                        color: Colors.black),
-                                  ),
+                                child: TextFormField(
+                                  decoration: InputDecoration(enabled: false),
+                                  controller: _chargeRoom,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 17,
+                                      color: Colors.black),
                                 ),
-                              )
+                              ),
                             ],
                           )
                         ],
@@ -334,7 +290,105 @@ class _AddBillPageState extends State<AddBillPage> {
                   ),
                 ),
               ),
-              _CardNull("Dịch vụ"),
+              Card(
+                  elevation: 2,
+                  child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _title("Điện - Nước"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _services_startend_index(
+                                "Điện",
+                                '10000 đ/kwh',
+                                width,
+                                _totalE,
+                                _startIndexE,
+                                _endIndexE,
+                                _chargeE,
+                                Icons.flash_on_outlined,
+                                'đ/kwh'),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _services_startend_index(
+                                "Nước",
+                                '10000 đ/m3',
+                                width,
+                                _totalW,
+                                _startIndexW,
+                                _endIndexW,
+                                _chargeW,
+                                Icons.invert_colors,
+                                'đ/m3'),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ]))),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("Dịch vụ"),
+                      StreamBuilder(
+                          stream: serviceApartmentFB.collectionReference
+                              .where('idRoom', isEqualTo: widget.id)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: _CardNull("Dịch vụ"),
+                              );
+                            } else {
+                              return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, i) {
+                                    QueryDocumentSnapshot x =
+                                        snapshot.data!.docs[i];
+
+                                    return Container(
+                                      child: StreamBuilder(
+                                          stream: FirebaseFirestore.instance
+                                              .collection("ServiceInfo")
+                                              .where('id',
+                                                  isEqualTo: x["idService"])
+                                              .snapshots(),
+                                          builder: (context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            if (!snapshot.hasData) {
+                                              return Center(child: Text(""));
+                                            } else {
+                                              QueryDocumentSnapshot y =
+                                                  snapshot.data!.docs[0];
+
+                                              return _services_month(y['name'],
+                                                  width, y['charge']);
+                                            }
+                                          }),
+                                    );
+                                  });
+                            }
+                          }),
+                    ],
+                  ),
+                ),
+              ),
               Card(
                 elevation: 2,
                 child: Container(
@@ -349,31 +403,59 @@ class _AddBillPageState extends State<AddBillPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      _textinRow("Tiền phòng", FontWeight.w400, FontWeight.w700,
-                          Colors.black, "0", 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Tiền phòng',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
+                            ),
+                          ),
+                          Container(
+                            width: width * 0.25,
+                            child: TextFormField(
+                              decoration: InputDecoration(enabled: false),
+                              controller: _chargeRoom,
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textinRow("Điện - Nước", FontWeight.w400,
+                          FontWeight.w700, Colors.black, _TotalWE, 16),
                       SizedBox(
                         height: 20,
                       ),
                       _textinRow("Dịch vụ", FontWeight.w400, FontWeight.w700,
-                          Colors.black, "0", 16),
+                          Colors.black, serviceFee, 16),
                       SizedBox(
                         height: 20,
                       ),
                       _textinRow("Tổng", FontWeight.w400, FontWeight.w700,
-                          Colors.black, "0", 16),
+                          Colors.black, _Total, 16),
                       SizedBox(
                         height: 20,
                       ),
-                      _textFormFieldinRow("Tiền phạt", width, Colors.black),
+                      _textFormFieldinRow(
+                          _fine, "Tiền phạt", width, Colors.black),
                       SizedBox(
                         height: 20,
                       ),
-                      _textFormFieldinRow("Giảm giá (%)", width, myRed),
+                      _textFormFieldinRow(_discount, "Giảm giá", width, myRed),
                       SizedBox(
                         height: 20,
                       ),
                       _textinRow("Thanh toán", FontWeight.w500, FontWeight.w700,
-                          myGreen, "10000000", 18),
+                          myGreen, _FinalTotal, 18),
                       SizedBox(
                         height: 10,
                       ),
@@ -398,6 +480,7 @@ class _AddBillPageState extends State<AddBillPage> {
                       TextFormField(
                         minLines: 2,
                         maxLines: 7,
+                        controller: _noteControler,
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
                           hintText: 'Ghi chú cho hóa đơn',
@@ -419,11 +502,7 @@ class _AddBillPageState extends State<AddBillPage> {
               ),
               Container(
                 padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                child: MainButton(
-                    name: "Thêm",
-                    onpressed: () {
-                      // _AddBil();
-                    }),
+                child: MainButton(name: "Thêm", onpressed: () {}),
               ),
             ],
           ),
@@ -432,120 +511,377 @@ class _AddBillPageState extends State<AddBillPage> {
     );
   }
 
-  void _gotoPageRoom() async {
-    var id = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => SelectRoomContract(
-                  status: 'Đang thuê',
-                )));
-    if (id != null) {
-      setState(() {
-        _roomidcontroler.text = id;
-        isSelectRoom = true;
-        contractFB.collectionReference
-            .where("room", isEqualTo: id)
-            .get()
-            .then((value) => {
-                  _startDayController.text = value.docs[0]['startDay'],
-                  _chargeRoom.text = value.docs[0]['roomCharge']
-                });
-        // contractFB.collectionReference
-        //     .doc(_id)
-        //     .get()
-        //     .then((value) => {_startDayController.text = value['startDay']});
-      
-        var now = DateTime.now();
-        var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
-        var date =
-            "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
-        _expirationDateController.text = date;
-        var temp = _startDayController.text.substring(0, 2);
-        var x =  (lastDayOfMonth.toLocal().day-int.parse(temp)+1)/lastDayOfMonth.toLocal().day;
-      
-   
-      });
-    }
-  }
-}
+  _services_startend_index(
+      String name,
+      String charge,
+      double width,
+      TextEditingController total,
+      TextEditingController controllerStart,
+      TextEditingController controllerEnd,
+      TextEditingController controllerCharge,
+      IconData icon,
+      String unit) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            Text(
+              'Đơn giá(' + unit + ')',
+              style: TextStyle(
+                color: myGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              " *",
+              style: TextStyle(color: Colors.red, fontSize: 16),
+            ),
+          ],
+        ),
+        TextFormField(
+          style: MyStyle().style_text_tff(),
+          controller: controllerCharge,
+          onChanged: (value) {
+            setState(() {
+              if (!(controllerEnd.text.isEmpty &&
+                  controllerStart.text.isEmpty &&
+                  controllerCharge.text.isEmpty)) {
+                total.text = (((int.parse(controllerEnd.text) -
+                            int.parse(controllerStart.text))) *
+                        int.parse(controllerCharge.text))
+                    .toString();
 
-_title(String text) =>
-    Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
-_textformFieldwithIcon(TextEditingController controller, String hint,
-        String text, IconData icon) =>
-    TextFormField(
-      style: MyStyle().style_text_tff(),
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hint,
-        suffixIcon: Padding(
-          padding: EdgeInsetsDirectional.all(0),
-          child: Icon(icon),
-        ),
-      ),
-      keyboardType: TextInputType.datetime,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return "Vui lòng nhập " + text;
-        } else {
-          return null;
-        }
-      },
-    );
-_textFormFieldinRow(String text, double width, Color color) => Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          text,
-          style: TextStyle(
-              fontWeight: FontWeight.w400, fontSize: 16, color: color),
-        ),
-        Container(
-          width: width * 0.25,
-          child: TextFormField(
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
+                _FinalTotal.text = _Total.text;
+                serviceFee.text = temp.toString();
+                _TotalWE.text =
+                    (int.parse(_totalW.text) + int.parse(_totalE.text))
+                        .toString();
+                _Total.text = (int.parse(_TotalWE.text) +
+                        int.parse(_chargeRoom.text) +
+                        int.parse(serviceFee.text))
+                    .toString();
+              }
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Đơn giá',
+            suffixIcon: Padding(
+              padding: EdgeInsetsDirectional.all(0),
+              child: Icon(icon),
+            ),
           ),
+          keyboardType: TextInputType.datetime,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "Vui lòng nhập đơn giá";
+            } else {
+              return null;
+            }
+          },
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Chọn ngày bắt đầu
+            Container(
+              width: width * 0.4,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Chỉ số đầu',
+                        style: TextStyle(
+                          color: myGreen,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        " *",
+                        style: TextStyle(color: Colors.red, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    style: MyStyle().style_text_tff(),
+                    controller: controllerStart,
+                    onChanged: (value) {
+                      setState(() {
+                        if (!(controllerEnd.text.isEmpty &&
+                            controllerStart.text.isEmpty &&
+                            controllerCharge.text.isEmpty)) {
+                          total.text = (((int.parse(controllerEnd.text) -
+                                      int.parse(controllerStart.text))) *
+                                  int.parse(controllerCharge.text))
+                              .toString();
+                          _TotalWE.text = (int.parse(_totalW.text) +
+                                  int.parse(_totalE.text))
+                              .toString();
+                          _Total.text = (int.parse(_TotalWE.text) +
+                                  int.parse(_chargeRoom.text) +
+                                  int.parse(serviceFee.text))
+                              .toString();
+                          _FinalTotal.text = _Total.text;
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Chỉ số đầu',
+                      suffixIcon: Padding(
+                        padding: EdgeInsetsDirectional.all(0),
+                        child: Icon(icon),
+                      ),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Vui lòng nhập chỉ số đầu";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            //Chọn ngày kết thúc
+            Container(
+              width: width * 0.4,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Chỉ số cuối',
+                        style: TextStyle(
+                          color: myGreen,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        " *",
+                        style: TextStyle(color: Colors.red, fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  TextFormField(
+                    style: MyStyle().style_text_tff(),
+                    controller: controllerEnd,
+                    onChanged: (value) {
+                      setState(() {
+                        if (!(controllerEnd.text.isEmpty &&
+                            controllerStart.text.isEmpty &&
+                            controllerCharge.text.isEmpty)) {
+                          total.text = (((int.parse(controllerEnd.text) -
+                                      int.parse(controllerStart.text))) *
+                                  int.parse(controllerCharge.text))
+                              .toString();
+                          _TotalWE.text = (int.parse(_totalW.text) +
+                                  int.parse(_totalE.text))
+                              .toString();
+                          _Total.text = (int.parse(_TotalWE.text) +
+                                  int.parse(_chargeRoom.text) +
+                                  int.parse(serviceFee.text))
+                              .toString();
+                          _FinalTotal.text = _Total.text;
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Chỉ số cuối',
+                      suffixIcon: Padding(
+                        padding: EdgeInsetsDirectional.all(0),
+                        child: Icon(icon),
+                      ),
+                    ),
+                    keyboardType: TextInputType.datetime,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Vui lòng nhập chỉ số cuối";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        _textinRow("Thành tiền", FontWeight.w400, FontWeight.w700, Colors.black,
+            total, 17),
+        SizedBox(
+          height: 20,
         ),
       ],
     );
-_textinRow(String text, FontWeight fontWeight1, FontWeight fontWeight2,
-        Color color, String total, double fontsize) =>
-    Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  }
+
+  _services_month(String name, double width, String total) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          text,
-          style: TextStyle(
-            fontWeight: fontWeight1,
-            fontSize: fontsize,
-          ),
+        SizedBox(
+          height: 20,
         ),
-        Text(
-          total,
-          style: TextStyle(
-              fontWeight: fontWeight2, fontSize: fontsize, color: color),
+        Row(
+          children: [
+            Text(
+              name,
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'đ/tháng',
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Thành tiền",
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 17,
+              ),
+            ),
+            Text(
+              total,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 17,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20,
         ),
       ],
     );
-_CardNull(String text) {
-  return Card(
-    elevation: 2,
-    child: Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  }
+
+  _title(String text) =>
+      Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
+  _textformFieldwithIcon(TextEditingController controller, String hint,
+          String text, IconData icon) =>
+      TextFormField(
+        style: MyStyle().style_text_tff(),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hint,
+          suffixIcon: Padding(
+            padding: EdgeInsetsDirectional.all(0),
+            child: Icon(icon),
+          ),
+        ),
+        keyboardType: TextInputType.datetime,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Vui lòng nhập " + text;
+          } else {
+            return null;
+          }
+        },
+      );
+  _textFormFieldinRow(TextEditingController controller, String text,
+          double width, Color color) =>
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 10,
+          Text(
+            text,
+            style: TextStyle(
+                fontWeight: FontWeight.w400, fontSize: 16, color: color),
           ),
-          _title(text),
-          SizedBox(
-            height: 10,
+          Container(
+            width: width * 0.25,
+            child: TextFormField(
+              controller: controller,
+              textAlign: TextAlign.center,
+              onChanged: (value) {
+                if (!(_Total.text.isEmpty &&
+                    !_fine.text.isEmpty &&
+                    _discount.text.isEmpty)) {
+                  setState(() {
+                    _FinalTotal.text = (int.parse(_Total.text) +
+                            int.parse(_fine.text) -
+                            int.parse(_discount.text))
+                        .toString();
+                  });
+                }
+              },
+              keyboardType: TextInputType.number,
+            ),
           ),
         ],
+      );
+  _textinRow(String text, FontWeight fontWeight1, FontWeight fontWeight2,
+          Color color, TextEditingController total, double fontsize) =>
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: fontWeight1,
+              fontSize: fontsize,
+            ),
+          ),
+          Text(
+            total.text,
+            style: TextStyle(
+                fontWeight: fontWeight2, fontSize: fontsize, color: color),
+          ),
+        ],
+      );
+  _CardNull(String text) {
+    return Card(
+      elevation: 2,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            _title(text),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

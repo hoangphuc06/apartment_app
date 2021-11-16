@@ -1,4 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/Bill/view/selectRoomService.dart';
+import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:flutter/material.dart';
 
 class UnpaidInvoice extends StatefulWidget {
@@ -19,7 +21,12 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
           child: Icon(Icons.add),
           backgroundColor: myGreen,
           onPressed: () {
-            Navigator.pushNamed(context, "add_new_bill_page");
+            Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SelectRoomService(
+                  status: 'Đang thuê',
+                )));
           },
         ));
   }
