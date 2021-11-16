@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,17 +19,8 @@ class _SelectRoomContractState extends State<SelectRoomContract> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Chọn phòng",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-        ),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Chọn phòng"),
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(

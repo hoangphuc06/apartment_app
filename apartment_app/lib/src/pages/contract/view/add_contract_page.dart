@@ -172,77 +172,77 @@ class _AddContractPageState extends State<AddContractPage> {
                         Icons.calendar_today_outlined),
                   )
               ),
-              SizedBox(height: 10,),
-              TitleInfoNotNull(text: "Ngày kết thúc"),
-              SizedBox(height: 10,),
-              GestureDetector(
-                  onTap: () => _selectDate(
-                      context, _expirationDateController),
-                  child: AbsorbPointer(
-                    child: _textformFieldwithIcon(
-                        _expirationDateController,
-                        "Chọn ngày",
-                        "ngày kết thúc",
-                        height,
-                        Icons.calendar_today_outlined),
-                  )
-              ),
-              SizedBox(height: 10,),
-              TitleInfoNotNull(text: "Ngày bắt đầu tính tiền"),
-              SizedBox(height: 10,),
-              GestureDetector(
-                  onTap: () => _selectDate(
-                      context, _billingStartDateController),
-                  child: AbsorbPointer(
-                    child: _textformFieldwithIcon(
-                        _billingStartDateController,
-                        "Chọn ngày bắt đầu tính tiền",
-                        "ngày bắt đầu tính tiền",
-                        height,
-                        Icons.calendar_today_outlined),
-                  )
-              ),
-              SizedBox(height: 10,),
-              TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
-              SizedBox(height: 10,),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Colors.blueGrey.withOpacity(0.2)
-                ),
-                child: DropdownButtonFormField<String>(
-                  value: _roomPaymentPeriodController,
-                  items: [
-                    "1 Tháng",
-                    "2 Tháng",
-                    "3 Tháng",
-                    "4 Tháng",
-                    "5 Tháng",
-                    "6 Tháng",
-                    "7 Tháng",
-                    "8 Tháng",
-                    "9 Tháng",
-                    "10 Tháng",
-                    "11 Tháng",
-                    "12 Tháng"
-                  ]
-                      .map((label) => DropdownMenuItem(
-                    child: Text(label),
-                    value: label,
-                  ))
-                      .toList(),
-                  decoration: InputDecoration(
-                      border: InputBorder.none
-                  ),
-                  hint: Text('Kỳ thanh toán'),
-                  onChanged: (value) {
-                    setState(() {
-                      _roomPaymentPeriodController = value;
-                    });
-                  },
-                ),
-              ),
+              //SizedBox(height: 10,),
+              // TitleInfoNotNull(text: "Ngày kết thúc"),
+              // SizedBox(height: 10,),
+              // GestureDetector(
+              //     onTap: () => _selectDate(
+              //         context, _expirationDateController),
+              //     child: AbsorbPointer(
+              //       child: _textformFieldwithIcon(
+              //           _expirationDateController,
+              //           "Chọn ngày",
+              //           "ngày kết thúc",
+              //           height,
+              //           Icons.calendar_today_outlined),
+              //     )
+              // ),
+              // SizedBox(height: 10,),
+              // TitleInfoNotNull(text: "Ngày bắt đầu tính tiền"),
+              // SizedBox(height: 10,),
+              // GestureDetector(
+              //     onTap: () => _selectDate(
+              //         context, _billingStartDateController),
+              //     child: AbsorbPointer(
+              //       child: _textformFieldwithIcon(
+              //           _billingStartDateController,
+              //           "Chọn ngày bắt đầu tính tiền",
+              //           "ngày bắt đầu tính tiền",
+              //           height,
+              //           Icons.calendar_today_outlined),
+              //     )
+              // ),
+              // SizedBox(height: 10,),
+              // TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
+              // SizedBox(height: 10,),
+              // Container(
+              //   padding: EdgeInsets.symmetric(horizontal: 8),
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.all(Radius.circular(10)),
+              //       color: Colors.blueGrey.withOpacity(0.2)
+              //   ),
+              //   child: DropdownButtonFormField<String>(
+              //     value: _roomPaymentPeriodController,
+              //     items: [
+              //       "1 Tháng",
+              //       "2 Tháng",
+              //       "3 Tháng",
+              //       "4 Tháng",
+              //       "5 Tháng",
+              //       "6 Tháng",
+              //       "7 Tháng",
+              //       "8 Tháng",
+              //       "9 Tháng",
+              //       "10 Tháng",
+              //       "11 Tháng",
+              //       "12 Tháng"
+              //     ]
+              //         .map((label) => DropdownMenuItem(
+              //       child: Text(label),
+              //       value: label,
+              //     ))
+              //         .toList(),
+              //     decoration: InputDecoration(
+              //         border: InputBorder.none
+              //     ),
+              //     hint: Text('Kỳ thanh toán'),
+              //     onChanged: (value) {
+              //       setState(() {
+              //         _roomPaymentPeriodController = value;
+              //       });
+              //     },
+              //   ),
+              // ),
               SizedBox(height: 30,),
               _titletext("Tiền thuê, mua nhà"),
               SizedBox(height: 10,),
@@ -389,7 +389,7 @@ class _AddContractPageState extends State<AddContractPage> {
     padding: MyStyle().padding_container_tff(),
     decoration: MyStyle().style_decoration_container(),
     child: TextFormField(
-      controller: _nameRenter,
+      controller: _hostController,
       decoration: MyStyle().style_decoration_tff("Đại diện cho thuê/bán"),
       style: MyStyle().style_text_tff(),
     ),

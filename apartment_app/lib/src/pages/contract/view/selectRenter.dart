@@ -6,6 +6,7 @@ import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 import 'package:apartment_app/src/pages/contract/view/add_renter.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,17 +27,8 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Người thuê",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-        ),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar("Người thuê"),
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -66,66 +58,35 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
                                 onTap: () {
                                   Navigator.pop(context, x["id"]);
                                 },
-                                child: Card(
-                                  elevation: 2,
                                   child: Container(
-                                    margin: EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                        color: Colors.blueGrey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.all(Radius.circular(10))
+                                    ),
+                                    padding: EdgeInsets.all(16),
+                                    margin: EdgeInsets.only(bottom: 8),
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          x['name'],
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
                                         Row(
                                           children: [
-                                            Icon(Icons.wc),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              "Giới tính",
-                                              style: TextStyle(fontSize: 15),
-                                            ),
+                                            Icon(Icons.person),
+                                            SizedBox(width: 5,),
+                                            Text(x["name"], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                                             Spacer(),
                                             Text(
-                                              x['gender'] == "0" ? "Nam" : "Nữ",
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.phone),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              "Số điện thoại",
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                            Spacer(),
-                                            Text(
-                                              x['phoneNumber'] == ""
-                                                  ? "Trống"
-                                                  : x['phoneNumber'],
-                                              style: TextStyle(fontSize: 15),
+                                              x["gender"]=="0"? "Nam" : "Nữ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: x["gender"]=="0"? myRed : myYellow,
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ],
                                     ),
                                   ),
-                                ),
+
                               );
                             });
                       }

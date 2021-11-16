@@ -47,16 +47,16 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
             ),
           ),
       ),
-      floatingActionButton: AnimatedFloatingActionButton(
-          key: fabKey,
-          fabButtons: <Widget>[
-            edit(),
-            delete(),
-          ],
-          colorStartAnimation: myGreen,
-          colorEndAnimation: myGreen,
-          animatedIconData: AnimatedIcons.menu_close //To principal button
-      ),
+      // floatingActionButton: AnimatedFloatingActionButton(
+      //     key: fabKey,
+      //     fabButtons: <Widget>[
+      //       edit(),
+      //       delete(),
+      //     ],
+      //     colorStartAnimation: myGreen,
+      //     colorEndAnimation: myGreen,
+      //     animatedIconData: AnimatedIcons.menu_close //To principal button
+      // ),
     );
   }
 
@@ -81,7 +81,6 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
           Text(minValue + " - " + maxValue + " VNĐ", style: TextStyle(fontSize: 15),),
         ],
       ),
-
     ],
   );
 
