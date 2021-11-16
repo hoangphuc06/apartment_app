@@ -26,7 +26,7 @@ class _CategoryApartmentPageState extends State<CategoryApartmentPage> {
       backgroundColor: Colors.white,
       appBar: myAppBar("Loại căn hộ"),
       body: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: StreamBuilder(
               stream: categoryApartmentFB.collectionReference.snapshots(),
