@@ -1,17 +1,19 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class SelectRoom extends StatefulWidget {
-  const SelectRoom({Key? key}) : super(key: key);
-
+class SelectRoomService extends StatefulWidget {
+  // const SelectRoomService({Key? key}) : super(key: key);
+  final String status;
+  SelectRoomService({required this.status});
   @override
-  _SelectRoomState createState() => _SelectRoomState();
+  _SelectRoomServiceState createState() => _SelectRoomServiceState();
 }
 
-class _SelectRoomState extends State<SelectRoom> {
+class _SelectRoomServiceState extends State<SelectRoomService> {
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
   @override
@@ -40,11 +42,11 @@ class _SelectRoomState extends State<SelectRoom> {
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder(
-                    stream: floorInfoFB.collectionReference.where('status').snapshots(),
+                    stream: floorInfoFB.collectionReference.where('status',isEqualTo: this.widget.status).snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
-                          child: Text("No Data"),
+                          child: Text("Dữ liệu trống"),
                         );
                       } else {
                         return ListView.builder(
@@ -58,11 +60,11 @@ class _SelectRoomState extends State<SelectRoom> {
                                 numOfDweller: x["numOfDweller"],
                                 status: x["status"],
                                 funtion: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             FloorInfoPage(floorid: x["id"])));
+                                 Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddBillPage(id: x["id"])));
                                 },
                               );
                             });

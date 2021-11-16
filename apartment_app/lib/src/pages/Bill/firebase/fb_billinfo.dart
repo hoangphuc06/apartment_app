@@ -5,7 +5,7 @@ class billinfoInfoFB {
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection("billinfo");
 
-  Future<void> add(String deposit, String discount, String fine, String note,
+  Future<void> add(String billMonth, String billYear,String deposit, String discount, String fine, String note,
       String roomCharge, String serviceFee, String status, String total) async {
     String id = (new DateTime.now().microsecondsSinceEpoch).toString();
     return FirebaseFirestore.instance
@@ -13,6 +13,8 @@ class billinfoInfoFB {
         .doc(id)
         .set({
           "idBillInfo": id,
+          "billMonth": billMonth,
+          "billYear": billYear,
           "deposit": deposit,
           "discount": discount,
           "fine": fine,

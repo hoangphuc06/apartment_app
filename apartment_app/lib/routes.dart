@@ -21,7 +21,7 @@ import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:flutter/material.dart';
 
-import 'src/pages/Bill/view/selectRoom.dart';
+import 'src/pages/Bill/view/selectRoomService.dart';
 
 final routes = <String, WidgetBuilder>{
   "register_page": (BuildContext context) => RegisterPage(),
@@ -59,8 +59,7 @@ final routes = <String, WidgetBuilder>{
   //doi mat khảu
   "update_password_page":(BuildContext context) =>UpdatePassWordPage(),
   //Hoa don
-  "add_new_bill_page":(BuildContext context) =>AddBillPage(),
-  "select_room":(BuildContext context) =>SelectRoom(),
+ 
   //Hop dong
 
 };
