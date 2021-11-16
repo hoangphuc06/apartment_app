@@ -138,161 +138,166 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.2),
+      backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Card(
-              elevation: 2,
-              child: Container(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 16, right: 16),
-                      child: Row(
-                        children: [
-                         Text('Tìm kiếm căn hộ',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-                          Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                this.setVisible=!this.setVisible;
-                                setState(() {});
-                              },
-                              iconSize: 35,
-                              icon: Icon(this.setVisible? Icons.arrow_drop_up_outlined:Icons.arrow_drop_down_outlined)),
-                        ],
+        padding: EdgeInsets.only(left: 16,right: 16),
+        child: Container(
+          child: Column(
+            children: [
+              Card(
+                elevation: 2,
+                child: Container(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 8, right: 8),
+                        child: Row(
+                          children: [
+                           Text('Tìm kiếm căn hộ',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
+                            Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  this.setVisible=!this.setVisible;
+                                  setState(() {});
+                                },
+                                iconSize: 35,
+                                icon: Icon(this.setVisible? Icons.arrow_drop_up_outlined:Icons.arrow_drop_down_outlined)),
+                          ],
+                        ),
                       ),
-                    ),
-
-
-                    Visibility(
-                      visible: this.setVisible,
-                        child: Column(children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 16, right: 16),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: _SearchBar(),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                    iconSize: 35,
-                                    icon: Icon(Icons.search)),
-                              ],
+                      Visibility(
+                        visible: this.setVisible,
+                          child: Column(children: [
+                            Container(
+                              padding: EdgeInsets.only(left: 8, right: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: _SearchBar(),
+                                  ),
+                                  SizedBox(width: 20,),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {});
+                                      },
+                                      iconSize: 24,
+                                      icon: Icon(Icons.search)),
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 16, right: 16),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Trạng thái căn hộ:',
-                                  style: TextStyle(fontSize: 17),
-                                ),
-                                Spacer(),
-                                _dropDownList()
-                              ],
-                            ),
-                          ),
-                          Container(
+                            Container(
                               padding: EdgeInsets.only(left: 16, right: 16),
                               child: Row(
                                 children: [
                                   Text(
-                                    'Loại căn hộ :',
+                                    'Trạng thái căn hộ:',
                                     style: TextStyle(fontSize: 17),
                                   ),
                                   Spacer(),
-                                  StreamBuilder(
-                                      stream: this.categoryApartmentFB.collectionReference.snapshots(),
-                                      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return Center(child: Text("No Data"),);
-                                        }
-                                        this.idAndName.clear();
-                                        this.ListCategory.clear();
-                                        snapshot.data!.docs.forEach((element) {
-                                          idAndName.putIfAbsent(element['id'], () => element['name']);
-                                          this.ListCategory.add(element['name']);
-                                        }
-                                        );
-                                        return this._typeApartmentList();
-                                      }),
+                                  _dropDownList()
                                 ],
-                              )
-                          ),
-                          ListTile(
-                            title: Text('Theo tên'),
-                            leading: Radio(
-                              value: 1,
-                              groupValue: this.radioValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  hitText= 'Tên căn hộ';
-                                  this.radioValue = 1;
-                                  this.searchController.text='';
-                                  option=true;
-                                });
-                              },
-                              activeColor: Colors.green,
+                              ),
                             ),
-                          ),
-                          ListTile(
-                            title: Text('Theo tầng'),
-                            leading: Radio(
-                              value: 2,
-                              groupValue: this.radioValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  this.radioValue=2;
-                                  this.searchController.text='';
-                                  this.hitText='Thứ tự tầng của căn hộ';
-                                  this.option= false;
-                                });
-                              },
-                              activeColor: Colors.green,
+                            Container(
+                                padding: EdgeInsets.only(left: 16, right: 16),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Loại căn hộ :',
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                    Spacer(),
+                                    StreamBuilder(
+                                        stream: this.categoryApartmentFB.collectionReference.snapshots(),
+                                        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Center(child: Text("No Data"),);
+                                          }
+                                          this.idAndName.clear();
+                                          this.ListCategory.clear();
+                                          snapshot.data!.docs.forEach((element) {
+                                            idAndName.putIfAbsent(element['id'], () => element['name']);
+                                            this.ListCategory.add(element['name']);
+                                          }
+                                          );
+                                          return this._typeApartmentList();
+                                        }),
+                                  ],
+                                )
                             ),
-                          ),
-                    ],)
-                    ),
+                            Container(
+                              child: ListTile(
+                                title: Text('Theo tên'),
+                                leading: Radio(
+                                  value: 1,
+                                  groupValue: this.radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      hitText= 'Tên căn hộ';
+                                      this.radioValue = 1;
+                                      this.searchController.text='';
+                                      option=true;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: ListTile(
+                                title: Text('Theo tầng'),
+                                leading: Radio(
+                                  value: 2,
+                                  groupValue: this.radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      this.radioValue=2;
+                                      this.searchController.text='';
+                                      this.hitText='Thứ tự tầng của căn hộ';
+                                      this.option= false;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                              ),
+                            ),
+                          ],)
+                      ),
 
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-
-            Expanded(
-                child: StreamBuilder(
-                    stream: this.floorInfoFB.collectionReference.snapshots(),
-                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(child: Text("No Data"),);
-                      }
-                      this.listApartmentCache.clear();
-                      snapshot.data!.docs.forEach((element) {
-                        ApartmentModel temp= ApartmentModel.fromDocument(element);
-                        if(this._filter(temp))
-                        this.listApartmentCache.add(temp);
-                      }
-                      );
-                      return ListView.builder(
-                          itemCount: this.listApartmentCache.length,
-                          itemBuilder: (context, index) {
-                            return ApartmentCard(
-                              apartment: this.listApartmentCache[index],
-                              funtion: ()async{
-                                await this.listApartmentCache[index].setInfo();
-                                Route route = MaterialPageRoute(builder: (context) => ApartmentDetailPage(this.listApartmentCache[index].id.toString()));
-                                Navigator.push(context,route);
-                            },);
-                          });
-                    })
-            ),
-          ],
+              SizedBox(height: 10,),
+              Expanded(
+                  child: StreamBuilder(
+                      stream: this.floorInfoFB.collectionReference.snapshots(),
+                      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: Text("No Data"),);
+                        }
+                        this.listApartmentCache.clear();
+                        snapshot.data!.docs.forEach((element) {
+                          ApartmentModel temp= ApartmentModel.fromDocument(element);
+                          if(this._filter(temp))
+                          this.listApartmentCache.add(temp);
+                        }
+                        );
+                        return ListView.builder(
+                            itemCount: this.listApartmentCache.length,
+                            itemBuilder: (context, index) {
+                              return ApartmentCard(
+                                apartment: this.listApartmentCache[index],
+                                funtion: ()async{
+                                  await this.listApartmentCache[index].setInfo();
+                                  Route route = MaterialPageRoute(builder: (context) => ApartmentDetailPage(this.listApartmentCache[index].id.toString()));
+                                  Navigator.push(context,route);
+                              },);
+                            });
+                      })
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -15,6 +15,12 @@ class ApartmentCard extends StatelessWidget {
     return GestureDetector(
       onTap: funtion,
       child: Container(
+        decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.2),
+            borderRadius: BorderRadius.all(Radius.circular(10))
+        ),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,23 +46,12 @@ class ApartmentCard extends StatelessWidget {
                   this.apartment.status.toString(),
                   style: TextStyle(
                       fontSize: 15,
-                      color: this.apartment.status == "Trống"? myRed : this.apartment.status == "Đã bán"? myGreen : myYellow,
+                      color: this.apartment.status == "Trống"? myRed : this.apartment.status == "Đã bán"? myGreen : Colors.orange,
                       fontWeight: FontWeight.bold
                   ),
                 ),
               ],
-            ),
-            SizedBox(height: 10,),
-            Row(
-              children: [
-                Icon(Icons.home),
-                SizedBox(width: 5,),
-                Text("Tầng:", style: TextStyle(fontSize: 15),),
-                Spacer(),
-                Text(this.apartment.floorid.toString(), style: TextStyle(fontSize: 15),),
-              ],
-            ),
-
+            )
           ],
         ),
       ),
