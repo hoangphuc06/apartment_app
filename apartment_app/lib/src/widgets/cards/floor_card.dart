@@ -18,11 +18,11 @@ class FloorCard extends StatelessWidget {
       onTap: funtion,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.blueGrey.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10))
         ),
         width: 150,
-        margin: EdgeInsets.only(right: 8),
+        margin: EdgeInsets.only(right: 16),
         padding: EdgeInsets.all(16),
         //alignment: Alignment.center,
         child: Column(
@@ -31,7 +31,7 @@ class FloorCard extends StatelessWidget {
           children: [
             Icon(Icons.apartment_sharp, size: 40,),
             SizedBox(height: 5,),
-            Text("Tầng " + name, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),)
+            Text("Tầng " + name, style: TextStyle( color: Colors.black),)
           ],
         ),
       ),

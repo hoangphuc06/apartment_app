@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 
 class AddApartmentPage extends StatefulWidget {
   String floorid;
-  AddApartmentPage(this.floorid);
+  String numAp;
+  AddApartmentPage(this.floorid, this.numAp);
 
   @override
   _AddApartmentPageState createState() => _AddApartmentPageState();
@@ -24,31 +25,18 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
 
   FloorInfoFB floorInfoFB = new FloorInfoFB();
 
-  int dem = 0;
-
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-
-  getName() async {
-    await FirebaseFirestore.instance.collection('floorinfo').where("floorid",isEqualTo: this.widget.floorid).get().then((value) => {
-      dem = value.size,
-      print("vi tri 1:" + dem.toString()),
-    });
-
-    print("vi tri 2:" + dem.toString());
-    return (int.parse(this.widget.floorid)*100 + dem + 1);
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getName();
+    print(this.widget.numAp);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("trong ham main" + getName().toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: myAppBar("Thêm căn hộ"),
@@ -151,7 +139,7 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     if (_formkey.currentState!.validate()) {
       floorInfoFB.add(
         widget.floorid,
-        getName().toString(),
+        (int.parse(this.widget.floorid)*100 + int.parse(this.widget.numAp) + 1).toString(),
         _categoryController.text,
         '0',
         'Trống',
@@ -178,7 +166,7 @@ class _AddApartmentPageState extends State<AddApartmentPage> {
     child: TextFormField(
       decoration: MyStyle().style_decoration_tff(""),
       style: MyStyle().style_text_tff(),
-      initialValue: (int.parse(this.widget.floorid)*100 + dem + 1).toString(),
+      initialValue: (int.parse(this.widget.floorid)*100 + int.parse(this.widget.numAp) + 1).toString(),
       readOnly: true,
     ),
   );

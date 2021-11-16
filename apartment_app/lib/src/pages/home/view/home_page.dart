@@ -30,30 +30,23 @@ class _HomePageState extends State<HomePage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar("Trang chủ"),
-      //drawer: NavBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Hình
-            Container(
-              margin: EdgeInsets.all(16),
-              height: 250,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/4.jpg"),
-                  fit: BoxFit.cover
-                ),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Stack(
+      body: CustomScrollView(
+        slivers:<Widget> [
+          SliverAppBar(
+            expandedHeight: 300,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
                 children: [
+                  Image(
+                    width: double.infinity,
+                    height: 350,
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/images/4.jpg'),
+                  ),
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.4),
-                        borderRadius: BorderRadius.all(Radius.circular(10))
-                    ),
+                    decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 1.5)),
+                    width: double.infinity,
+                    height: 350,
                   ),
                   Container(
                     padding: EdgeInsets.all(16),
@@ -64,9 +57,9 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Dream Building",
                           style: GoogleFonts.aBeeZee(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold
                           ),
                         ),
                         SizedBox(height: 5),
@@ -81,103 +74,107 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Đ/c: KP6, Linh Trung, Thủ Đức, TP.HCM",
                           style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500
                           ),
                         )
                       ],
                     ),
                   ),
-                ],
+                ]
+              )
+            )
+          ),
+          SliverList(delegate: SliverChildListDelegate(
+            [
+              SizedBox(height: 20,),
+              Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: _title("Danh sách tầng"),
               ),
-            ),
-
-            //Danh sách tầng
-            Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: _title("Danh sách tầng"),
-            ),
-            Container(
-              margin: EdgeInsets.all(16),
-              height: 200,
-              child: StreamBuilder(
-                  stream: floorFB.collectionReference.snapshots(),
-                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(child: Text("No Data"),);
+              Container(
+                margin: EdgeInsets.all(16),
+                height: 100,
+                child: StreamBuilder(
+                    stream: floorFB.collectionReference.snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: Text("No Data"),);
+                      }
+                      else {
+                        a = snapshot.data!.docs.length;
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context,i) {
+                              QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                              return FloorCard(
+                                name: x["id"],
+                                numOfApm: x["numOfApm"],
+                                funtion: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => FloorInfoPage(floorid: x["id"])));
+                                },
+                              );
+                            }
+                        );
+                      }
                     }
-                    else {
-                      a = snapshot.data!.docs.length;
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          physics: ScrollPhysics(),
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context,i) {
-                            QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                            return FloorCard(
-                              name: x["id"],
-                              numOfApm: x["numOfApm"],
-                              funtion: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => FloorInfoPage(floorid: x["id"])));
-                              },
-                            );
-                          }
-                      );
-                    }
-                  }
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: (){
+              SizedBox(height: 5,),
+              GestureDetector(
+                onTap: (){
 
-              },
-              child: Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "Thêm vào một tầng mới",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: myGreen
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Thêm vào một tầng mới",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: myGreen
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            //Quản lý
-            Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: _title("Quản lý"),
-            ),
-            Container(
-              margin: EdgeInsets.all(16),
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  _lableButton(size, Icons.assignment_rounded, "Hợp đồng", (){
-
-                  }),
-                  _lableButton(size, Icons.description, "Hóa đơn", (){
-
-                  }),
-                  _lableButton(size, Icons.wifi, "Dịch vụ", (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ServicePage()));
-                  }),
-                  _lableButton(size, Icons.apartment, "Loại căn hộ", (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryApartmentPage()));
-                  }),
-                  _lableButton(size, Icons.mail, "Thông báo", (){
-
-                  }),
-                  _lableButton(size, Icons.build, "Sửa chữa", (){
-                    
-                  }),
-                ],
+              SizedBox(height: 20,),
+              Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: _title("Quản lý"),
               ),
-            ),
-          ],
-        ),
+              Container(
+                margin: EdgeInsets.all(16),
+                child: Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    _lableButton(size, Icons.assignment_rounded, "Hợp đồng", (){
+
+                    }),
+                    _lableButton(size, Icons.description, "Hóa đơn", (){
+
+                    }),
+                    _lableButton(size, Icons.wifi, "Dịch vụ", (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ServicePage()));
+                    }),
+                    _lableButton(size, Icons.apartment, "Loại căn hộ", (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryApartmentPage()));
+                    }),
+                    _lableButton(size, Icons.mail, "Thông báo", (){
+
+                    }),
+                    _lableButton(size, Icons.build, "Sửa chữa", (){
+
+                    }),
+                  ],
+                ),
+              ),
+            ]
+          ))
+        ]
       ),
     );
   }
@@ -196,7 +193,7 @@ class _HomePageState extends State<HomePage> {
       width: (size.width - 52) / 3,
       height: (size.width - 52) / 4,
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
+        color: Colors.blueGrey.withOpacity(0.2),
         borderRadius: BorderRadius.all(Radius.circular(20))
       ),
       child: Column(

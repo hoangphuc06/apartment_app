@@ -244,51 +244,51 @@ class _ModifyDwellerPageState extends State<ModifyDwellerPage> {
               TitleInfoNull(text: "Số điện thoại"),
               _PhoneTextField(),
               SizedBox(height: 30,),
-              MainButton(name: 'Xác nhận', onpressed: () {
-                this.gender=this.radioValue.toString();
-                if(_formkey.currentState!.validate()) {
-                  this.fb.update(
-                      this.widget.info.id.toString(),
-                      this.widget.info.idApartment.toString(),
-                      this._NameController.text,
-                      this._dayController.text,
-                      this.gender,
-                      this._CMNDController.text,
-                      this._HomeTownController.text,
-                      this._JobController.text,
-                      this.widget.info.role.toString(),
-                      this._PhoneController.text,
-                      this._EmailController.text);
-                  this.info.name= this._NameController.text;
-                  this.info.birthday=  this._dayController.text;
-                  this.info.gender=this.gender;
-                  this.info.cmnd= this._CMNDController.text;
-                  this.info.phoneNumber=this._PhoneController.text;
-                  this.info.email=this._EmailController.text;
-                  this.info.homeTown=this._HomeTownController.text;
-                  Navigator.pop(context, this.info);
-                }
-                // this.info.body= this._NoteController.text;
-                // this.info.title=this._TitleController.text;
-                // if(_formkey.currentState!.validate())
-                // {
-                //   //  Navigator.pop(context,this.info);
-                //   if(this.widget.info!=null) {
-                //     DateTime tempDate = new DateFormat('dd-MM-yyyy hh:mm a').parse(this.widget.info!.date.toString());
-                //     this.fb.update(this.widget.info!.id.toString(),
-                //         this._TitleController.text,
-                //         this._NoteController.text,
-                //         Timestamp.fromDate(tempDate));
-                //     Navigator.pop(context, this.info);
-                //   }
-                //   else{
-                //     this.fb.add(this._TitleController.text,this._NoteController.text,Timestamp.fromDate(DateTime.now()));
-                //     Navigator.pop(context, this.info);
-                //   }
-                //
-                // }
-
-              }),
+              // MainButton(name: 'Xác nhận', onpressed: () {
+              //   this.gender=this.radioValue.toString();
+              //   if(_formkey.currentState!.validate()) {
+              //     this.fb.update(
+              //         this.widget.info.id.toString(),
+              //         this.widget.info.idApartment.toString(),
+              //         this._NameController.text,
+              //         this._dayController.text,
+              //         this.gender,
+              //         this._CMNDController.text,
+              //         this._HomeTownController.text,
+              //         this._JobController.text,
+              //         this.widget.info.role.toString(),
+              //         this._PhoneController.text,
+              //         this._EmailController.text);
+              //     this.info.name= this._NameController.text;
+              //     this.info.birthday=  this._dayController.text;
+              //     this.info.gender=this.gender;
+              //     this.info.cmnd= this._CMNDController.text;
+              //     this.info.phoneNumber=this._PhoneController.text;
+              //     this.info.email=this._EmailController.text;
+              //     this.info.homeTown=this._HomeTownController.text;
+              //     Navigator.pop(context, this.info);
+              //   }
+              //   // this.info.body= this._NoteController.text;
+              //   // this.info.title=this._TitleController.text;
+              //   // if(_formkey.currentState!.validate())
+              //   // {
+              //   //   //  Navigator.pop(context,this.info);
+              //   //   if(this.widget.info!=null) {
+              //   //     DateTime tempDate = new DateFormat('dd-MM-yyyy hh:mm a').parse(this.widget.info!.date.toString());
+              //   //     this.fb.update(this.widget.info!.id.toString(),
+              //   //         this._TitleController.text,
+              //   //         this._NoteController.text,
+              //   //         Timestamp.fromDate(tempDate));
+              //   //     Navigator.pop(context, this.info);
+              //   //   }
+              //   //   else{
+              //   //     this.fb.add(this._TitleController.text,this._NoteController.text,Timestamp.fromDate(DateTime.now()));
+              //   //     Navigator.pop(context, this.info);
+              //   //   }
+              //   //
+              //   // }
+              //
+              // }),
             ],
           ),
         ),

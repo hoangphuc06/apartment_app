@@ -35,6 +35,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
   final TextEditingController _jobController = TextEditingController();
   final TextEditingController _homeTownController = TextEditingController();
   final TextEditingController _roleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
 
   final List<Map<String, dynamic>> _items = [
     {
@@ -160,6 +161,13 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                     TitleInfoNull(text: "Email"),
                     SizedBox(height: 10,),
                     _emailTextField(),
+
+                    SizedBox(height: 30,),
+                    _title("Khác"),
+                    SizedBox(height: 10,),
+                    TitleInfoNull(text: "Ghi chú"),
+                    SizedBox(height: 10,),
+                    _noteTextField(),
                   ],
                 ),
               ),
@@ -189,8 +197,9 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
+      String note = _noteController.text.trim();
 
-      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email)
+      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email, note)
           .then((value) => {
         Navigator.pop(context),
       });
@@ -321,6 +330,19 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
         }
         return null;
       },
+    ),
+  );
+
+  _noteTextField() => Container(
+    padding: MyStyle().padding_container_tff(),
+    decoration: MyStyle().style_decoration_container(),
+    child: TextFormField(
+      decoration: MyStyle().style_decoration_tff("Nhập ghi chú"),
+      style: MyStyle().style_text_tff(),
+      controller: _noteController,
+      keyboardType: TextInputType.name,
+      minLines: 3,
+      maxLines: 10,
     ),
   );
 

@@ -24,6 +24,8 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   FloorFB floorFB = new FloorFB();
 
+  late int dem;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +49,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                     if (!snapshot.hasData) {
                       return Center(child: Text("No Data"));
                     } else {
+                      dem = snapshot.data!.docs.length;
                       _updateNumofApm(snapshot.data!.docs.length);
                       _updateNumofUse(snapshot.data!.docs.length);
                       return ListView.builder(
@@ -57,7 +60,6 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
                             QueryDocumentSnapshot x = snapshot.data!.docs[i];
                             return FloorInfoCard(
                                 id: x["id"],
-                                numOfDweller: x["numOfDweller"],
                                 status: x["status"],
                                 funtion: () {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => ApartmentDetailPage(x["id"])));
@@ -75,7 +77,7 @@ class _FloorInfoPageState  extends State<FloorInfoPage>{
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddApartmentPage(widget.floorid)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddApartmentPage(widget.floorid,dem.toString())));
         },
         backgroundColor: myGreen,
       ),

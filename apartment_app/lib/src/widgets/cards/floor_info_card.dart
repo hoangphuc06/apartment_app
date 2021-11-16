@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 class FloorInfoCard extends StatelessWidget {
   final String id;
-  final String numOfDweller;
   final String status;
   final funtion;
   const FloorInfoCard({
     Key? key,
     required this.id,
-    required this.numOfDweller,
     required this.status,
     required this.funtion
   }) : super(key: key);
@@ -20,7 +18,7 @@ class FloorInfoCard extends StatelessWidget {
       onTap: funtion,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          color: Colors.blueGrey.withOpacity(0.2),
           borderRadius: BorderRadius.all(Radius.circular(10))
         ),
         padding: EdgeInsets.all(16),
@@ -28,29 +26,17 @@ class FloorInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Căn hộ " + id, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-            SizedBox(height: 10,),
             Row(
               children: [
-                Icon(Icons.person),
+                Icon(Icons.home),
                 SizedBox(width: 5,),
-                Text("Số người đang ở:", style: TextStyle(fontSize: 15),),
-                Spacer(),
-                Text(numOfDweller, style: TextStyle(fontSize: 15),),
-              ],
-            ),
-            SizedBox(height: 10,),
-            Row(
-              children: [
-                Icon(Icons.wysiwyg_rounded),
-                SizedBox(width: 5,),
-                Text("Trạng thái:", style: TextStyle(fontSize: 15),),
+                Text(this.id, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                 Spacer(),
                 Text(
                   status,
                   style: TextStyle(
                     fontSize: 15,
-                    color: status == "Trống"? myRed : status == "Đã bán"? myGreen : Colors.orange,
+                    color: status == "Trống"? myGreen : status == "Đã bán"? myRed : myRed,
                     fontWeight: FontWeight.bold
                   ),
                 ),

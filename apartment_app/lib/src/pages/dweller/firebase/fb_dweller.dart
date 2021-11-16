@@ -14,7 +14,8 @@ class DwellersFB {
       String job,
       String role,
       String phoneNumber,
-      String email) async {
+      String email,
+      String note) async {
     String id = (new DateTime.now().millisecondsSinceEpoch).toString();
 
     return collectionReference
@@ -31,6 +32,7 @@ class DwellersFB {
           "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
+          "note": note
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
@@ -47,7 +49,8 @@ class DwellersFB {
       String job,
       String role,
       String phoneNumber,
-      String email) async {
+      String email,
+      String note) async {
     return collectionReference
         .doc(id)
         .update({
@@ -62,6 +65,7 @@ class DwellersFB {
           "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
+          "note": note
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));

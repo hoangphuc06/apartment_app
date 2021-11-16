@@ -466,7 +466,8 @@ class _AddContractPageState extends State<AddContractPage> {
                             value['job'],
                             value['role'],
                             value['role'],
-                            value['email'])
+                            value['email'],
+                            ""),
                       }),
               floorInfoFB.updateDweller(_roomController.text, '1'),
               _hostController.clear(),

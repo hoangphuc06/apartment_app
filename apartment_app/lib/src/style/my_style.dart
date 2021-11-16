@@ -22,7 +22,7 @@ class MyStyle {
 
     style_decoration_container() => BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.grey.withOpacity(0.1)
+        color: Colors.blueGrey.withOpacity(0.2)
     );
 
     style_decoration_tff(String hint) => InputDecoration(
