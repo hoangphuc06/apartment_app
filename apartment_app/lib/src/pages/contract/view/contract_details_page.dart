@@ -49,7 +49,7 @@ class _ContractDetailsState extends State<ContractDetails> {
           ),
           backgroundColor:Colors.white,
           centerTitle: true,
-          elevation: 1,
+          elevation: 0,
           actions: [
             IconButton(
               onPressed: () {},
@@ -95,18 +95,18 @@ class _ContractDetailsState extends State<ContractDetails> {
                       SizedBox(height: 10,),
                       _detail("Phòng",x["room"]),
                       SizedBox(height: 10,),
-                      _detail("Từ ngày", x["startDay"]),
+                      _detail("Ngày bắt đầu", x["startDay"]),
                       SizedBox(height: 10,),
-                      _detail("Đến ngày", x["expirationDate"]),
-                      SizedBox(height: 10,),
+                      // _detail("Đến ngày", x["expirationDate"]),
+                      // SizedBox(height: 10,),
                       _detail("Người cho thuê", x["host"]),
                       SizedBox(height: 10,),
                       _detail("Tiền phòng", x["roomCharge"]),
                       SizedBox(height: 10,),
                       _detail("Tiền cọc", x["deposit"]),
                       SizedBox(height: 10,),
-                      _detail("Kỳ thanh toán", x["roomPaymentPeriod"]),
-                      SizedBox(height: 10,),
+                      // _detail("Kỳ thanh toán", x["roomPaymentPeriod"]),
+                      // SizedBox(height: 10,),
                       Row(
                         mainAxisAlignment:
                         MainAxisAlignment.end,
