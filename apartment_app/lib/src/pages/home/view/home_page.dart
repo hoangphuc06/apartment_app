@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               margin: EdgeInsets.all(16),
-              height: 130,
+              height: 200,
               child: StreamBuilder(
                   stream: floorFB.collectionReference.snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
