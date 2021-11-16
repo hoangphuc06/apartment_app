@@ -541,7 +541,7 @@ class _AddContractPageState extends State<AddContractPage> {
       Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
   void _gotoPageRoom() async {
     var id = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SelectRoomContract()));
+        context, MaterialPageRoute(builder: (context) => SelectRoomContract(status: 'Trống',)));
     if (id != null) {
       setState(() {
         _roomController.text = id;

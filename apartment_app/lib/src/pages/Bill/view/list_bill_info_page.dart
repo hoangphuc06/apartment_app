@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/Bill/view/bill_detail_page.dart';
-import 'package:apartment_app/src/pages/Bill/firebase/fb_list_bill_info.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
 
 class ListBillInfoPage extends StatefulWidget {
   String id;
@@ -16,7 +16,7 @@ class ListBillInfoPage extends StatefulWidget {
 
 class _ListBillInfoPageState extends State<ListBillInfoPage> {
 
-  ApartmentBillInfo apartmentBillInfo = new ApartmentBillInfo();
+  BillFB billFB = new BillFB();
 
 
   @override
@@ -37,7 +37,7 @@ class _ListBillInfoPageState extends State<ListBillInfoPage> {
               Container(
                 child: SingleChildScrollView(
                   child: StreamBuilder(
-                    stream: apartmentBillInfo.collectionReference.where('roomid', isEqualTo: widget.id).snapshots(),
+                    stream: billFB.collectionReference.where('roomid', isEqualTo: widget.id).snapshots(),
                       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: Text("No Data"),);
