@@ -15,9 +15,9 @@ class ListServicePage extends StatefulWidget {
 
 class _ListServicePageState extends State<ListServicePage> {
    List<String> listIdService = <String>[];
-   List<ServiceModel> ListServiceModel = <ServiceModel>[];
 
   Future<void> loadData() async {
+    listIdService.add("s");
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
     Stream<QuerySnapshot> query = serviceApartmentFB.collectionReference
         .where('idRoom', isEqualTo: widget.id)
@@ -41,8 +41,9 @@ class _ListServicePageState extends State<ListServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

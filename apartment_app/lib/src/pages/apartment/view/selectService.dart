@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,16 +19,7 @@ class _SelectServicePageState extends State<SelectServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Thêm dịch vụ cho phòng",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-        ),
-      ),
+      appBar: myAppBar("Thêm dịch vụ phòng"),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -53,61 +45,27 @@ class _SelectServicePageState extends State<SelectServicePage> {
                               serviceApartmentFB.add(this.widget.id,x['id'],);
                               Navigator.pop(context);
                             },
-                            child: Card(
-                              elevation: 2,
-                              child: Container(
-                                margin: EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      x['name'],
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.attach_money),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          "Phí dịch vụ",
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          x['charge'] + " VNĐ",
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.credit_card),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          "Đơn vị",
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                        Spacer(),
-                                        Text(
-                                          x['type'],
-                                          style: TextStyle(fontSize: 15),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.blueGrey.withOpacity(0.2),
+                                  borderRadius: BorderRadius.all(Radius.circular(10))
+                              ),
+                              padding: EdgeInsets.all(16),
+                              margin: EdgeInsets.only(bottom: 8),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.local_laundry_service_outlined),
+                                      SizedBox(width: 5,),
+                                      Text(x["name"], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                      Spacer(),
+                                      Text(x["charge"]+" VNĐ", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
                           );

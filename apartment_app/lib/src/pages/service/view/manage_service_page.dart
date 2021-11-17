@@ -95,7 +95,7 @@ class StateServicePage extends State<ServicePage> {
                     stream: fb.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
+                        return Text("no data");
                       }
                       this.ListServiceModel.clear();
                       snapshot.data!.docs.forEach((element) {

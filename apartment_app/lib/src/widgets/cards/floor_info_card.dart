@@ -36,7 +36,7 @@ class FloorInfoCard extends StatelessWidget {
                   status,
                   style: TextStyle(
                     fontSize: 15,
-                    color: status == "Trống"? myGreen : status == "Đã bán"? myRed : myRed,
+                    color: status == "Trống"? myGreen : status == "Đã bán"? myRed : Colors.orange,
                     fontWeight: FontWeight.bold
                   ),
                 ),
