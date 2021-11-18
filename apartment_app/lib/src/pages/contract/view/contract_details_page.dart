@@ -47,7 +47,7 @@ class _ContractDetailsState extends State<ContractDetails> {
           iconTheme: IconThemeData(
             color: myGreen, //change your color here
           ),
-          backgroundColor:Colors.white,
+          backgroundColor: Colors.white,
           centerTitle: true,
           elevation: 0,
           actions: [
@@ -69,7 +69,12 @@ class _ContractDetailsState extends State<ContractDetails> {
             },
             icon: Icon(Icons.arrow_back_ios),
           ),
-          title: Text("Hợp đồng", style: TextStyle(color: myGreen,),),
+          title: Text(
+            "Hợp đồng",
+            style: TextStyle(
+              color: myGreen,
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -90,26 +95,39 @@ class _ContractDetailsState extends State<ContractDetails> {
                     children: [
                       //thông tin hợp đồng
                       _title("Hợp đồng"),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       _detail("Số hợp đồng", x["id"]),
-                      SizedBox(height: 10,),
-                      _detail("Phòng",x["room"]),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _detail("Phòng", x["room"]),
+                      SizedBox(
+                        height: 10,
+                      ),
                       _detail("Ngày bắt đầu", x["startDay"]),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       // _detail("Đến ngày", x["expirationDate"]),
                       // SizedBox(height: 10,),
                       _detail("Người cho thuê", x["host"]),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       _detail("Tiền phòng", x["roomCharge"]),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       _detail("Tiền cọc", x["deposit"]),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       // _detail("Kỳ thanh toán", x["roomPaymentPeriod"]),
                       // SizedBox(height: 10,),
                       Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           // Container(
                           //   padding:
@@ -128,8 +146,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                           //       color: myYellow),
                           // ),
                           Container(
-                            padding:
-                            EdgeInsets.only(right: 8),
+                            padding: EdgeInsets.only(right: 8),
                             child: RoundedButton(
                                 name: 'Xóa',
                                 onpressed: () => {_onClick()},
@@ -139,32 +156,45 @@ class _ContractDetailsState extends State<ContractDetails> {
                             child: RoundedButton(
                                 name: 'Thanh lý',
                                 onpressed: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              LiquidationContractPage(
-                                                  id: widget
-                                                      .id)))
-                                },
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  LiquidationContractPage(
+                                                      id: widget.id)))
+                                    },
                                 color: myGreen),
                           ),
                         ],
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       _title("Điều khoản"),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       TitleInfoNull(text: "Điều khoản bên A"),
-                      SizedBox(height: 10,),
-                      _noteA(),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _note(_rulesAController),
+                      SizedBox(
+                        height: 10,
+                      ),
                       TitleInfoNull(text: "Điều khoản bên B"),
-                      SizedBox(height: 10,),
-                      _noteB(),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _note(_rulesBController),
+                      SizedBox(
+                        height: 10,
+                      ),
                       TitleInfoNull(text: "Điều khoản chung"),
-                      SizedBox(height: 10,),
-                      _note(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _note(_rulesCController),
                     ],
                   );
                 }
@@ -182,8 +212,8 @@ class _ContractDetailsState extends State<ContractDetails> {
             });
   }
 
-  _items(String text, TextEditingController controller,String init) {
-    controller.text=init;
+  _items(String text, TextEditingController controller, String init) {
+    controller.text = init;
     return Column(
       children: [
         TitleInfoNull(text: text),
@@ -191,7 +221,6 @@ class _ContractDetailsState extends State<ContractDetails> {
           height: 10,
         ),
         TextFormField(
-         
           minLines: 2,
           maxLines: 7,
           enabled: false,
@@ -208,123 +237,61 @@ class _ContractDetailsState extends State<ContractDetails> {
       ],
     );
   }
-  _title(String text) => Text(
-    text,
-    style: TextStyle(
-        color: Colors.black.withOpacity(0.5),
-        fontWeight: FontWeight.bold
-    ),
-  );
 
+  _title(String text) => Text(
+        text,
+        style: TextStyle(
+            color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
+      );
 
   _detail(String name, String detail) => Container(
-    padding: EdgeInsets.all(8),
-    height: 50,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.blueGrey.withOpacity(0.2)
-    ),
-    child: Row(
-      children: [
-        Text(
-          name,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-          ),
+        padding: EdgeInsets.all(8),
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.blueGrey.withOpacity(0.2)),
+        child: Row(
+          children: [
+            Text(
+              name,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            Spacer(),
+            Text(
+              detail,
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+            ),
+          ],
         ),
-        Spacer(),
-        Text(
-          detail,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500
-          ),
-        ),
-      ],
-    ),
-  );
+      );
 
-  _note() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesCController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Nhập ghi chú"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
+  _note(TextEditingController controller) => Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
-  _noteA() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesAController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Nhập ghi chú"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: controller,
+              maxLines: 10,
+              minLines: 3,
+              decoration: InputDecoration(
+                  enabled: false,
+                  border: InputBorder.none,
+                  hintText: "[Trống]"),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
         ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
-  _noteB() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesBController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Nhập ghi chú"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
-        ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
-
+      );
 }

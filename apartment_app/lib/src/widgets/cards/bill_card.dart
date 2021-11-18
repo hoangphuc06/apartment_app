@@ -2,59 +2,46 @@ import 'package:flutter/material.dart';
 import 'package:apartment_app/src/colors/colors.dart';
 
 class BillCard extends StatelessWidget {
-  final String MonthYear;
-  final String billdate;
-  final String status;
+  final String id;
+  final String idRoom;
   final funtion;
-  const BillCard({
-    Key? key,
-    required this.MonthYear,
-    required this.billdate,
-    required this.status,
-    required this.funtion
-  }) : super(key: key);
+  const BillCard(
+      {Key? key, required this.id, required this.idRoom, required this.funtion})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: funtion,
-      child: Card(
-        elevation: 2,
-        child: Container(
-          margin: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Hóa đơn tháng " + MonthYear, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.calendar_today),
-                  SizedBox(width: 5,),
-                  Text("Ngày lập hóa đơn:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(billdate, style: TextStyle(fontSize: 15),),
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: [
-                  Icon(Icons.wysiwyg_rounded),
-                  SizedBox(width: 5,),
-                  Text("Trạng thái:", style: TextStyle(fontSize: 15),),
-                  Spacer(),
-                  Text(
-                    status,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: status == "chưa thanht toán"? myGreen :  myRed ,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.blueGrey.withOpacity(0.2),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.assignment),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  id,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                Spacer(),
+                Text(
+                  idRoom,
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

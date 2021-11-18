@@ -15,7 +15,6 @@ class ListServicePage extends StatefulWidget {
 
 class _ListServicePageState extends State<ListServicePage> {
    List<String> listIdService = <String>[];
-   List<ServiceModel> ListServiceModel = <ServiceModel>[];
 
   Future<void> loadData() async {
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
@@ -34,6 +33,7 @@ class _ListServicePageState extends State<ListServicePage> {
   @override
   void initState() {
     super.initState();
+    
     // listIdService.add('1636025589162');
      this.loadData();
     //  createListCard();
