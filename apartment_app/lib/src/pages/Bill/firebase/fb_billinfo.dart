@@ -6,8 +6,12 @@ class BillInfoFB {
       FirebaseFirestore.instance.collection("billinfo");
 
   Future<void> add(
+      String id,
       String idRoom,
       String billDate,
+      String monthBill,
+      String yearBill,
+      String paymentTerm,
       String deposit,
       String discount,
       String fine,
@@ -15,10 +19,17 @@ class BillInfoFB {
       String roomCharge,
       String serviceFee,
       String status,
+      String startE,
+      String endE,
+      String chargeE,
+      String totalE,
+      String startW,
+      String endW,
+      String chargeW,
+      String totalW,
       String total,
       String startBill,
       String endBill) async {
-    String id = (new DateTime.now().microsecondsSinceEpoch).toString();
     return FirebaseFirestore.instance
         .collection("billinfo")
         .doc(id)
@@ -26,6 +37,9 @@ class BillInfoFB {
           "idBillInfo": id,
           "idRoom": idRoom,
           "billDate": billDate,
+          "monthBill": monthBill,
+          "yearBill": yearBill,
+          "paymentTerm": paymentTerm,
           "deposit": deposit,
           "discount": discount,
           "fine": fine,
@@ -33,6 +47,14 @@ class BillInfoFB {
           "roomCharge": roomCharge,
           "serviceFee": serviceFee,
           "status": status,
+          "startE": startE,
+          'endE': endE,
+          'chargeE': chargeE,
+          'totalE': totalE,
+          'startW': startW,
+          'endW': endW,
+          'chargeW': chargeW,
+          'totalW': totalW,
           "total": total,
           "startBill": startBill,
           "endBill": endBill,
@@ -41,16 +63,13 @@ class BillInfoFB {
         .catchError((error) => print("fail"));
   }
 
-  // Future<void> update(String id,String roomid,String billinfodate,String status) async{
-  //   return FirebaseFirestore.instance.collection("billinfoinfo").doc(id).update({
-  //     "billinfoid" : id,
-  //     "billinfodate" : billinfodate,
-  //     "roomid" : roomid,
-  //     "status" : status,
-  //   }
-  //   ).then((value) => print("completed"))
-  //       .catchError((error)=>print("fail"));
-  // }
+  Future<void> updateStatus(String id,String status) async{
+    return FirebaseFirestore.instance.collection("billinfo").doc(id).update({
+      "status" : status,
+    }
+    ).then((value) => print("completed"))
+        .catchError((error)=>print("fail"));
+  }
   Future<void> delete(String id) async {
     return FirebaseFirestore.instance.collection("billinfo").doc(id).delete();
   }

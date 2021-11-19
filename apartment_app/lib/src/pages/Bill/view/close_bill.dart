@@ -1,8 +1,11 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
+import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
+import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,11 +33,15 @@ class _CloseBillState extends State<CloseBill> {
   final TextEditingController _chargeW = TextEditingController();
   final TextEditingController _TotalWE = TextEditingController();
   final TextEditingController _chargeRoom = TextEditingController();
+  final TextEditingController _check = TextEditingController();
+  final TextEditingController _deposit = TextEditingController();
+  final TextEditingController _startDay = TextEditingController();
   ContractFB contractFB = new ContractFB();
   ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
   ServiceFB serviceFB = new ServiceFB();
-
+  BillInfoFB billInfoFB = new BillInfoFB();
   List<String> listChargeService = <String>[];
+  List<String> listIdService = <String>[];
 
   Future<void> loadData() async {
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
@@ -44,6 +51,7 @@ class _CloseBillState extends State<CloseBill> {
     await query.forEach((x) {
       x.docs.asMap().forEach((key, value) {
         var t = x.docs[key];
+        listIdService.add(t['idService']);
         serviceFB.collectionReference
             .doc(t['idService'])
             .get()
@@ -52,16 +60,45 @@ class _CloseBillState extends State<CloseBill> {
     });
   }
 
+  bool check = false;
   @override
   void initState() {
+    _startIndexE.text = '0';
+    _startIndexW.text = '0';
+    _endIndexE.text = '0';
+    _endIndexW.text = '0';
+    _chargeE.text = '0';
+    _chargeW.text = '0';
+    _check.text = '0';
     contractFB.collectionReference
         .where('room', isEqualTo: this.widget.id)
         .get()
         .then((value) => {
               _chargeRoom.text = value.docs[0]['roomCharge'],
+              _deposit.text = value.docs[0]['deposit'],
+              _startDay.text =value.docs[0]['startDay'],
+            });
+    var now = DateTime.now();
+    billInfoFB.collectionReference
+        .where('idRoom', isEqualTo: this.widget.id)
+        .where('monthBill', isEqualTo: (now.toLocal().month - 1).toString())
+        .where('yearBill', isEqualTo: now.toLocal().year.toString())
+        .get()
+        .then((value) => {
+              if (value.docs.length != 0)
+                {
+                  _check.text = '1',
+                  _startIndexE.text = value.docs[0]['endE'],
+                  _startIndexW.text = value.docs[0]['endW'],
+                  _endIndexE.text = value.docs[0]['endE'],
+                  _endIndexW.text = value.docs[0]['endW'],
+                  _chargeE.text = value.docs[0]['chargeE'],
+                  _chargeW.text = value.docs[0]['chargeW'],
+                }
             });
     _totalE.text = '0';
     _totalW.text = '0';
+    _TotalWE.text = '0';
     loadData();
     super.initState();
   }
@@ -147,8 +184,8 @@ class _CloseBillState extends State<CloseBill> {
                                 builder: (context,
                                     AsyncSnapshot<QuerySnapshot> snapshot) {
                                   if (!snapshot.hasData) {
-                                    return Center(
-                                      child: _CardNull("Dịch vụ"),
+                                    return SizedBox(
+                                      height: 10,
                                     );
                                   } else {
                                     return ListView.builder(
@@ -195,7 +232,7 @@ class _CloseBillState extends State<CloseBill> {
                     Container(
                       padding: EdgeInsets.all(16),
                       child: MainButton(
-                        name: "Chốt dịch vụ",
+                        name: "Chốt dịch vụ & Điện - nước",
                         onpressed: _onClick,
                       ),
                     ),
@@ -303,6 +340,7 @@ class _CloseBillState extends State<CloseBill> {
                   TextFormField(
                     style: MyStyle().style_text_tff(),
                     controller: controllerStart,
+                    enabled: false,
                     onChanged: (value) {
                       setState(() {
                         if (!(controllerEnd.text.isEmpty &&
@@ -365,16 +403,21 @@ class _CloseBillState extends State<CloseBill> {
                     controller: controllerEnd,
                     onChanged: (value) {
                       setState(() {
-                        if (!(controllerEnd.text.isEmpty &&
-                            controllerStart.text.isEmpty &&
-                            controllerCharge.text.isEmpty)) {
-                          total.text = (((int.parse(controllerEnd.text) -
-                                      int.parse(controllerStart.text))) *
-                                  int.parse(controllerCharge.text))
-                              .toString();
-                          _TotalWE.text = (int.parse(_totalW.text) +
-                                  int.parse(_totalE.text))
-                              .toString();
+                        if (int.parse(controllerStart.text) <=
+                            int.parse(controllerEnd.text)) {
+                          if (!(controllerEnd.text.isEmpty &&
+                              controllerStart.text.isEmpty &&
+                              controllerCharge.text.isEmpty)) {
+                            total.text = (((int.parse(controllerEnd.text) -
+                                        int.parse(controllerStart.text))) *
+                                    int.parse(controllerCharge.text))
+                                .toString();
+                            _TotalWE.text = (int.parse(_totalW.text) +
+                                    int.parse(_totalE.text))
+                                .toString();
+                          }
+                        } else {
+                          total.text = '0';
                         }
                       });
                     },
@@ -390,7 +433,8 @@ class _CloseBillState extends State<CloseBill> {
                       if (value!.isEmpty) {
                         return "Vui lòng nhập chỉ số cuối";
                       } else {
-                        return null;
+                        if (int.parse(value) < int.parse(_startIndexE.text))
+                          return "Chỉ số cuối phải lớn hơn chỉ số \nđầu";
                       }
                     },
                   ),
@@ -510,14 +554,29 @@ class _CloseBillState extends State<CloseBill> {
 
   void _onClick() {
     if (_fomkey.currentState!.validate()) {
+      print(_check.text);
+      WE we = WE(
+          startE: _startIndexE.text,
+          endE: _endIndexE.text,
+          chargeE: _chargeE.text,
+          totalE: _totalE.text,
+          startW: _startIndexW.text,
+          endW: _endIndexW.text,
+          chargeW: _chargeW.text,
+          totalW: _totalW.text,
+          totalWE: _TotalWE.text,
+          chargeRoom: _chargeRoom.text,
+          deposit: _deposit.text,
+          startDay: _startDay.text);
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => AddBillPage(
+                    flag: _check.text,
                     id: widget.id,
-                    listService: listChargeService,
-                    totalWE: _TotalWE.text,
-                    roomCharge: _chargeRoom.text,
+                    listChargeService: listChargeService,
+                    listIdService: listIdService,
+                    we: we,
                   )));
     }
   }

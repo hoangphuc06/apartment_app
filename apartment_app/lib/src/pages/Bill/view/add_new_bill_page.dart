@@ -1,51 +1,47 @@
 import 'dart:convert';
 
 import 'package:apartment_app/src/colors/colors.dart';
-import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_billService.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
-import 'package:apartment_app/src/pages/Bill/model/sevice_model.dart';
+import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
-import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
+
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
-import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
-import 'package:select_form_field/select_form_field.dart';
 
 class AddBillPage extends StatefulWidget {
   // const AddBillPage({Key? key}) : super(key: key);
-  final List<String> listService;
+  final List<String> listChargeService;
+  final List<String> listIdService;
   final id;
-  final totalWE;
-  final roomCharge;
-  AddBillPage(
-      {required this.id,
-      required this.listService,
-      required this.totalWE,
-      required this.roomCharge});
+  final flag;
+  final WE we;
+  AddBillPage({
+    required this.id,
+    required this.flag,
+    required this.listIdService,
+    required this.listChargeService,
+    required this.we,
+  });
 
   @override
   _AddBillPageState createState() => _AddBillPageState();
 }
 
 class _AddBillPageState extends State<AddBillPage> {
-  late String _id;
-  List<Sevice> SeviceItem = [];
   BillInfoFB billInfoFB = new BillInfoFB();
+  BillServiceFB billServiceFB = new BillServiceFB();
   ContractFB contractFB = new ContractFB();
   ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
   ServiceFB serviceFB = new ServiceFB();
   Object? selectedCurrency;
-
-  void getCategory(String id) {
-    final sevicefb = FirebaseFirestore.instance.collection('sevice');
-  }
 
   final _fomkey = GlobalKey<FormState>();
 
@@ -55,11 +51,12 @@ class _AddBillPageState extends State<AddBillPage> {
   final TextEditingController _chargeRoom = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
   final TextEditingController _billdatecontroler = TextEditingController();
-  final TextEditingController _billmonthcontroler = TextEditingController();
-  final TextEditingController _billyearcontroler = TextEditingController();
-  final TextEditingController _servicecontroler = TextEditingController();
-  final TextEditingController _statuscontroler = TextEditingController();
+
   final TextEditingController _startDayController = TextEditingController();
+
+  final TextEditingController _depositController = TextEditingController();
+
+  final TextEditingController _paymentTerm = TextEditingController();
 
   final TextEditingController _Total = TextEditingController();
   final TextEditingController _TotalWE = TextEditingController();
@@ -72,33 +69,53 @@ class _AddBillPageState extends State<AddBillPage> {
   Contract contract = new Contract();
   final TextEditingController serviceFee = TextEditingController();
 
+  _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2100));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        var date =
+            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+        controller.text = date;
+      });
+  }
+
   @override
   void initState() {
+    var now = DateTime.now();
+    if (widget.flag == '0') {
+      _startDayController.text = widget.we.startDay!;
+      _depositController.text = this.widget.we.deposit!;
+    } else {
+      _depositController.text = '0';
+      _startDayController.text = '01/01/' + now.year.toString();
+    }
     var a = 0;
-    for (int i = 0; i < widget.listService.length; i++) {
-      a = a + int.parse(widget.listService[i].toString());
+    for (int i = 0; i < widget.listChargeService.length; i++) {
+      a = a + int.parse(widget.listChargeService[i].toString());
     }
     serviceFee.text = a.toString();
-    var now = DateTime.now();
+
     var start_date =
         "${now.toLocal().day}/${now.toLocal().month}/${now.toLocal().year}";
-    contractFB.collectionReference
-        .where('room', isEqualTo: this.widget.id)
-        .get()
-        .then((value) => {
-              _startDayController.text = value.docs[0]['startDay'],
-            });
+    _paymentTerm.text = start_date;
     var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     var last_date =
         "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
-    _chargeRoom.text = widget.roomCharge;
+    _chargeRoom.text = widget.we.chargeRoom!;
     _expirationDateController.text = last_date;
     _billdatecontroler.text = start_date;
     _roomidcontroler.text = this.widget.id;
+
     _discount.text = '0';
     _fine.text = '0';
-    _TotalWE.text = widget.totalWE;
+    _TotalWE.text = widget.we.totalWE!;
     _Total.text = (int.parse(_TotalWE.text) +
+            int.parse(_depositController.text) +
             int.parse(_chargeRoom.text) +
             int.parse(serviceFee.text))
         .toString();
@@ -175,6 +192,27 @@ class _AddBillPageState extends State<AddBillPage> {
                                             "Chọn phòng",
                                             "phòng",
                                             Icons.home),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(
+                                      text: "Hạn thanh toán hóa đơn"),
+                                  GestureDetector(
+                                      onTap: () =>
+                                          _selectDate(context, _paymentTerm),
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _billdatecontroler,
+                                            "Chọn ngày thanh toán",
+                                            "hạn thanh toán hóa đơn",
+                                            Icons.calendar_today_outlined),
                                       )),
                                 ],
                               ),
@@ -279,6 +317,36 @@ class _AddBillPageState extends State<AddBillPage> {
                   ),
                 ),
               ),
+              widget.flag == '0'
+                  ? Card(
+                      elevation: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _title("Tiền cọc"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _textinRow(
+                                'Tiền cọc',
+                                FontWeight.w400,
+                                FontWeight.w700,
+                                Colors.black,
+                                _depositController,
+                                17),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
               Card(
                 elevation: 2,
                 child: Container(
@@ -298,6 +366,22 @@ class _AddBillPageState extends State<AddBillPage> {
                       SizedBox(
                         height: 20,
                       ),
+                      widget.flag == '0'
+                          ? Column(
+                              children: [
+                                _textinRow(
+                                    "Tiền cọc",
+                                    FontWeight.w400,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    _depositController,
+                                    16),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       _textinRow("Điện - Nước", FontWeight.w400,
                           FontWeight.w700, Colors.black, _TotalWE, 16),
                       SizedBox(
@@ -461,17 +545,36 @@ class _AddBillPageState extends State<AddBillPage> {
 
   void _addBill() {
     var count = 0;
+    var now = DateTime.now();
+    var id = (new DateTime.now().microsecondsSinceEpoch);
+    if (widget.listIdService.length != 0)
+      for (int i = 0; i < widget.listIdService.length; i++) {
+        billServiceFB.add((id + i).toString(), id.toString(),
+            widget.listIdService[i].toString());
+      }
     billInfoFB
         .add(
+            id.toString(),
             widget.id,
             _billdatecontroler.text,
-            "",
+            now.toLocal().month.toString(),
+            now.toLocal().year.toString(),
+            _paymentTerm.text,
+            _depositController.text,
             _discount.text,
             _fine.text,
             _noteControler.text,
             _chargeRoom.text,
             serviceFee.text,
             "Chưa thanh toán",
+            widget.we.startE!,
+            widget.we.endE!,
+            widget.we.chargeE!,
+            widget.we.totalE!,
+            widget.we.startW!,
+            widget.we.endW!,
+            widget.we.chargeW!,
+            widget.we.totalW!,
             _FinalTotal.text,
             _startDayController.text,
             _expirationDateController.text)

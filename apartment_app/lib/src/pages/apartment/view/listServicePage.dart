@@ -17,6 +17,7 @@ class _ListServicePageState extends State<ListServicePage> {
    List<String> listIdService = <String>[];
 
   Future<void> loadData() async {
+    listIdService.add('s');
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
     Stream<QuerySnapshot> query = serviceApartmentFB.collectionReference
         .where('idRoom', isEqualTo: widget.id)

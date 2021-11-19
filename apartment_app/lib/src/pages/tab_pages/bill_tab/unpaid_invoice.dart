@@ -17,8 +17,27 @@ class UnpaidInvoice extends StatefulWidget {
 class _UnpaidInvoiceState extends State<UnpaidInvoice> {
   bool isPaid = false;
   BillInfoFB billInfoFB = new BillInfoFB();
+
+  List<String> listIdRoom = <String>[];
+
+  Future<void> loadData() async {
+    var now = DateTime.now();
+    listIdRoom.add('s');
+    Stream<QuerySnapshot> query = billInfoFB.collectionReference
+        .where('monthBill', isEqualTo: now.toLocal().month.toString())
+        .where('yearBill', isEqualTo: now.toLocal().year.toString())
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listIdRoom.add(t['idRoom']);
+      });
+    });
+  }
+
   @override
   void initState() {
+    loadData();
     super.initState();
   }
 
@@ -29,7 +48,9 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
         body: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Padding(
             padding: EdgeInsets.only(left: 16),
             child: _title("Danh sách hóa đơn"),
@@ -60,6 +81,7 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => BillDetailPage(
+                                              flag: true,
                                               id: x['idBillInfo'],
                                             )));
                               });
@@ -76,7 +98,7 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => SelectRoomService(
-                          status: 'Đang thuê',
+                          listIdRoom: listIdRoom,
                         )));
           },
         ));

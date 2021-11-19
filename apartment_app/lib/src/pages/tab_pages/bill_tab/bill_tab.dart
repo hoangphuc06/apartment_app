@@ -46,7 +46,7 @@ class _BillTabState extends State<BillTab> {
           ),
         ),
         body: TabBarView(
-          children: [UnpaidInvoice(), OverdueInvoice(), Billpaid()],
+          children: [UnpaidInvoice(), OverdueInvoice(), BillPaid()],
         ),
       ),
     );

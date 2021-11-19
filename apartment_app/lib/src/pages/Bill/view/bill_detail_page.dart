@@ -1,5 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
-import 'package:apartment_app/src/pages/Bill/firebase/fb_bill.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_billService.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +10,8 @@ import 'package:select_form_field/select_form_field.dart';
 
 class BillDetailPage extends StatefulWidget {
   String id;
-  BillDetailPage({required this.id});
+  bool flag;
+  BillDetailPage({required this.id, required this.flag});
 
   @override
   _BillInfoPageState createState() => _BillInfoPageState();
@@ -47,11 +48,13 @@ class _BillInfoPageState extends State<BillDetailPage> {
         _billdatecontroler.text = date;
       });
   }
-@override
+
+  @override
   void initState() {
-    billInfoFB.collectionReference.doc(widget.id).get().then((value) => {
-         _noteController.text=value['note']
-    });
+    billInfoFB.collectionReference
+        .doc(widget.id)
+        .get()
+        .then((value) => {_noteController.text = value['note']});
     super.initState();
   }
 
@@ -106,7 +109,7 @@ class _BillInfoPageState extends State<BillDetailPage> {
                   );
                 } else {
                   QueryDocumentSnapshot x = snapshot.data!.docs[0];
-               
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -131,6 +134,10 @@ class _BillInfoPageState extends State<BillDetailPage> {
                           x["startBill"] + ' - ' + x['endBill']),
                       SizedBox(
                         height: 10,
+                      ),
+                      _detail("Hạn thanh toán", x["paymentTerm"]),
+                      SizedBox(
+                        height: 20,
                       ),
                       _title("Chi tiết"),
                       SizedBox(
@@ -161,16 +168,31 @@ class _BillInfoPageState extends State<BillDetailPage> {
                         height: 10,
                       ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(right: 8),
-                            child: RoundedButton(
-                                name: 'Xóa', onpressed: () => {}, color: myRed),
-                          ),
-                        ],
-                      ),
+                      widget.flag
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: RoundedButton(
+                                      name: 'Xóa',
+                                      onpressed: () => {},
+                                      color: myRed),
+                                ),
+                                Container(
+                                  child: RoundedButton(
+                                      name: 'Thanh lý',
+                                      onpressed: () => {
+                                            billInfoFB.updateStatus(
+                                                x['idBillInfo'],
+                                                "Đã thanh toán"),
+                                            Navigator.pop(context)
+                                          },
+                                      color: myGreen),
+                                ),
+                              ],
+                            )
+                          : Container(),
                       SizedBox(
                         height: 30,
                       ),
@@ -233,8 +255,9 @@ class _BillInfoPageState extends State<BillDetailPage> {
               maxLines: 10,
               minLines: 3,
               decoration: InputDecoration(
-                enabled: false,
-                  border: InputBorder.none, hintText: "Nhập ghi chú"),
+                  enabled: false,
+                  border: InputBorder.none,
+                  hintText: "[Trống]"),
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
             ),
