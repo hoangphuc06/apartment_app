@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
+import 'package:apartment_app/src/pages/Bill/view/close_bill.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _SelectRoomServiceState extends State<SelectRoomService> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                AddBillPage(id: x["id"])));
+                                                CloseBill(id: x["id"])));
                                 },
                               );
                             });

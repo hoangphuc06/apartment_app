@@ -1,20 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class billinfoInfoFB {
+class BillInfoFB {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection("billinfo");
 
-  Future<void> add(String billMonth, String billYear,String deposit, String discount, String fine, String note,
-      String roomCharge, String serviceFee, String status, String total) async {
+  Future<void> add(
+      String idRoom,
+      String billDate,
+      String deposit,
+      String discount,
+      String fine,
+      String note,
+      String roomCharge,
+      String serviceFee,
+      String status,
+      String total,
+      String startBill,
+      String endBill) async {
     String id = (new DateTime.now().microsecondsSinceEpoch).toString();
     return FirebaseFirestore.instance
         .collection("billinfo")
         .doc(id)
         .set({
           "idBillInfo": id,
-          "billMonth": billMonth,
-          "billYear": billYear,
+          "idRoom": idRoom,
+          "billDate": billDate,
           "deposit": deposit,
           "discount": discount,
           "fine": fine,
@@ -23,6 +34,8 @@ class billinfoInfoFB {
           "serviceFee": serviceFee,
           "status": status,
           "total": total,
+          "startBill": startBill,
+          "endBill": endBill,
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
