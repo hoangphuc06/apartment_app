@@ -1,3 +1,4 @@
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/detail_dweller_page.dart';
@@ -36,8 +37,8 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   bool chechInfo(Dweller temp){
     if(temp.homeTown!.isEmpty||temp.phoneNumber!.isEmpty||temp.gender!.isEmpty
         ||temp.email!.isEmpty||temp.name!.isEmpty||temp.birthday!.isEmpty)
-      return false;
-    return true;
+      return true;
+    return false;
   }
   bool _filter(Dweller temp){
     bool KTGioiTinh= true ;
@@ -48,7 +49,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
     if(this.role=='Tất cả'||(this.role=='Chủ hộ'&&temp.role=='1')||(this.role=='Người thân chủ hộ'&&temp.role=='2')||(this.role=='Người thuê lại'&&temp.role=='3'))
       chekRole=true;
     else chekRole=false;
-    if((!check||!this.chechInfo(temp))&&KTGioiTinh&&chekRole&&
+    if((!check||this.chechInfo(temp))&&KTGioiTinh&&chekRole&&
         ((this.option&&(temp.name!.contains(this.searchController.text)||this.searchController.text.isEmpty))
             ||(!this.option&&(temp.cmnd!.contains(this.searchController.text)||this.searchController.text.isEmpty)))
     )
@@ -56,15 +57,24 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
     return false;
   }
   _SearchBar() => TextField(
+
     style: MyStyle().style_text_tff(),
     controller: this.searchController,
+    onChanged: (value){
+      setState(() {
+      });
+    },
     keyboardType: this.option? TextInputType.name: TextInputType.phone,
     decoration: InputDecoration(
       hintText: this.hitText,
+      icon: Icon(Icons.search)
     ),
   );
   _dropDownList() => DropdownButton(
-    hint: Text(this.gioiTinh.toString()),
+    hint: Text(this.gioiTinh.toString(),  style: TextStyle(
+      fontWeight: FontWeight.bold,
+      color: this.gioiTinh.toString()=='Nam'? myRed :  this.gioiTinh.toString()=='Nam'? myYellow: Colors.grey,
+    ),),
     iconSize: 36,
     onChanged: (temp) {
       setState(() {
@@ -109,19 +119,22 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.2),
+      backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            Card(
-              elevation: 2,
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                  color: Colors.blueGrey.withOpacity(0.18),
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
               child: Container(
                 child: Column(
-
                   children: [
                     Container(
-                      padding: EdgeInsets.only(left: 16, right: 16),
+                      padding: EdgeInsets.only(left: 5, right: 5),
                       child: Row(
                         children: [
                           Text('Tìm kiếm dân cư',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
@@ -147,17 +160,11 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                             Expanded(
                               child: _SearchBar(),
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                iconSize: 35,
-                                icon: Icon(Icons.search)),
                           ],
                         ),
                       ),
                       ListTile(
-                        title: Text('Họ tên'),
+                        title: Text('Họ tên', style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         leading: Radio(
                           value: 1,
                           groupValue: this.radioValue,
@@ -173,7 +180,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                         ),
                       ),
                       ListTile(
-                        title: Text('CMND/CCCD'),
+                        title: Text('CMND/CCCD',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         leading: Radio(
                           value: 2,
                           groupValue: this.radioValue,
@@ -194,7 +201,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                           children: [
                             Text(
                               'Giới tính:',
-                              style: TextStyle(fontSize: 17),
+                              style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                             ),
                             Spacer(),
                             _dropDownList()
@@ -207,7 +214,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                             children: [
                               Text(
                                 'Vai trò:',
-                                style: TextStyle(fontSize: 17),
+                                style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
                               Spacer(),
                               _roleDownList()
@@ -220,7 +227,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                           children: [
                             Text(
                               'Chưa đầy đủ thông tin:',
-                              style: TextStyle(fontSize: 17),
+                              style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                             ),
                             Checkbox(value: check,
                                 onChanged: (value){
@@ -238,7 +245,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                 ),
               ),
             ),
-
+            SizedBox(height: 7,),
             Expanded(
                 child: StreamBuilder(
                     stream: this.fb.collectionReference.snapshots(),

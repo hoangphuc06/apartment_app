@@ -18,16 +18,17 @@ class _SearchTabState extends State<SearchTab> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: myGreen,
+          backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
           title: Text(
             "Tìm kiếm",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+            style: TextStyle(color:myGreen, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           bottom: TabBar(
-            labelStyle: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            indicatorColor: Colors.white,
+            labelColor: myGreen,
+            labelStyle: TextStyle(color: myGreen, fontSize: 15, fontWeight: FontWeight.bold),
+            indicatorColor: myGreen,
             indicatorWeight: 5,
             tabs: [
               Tab(text: "Căn hộ",),
