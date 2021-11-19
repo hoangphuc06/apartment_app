@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:apartment_app/src/pages/news/firebase/news_fb.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
