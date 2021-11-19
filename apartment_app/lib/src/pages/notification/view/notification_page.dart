@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/notification/firebase/fb_notification.dart';
 import 'package:apartment_app/src/pages/notification/model/notification_info.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
 import 'package:apartment_app/src/widgets/cards/notification_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,14 +77,8 @@ class _NotificationState extends State<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: myGreen,
-          elevation: 0,
-          centerTitle: true,
-          title:  Text(
-            "Thông báo",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-        ),
+        backgroundColor: Colors.white,
+         appBar: myAppBar("Thông báo"),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () async {

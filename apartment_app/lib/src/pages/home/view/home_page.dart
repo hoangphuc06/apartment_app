@@ -3,6 +3,7 @@ import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/category_apartment/view/category_apartment_page.dart';
 import 'package:apartment_app/src/pages/floor_info_page.dart';
+import 'package:apartment_app/src/pages/notification/view/notification_page.dart';
 import 'package:apartment_app/src/pages/service/view/manage_service_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/contract_tab.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
@@ -164,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoryApartmentPage()));
                     }),
                     _lableButton(size, Icons.mail, "Thông báo", (){
-
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> NotificationPage()));
                     }),
                     _lableButton(size, Icons.build, "Sửa chữa", (){
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:async';
 import 'dart:collection';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/apartment/view/apartment_detail_page.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
@@ -46,10 +47,13 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
   _dropDownList() => DropdownButton(
     onTap: (){
       setState(() {
-
       });
     },
-        hint: Text(this.state.toString()),
+        hint: Text(this.state.toString(),style: TextStyle(
+            fontSize: 16,
+            color: state.toString() == "Trống"? myGreen : state.toString() == "Đã bán"? myRed :  state.toString() == 'Đang thuê' ?Colors.orange:Colors.grey,
+            fontWeight: FontWeight.bold
+        ),),
         iconSize: 36,
         onChanged: (temp) {
           setState(() {
@@ -59,7 +63,8 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
         items: this.stateindex.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: Text(value,
+            ),
           );
         }).toList(),
       );
@@ -86,10 +91,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
       this.stateindex.add(element['name']);
     });
   });
-
-
-
-
+  
   }
   bool _filter(ApartmentModel temp){
     String value =this.idAndName.keys.firstWhere((element) => this.idAndName[element]==this.Category, orElse: () => '');
@@ -103,11 +105,12 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
        return true;
        return false;
    }
-
   _SearchBar() => TextField(
     style: MyStyle().style_text_tff(),
+
     controller: this.searchController,
     decoration: InputDecoration(
+      icon: Icon(Icons.search),
       hintText: this.hitText,
     ),
     keyboardType: this.option? TextInputType.name:TextInputType.number,
@@ -129,14 +132,10 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -144,18 +143,25 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
         child: Container(
           child: Column(
             children: [
-              Card(
-                elevation: 2,
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey.withOpacity(0.18),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+
                 child: Container(
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(left: 8, right: 8),
+                        padding: EdgeInsets.only(left: 5, right: 5),
                         child: Row(
                           children: [
-                           Text('Tìm kiếm căn hộ',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
+                           Text('Tìm kiếm căn hộ',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: myGreen)),
                             Spacer(),
                             IconButton(
+                              color:myGreen ,
+                              padding: EdgeInsets.all(0),
                                 onPressed: () {
                                   this.setVisible=!this.setVisible;
                                   setState(() {});
@@ -176,13 +182,43 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                                     child: _SearchBar(),
                                   ),
                                   SizedBox(width: 20,),
-                                  IconButton(
-                                      onPressed: () {
-                                        setState(() {});
-                                      },
-                                      iconSize: 24,
-                                      icon: Icon(Icons.search)),
                                 ],
+                              ),
+                            ),
+                            Container(
+                              child: ListTile(
+                                title: Text('Theo tên',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                leading: Radio(
+                                  value: 1,
+                                  groupValue: this.radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      hitText= 'Tên căn hộ';
+                                      this.radioValue = 1;
+                                      this.searchController.text='';
+                                      option=true;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              child: ListTile(
+                                title: Text('Theo tầng',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                                leading: Radio(
+                                  value: 2,
+                                  groupValue: this.radioValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      this.radioValue=2;
+                                      this.searchController.text='';
+                                      this.hitText='Thứ tự tầng của căn hộ';
+                                      this.option= false;
+                                    });
+                                  },
+                                  activeColor: Colors.green,
+                                ),
                               ),
                             ),
                             Container(
@@ -191,7 +227,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                                 children: [
                                   Text(
                                     'Trạng thái căn hộ:',
-                                    style: TextStyle(fontSize: 17),
+                                    style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 16),
                                   ),
                                   Spacer(),
                                   _dropDownList()
@@ -204,7 +240,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                                   children: [
                                     Text(
                                       'Loại căn hộ :',
-                                      style: TextStyle(fontSize: 17),
+                                      style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 16),
                                     ),
                                     Spacer(),
                                     StreamBuilder(
@@ -225,42 +261,6 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                                   ],
                                 )
                             ),
-                            Container(
-                              child: ListTile(
-                                title: Text('Theo tên'),
-                                leading: Radio(
-                                  value: 1,
-                                  groupValue: this.radioValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      hitText= 'Tên căn hộ';
-                                      this.radioValue = 1;
-                                      this.searchController.text='';
-                                      option=true;
-                                    });
-                                  },
-                                  activeColor: Colors.green,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: ListTile(
-                                title: Text('Theo tầng'),
-                                leading: Radio(
-                                  value: 2,
-                                  groupValue: this.radioValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      this.radioValue=2;
-                                      this.searchController.text='';
-                                      this.hitText='Thứ tự tầng của căn hộ';
-                                      this.option= false;
-                                    });
-                                  },
-                                  activeColor: Colors.green,
-                                ),
-                              ),
-                            ),
                           ],)
                       ),
 
@@ -268,6 +268,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                   ),
                 ),
               ),
+
               SizedBox(height: 10,),
               Expanded(
                   child: StreamBuilder(
@@ -286,13 +287,12 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                         return ListView.builder(
                             itemCount: this.listApartmentCache.length,
                             itemBuilder: (context, index) {
-                              return ApartmentCard(
-                                apartment: this.listApartmentCache[index],
-                                funtion: ()async{
-                                  await this.listApartmentCache[index].setInfo();
-                                  Route route = MaterialPageRoute(builder: (context) => ApartmentDetailPage(this.listApartmentCache[index].id.toString()));
-                                  Navigator.push(context,route);
-                              },);
+                              return FloorInfoCard(funtion: ()async{
+                                await this.listApartmentCache[index].setInfo();
+                                Route route = MaterialPageRoute(builder: (context) => ApartmentDetailPage(this.listApartmentCache[index].id.toString()));
+                                Navigator.push(context,route);
+                              }, status: this.listApartmentCache[index].status.toString(), id: this.listApartmentCache[index].id.toString(),);
+
                             });
                       })
               ),

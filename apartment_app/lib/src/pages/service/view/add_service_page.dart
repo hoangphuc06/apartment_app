@@ -213,7 +213,7 @@ class StateAddPage extends State<AddServicPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          controller: this.nameController,
+          controller: this.noteController,
           maxLines: 10,
           minLines: 3,
           decoration: InputDecoration(

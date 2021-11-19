@@ -3,6 +3,7 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/notification/model/notification_info.dart';
 import 'package:apartment_app/src/pages/notification/firebase/fb_notification.dart';
 import 'package:apartment_app/src/pages/service/view/add_service_page.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'add_notification.dart';
 class NotificationDetail extends StatefulWidget {
@@ -16,36 +17,57 @@ class NotificationDetail extends StatefulWidget {
 class _NotificationDetailState extends State<NotificationDetail> {
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
   NotificationFB fb = new NotificationFB();
+  _detail(String name, String detail) => Container(
+    padding: EdgeInsets.all(8),
+    height: 50,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.blueGrey.withOpacity(0.2)
+    ),
+    child: Row(
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        Spacer(),
+        Text(
+          detail,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+      ],
+    ),
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: AppBar(
-        backgroundColor: myGreen,
-        elevation: 0,
-        centerTitle: true,
-        title:  Text(
-          widget.notify.title.toString(),
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),),
-      ),
+      backgroundColor: Colors.white,
+      appBar: myAppBar(widget.notify.title.toString(),),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
         child: Column(
           children: [
-            Card(
-              elevation: 2,
+            Container(
               child: Container(
                 padding: EdgeInsets.all(8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10,),
-                    Text("Thông tin báo", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.wysiwyg , "Nội dung:", widget.notify.body.toString()),
-                    SizedBox(height: 20,),
-                    _detailInfo(Icons.calendar_today, "Ngày", widget.notify.date.toString()),
-                    SizedBox(height: 20,),
+                    Text("Thông tin báo", style: TextStyle( fontWeight: FontWeight.bold),),
+                    SizedBox(height: 10,),
+                    _detail("Tên thông báo :", widget.notify.title.toString()),
+                    SizedBox(height: 10,),
+                    _detail("Nội dung:", widget.notify.body.toString()),
+                    SizedBox(height: 10,),
+                    _detail("Ngày", widget.notify.date.toString()),
+                    SizedBox(height: 10,),
                   ],
                 ),
               ),
@@ -67,14 +89,24 @@ class _NotificationDetailState extends State<NotificationDetail> {
     );
   }
 
-  _detailInfo(IconData icons, String title, String value) => Row(
-    children: [
-      Icon(icons),
-      SizedBox(width: 5,),
-      Text(title, style: TextStyle(fontSize: 15),),
-      Spacer(),
-      Text(value, style: TextStyle(fontSize: 15),),
-    ],
+  _detailInfo(IconData icons, String title, String value) =>
+      Container(
+        decoration: BoxDecoration(
+            color: Colors.blueGrey.withOpacity(0.2),
+            borderRadius: BorderRadius.all(Radius.circular(10))
+        ),
+        padding: EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 8),
+        child:  Row(
+          children: [
+            Icon(icons),
+            SizedBox(width: 5,),
+            Text(title, style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+            Spacer(),
+            Text(value, style: TextStyle(fontSize: 15),),
+          ],
+        ),
+
   );
 
 
