@@ -34,7 +34,7 @@ class HomeTab extends StatelessWidget {
         body: TabBarView(
           children: [
             FloorTab(),
-            ContracTab(),
+            ContractTab(),
           ],
         ),
       ),
