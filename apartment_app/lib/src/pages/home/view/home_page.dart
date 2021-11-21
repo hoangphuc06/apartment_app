@@ -5,6 +5,7 @@ import 'package:apartment_app/src/pages/category_apartment/view/category_apartme
 import 'package:apartment_app/src/pages/floor_info_page.dart';
 import 'package:apartment_app/src/pages/news/view/list_news_page.dart';
 import 'package:apartment_app/src/pages/service/view/manage_service_page.dart';
+import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_tab.dart';
 
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/floor_card.dart';
@@ -147,8 +148,8 @@ class _HomePageState extends State<HomePage> {
               runSpacing: 10,
               children: [
                 _lableButton(size, Icons.assignment_rounded, "Hợp đồng", () {
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) => ContractTab()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ContractTab()));
                 }),
                 _lableButton(size, Icons.description, "Hóa đơn", () {}),
                 _lableButton(size, Icons.wifi, "Dịch vụ", () {

@@ -81,7 +81,7 @@ class _AddContractPageState extends State<AddContractPage> {
     var date =
         "${DateTime.now().toLocal().day}/${DateTime.now().toLocal().month}/${DateTime.now().toLocal().year}";
     _startDayController.text = date;
-    _typeController.text='0';
+    _typeController.text = '0';
   }
 
   //Chọn ngày
@@ -118,51 +118,62 @@ class _AddContractPageState extends State<AddContractPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _titletext("Thông tin hợp đồng"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Loại hợp đồng"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    color: Colors.blueGrey.withOpacity(0.2)
-                ),
+                    color: Colors.blueGrey.withOpacity(0.2)),
                 child: SelectFormField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none
-                  ),
+                  decoration: InputDecoration(border: InputBorder.none),
                   hintText: "Chọn loại hợp đồng",
                   initialValue: _typeController.text,
-                  type:
-                  SelectFormFieldType.dropdown, // or can be dialog
+                  type: SelectFormFieldType.dropdown, // or can be dialog
                   items: _items,
                   onChanged: (val) => _typeController.text = val,
                   onSaved: (val) => _typeController.text = val!,
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Đại diện cho thuê/bán"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               _nameTextFormField(),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Chọn phòng"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               GestureDetector(
                   onTap: () {
                     _gotoPageRoom();
                   },
                   child: AbsorbPointer(
                       child: _textformField(
-                        _roomController,
-                        "Chọn phòng",
-                        "Chọn phòng",
-                      ))),
-              SizedBox(height: 10,),
+                    _roomController,
+                    "Chọn phòng",
+                    "Chọn phòng",
+                  ))),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Ngày bắt đầu"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               GestureDetector(
-                  onTap: () => _selectDate(
-                      context, _startDayController),
+                  onTap: () => _selectDate(context, _startDayController),
                   child: AbsorbPointer(
                     child: _textformFieldwithIcon(
                         _startDayController,
@@ -170,8 +181,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         "ngày bắt đầu",
                         height,
                         Icons.calendar_today_outlined),
-                  )
-              ),
+                  )),
               //SizedBox(height: 10,),
               // TitleInfoNotNull(text: "Ngày kết thúc"),
               // SizedBox(height: 10,),
@@ -243,47 +253,76 @@ class _AddContractPageState extends State<AddContractPage> {
               //     },
               //   ),
               // ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               _titletext("Tiền thuê, mua nhà"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Tiền nhà"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               _textformFieldDisable(
                   _roomChargeController, "Nhập tiền nhà", "tiền nhà"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Tiền cọc"),
-              SizedBox(height: 10,),
-              _textformField(
-                  _depositController, "Nhập tiền cọc", "tiền cọc"),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 10,
+              ),
+              _textformField(_depositController, "Nhập tiền cọc", "tiền cọc"),
+              SizedBox(
+                height: 30,
+              ),
               _titletext("Người thuê/mua"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNotNull(text: "Người thuê/mua nhà"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               GestureDetector(
                   onTap: () {
                     _gotoPageRenter();
                   },
                   child: AbsorbPointer(
-                      child: _textformField(_nameRenter,
-                          "Chọn người thuê nhà", "người thuê nhà")
-                  )
+                      child: _textformField(_nameRenter, "Chọn người thuê nhà",
+                          "người thuê nhà"))),
+              SizedBox(
+                height: 30,
               ),
-              SizedBox(height: 30,),
               _titletext("Điều khoản"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNull(text: "Điều khoản bên A(Người cho thuê/bán)"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               _noteA(),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNull(text: "Điều khoản bên B(Người thuê/mua)"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               _noteB(),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TitleInfoNull(text: "Điều khoản chung"),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               _note(),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
 
               //tạo hợp đồng
               Container(
@@ -372,10 +411,7 @@ class _AddContractPageState extends State<AddContractPage> {
         child: TextFormField(
           style: MyStyle().style_text_tff(),
           controller: controller,
-          decoration: InputDecoration(
-            hintText: hint,
-            border: InputBorder.none
-          ),
+          decoration: InputDecoration(hintText: hint, border: InputBorder.none),
           keyboardType: TextInputType.name,
           validator: (val) {
             if (val!.isEmpty) {
@@ -386,14 +422,14 @@ class _AddContractPageState extends State<AddContractPage> {
         ),
       );
   _nameTextFormField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      controller: _hostController,
-      decoration: MyStyle().style_decoration_tff("Đại diện cho thuê/bán"),
-      style: MyStyle().style_text_tff(),
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          controller: _hostController,
+          decoration: MyStyle().style_decoration_tff("Đại diện cho thuê/bán"),
+          style: MyStyle().style_text_tff(),
+        ),
+      );
   _textformFieldDisable(
           TextEditingController controller, String hint, String text) =>
       Container(
@@ -446,7 +482,11 @@ class _AddContractPageState extends State<AddContractPage> {
       Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
   void _gotoPageRoom() async {
     var id = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SelectRoomContract(status: 'Trống',)));
+        context,
+        MaterialPageRoute(
+            builder: (context) => SelectRoomContract(
+                  status: 'Trống',
+                )));
     if (id != null) {
       setState(() {
         _roomController.text = id;
@@ -493,92 +533,85 @@ class _AddContractPageState extends State<AddContractPage> {
       ),
     );
   }
+
   _note() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesCController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Điều khoản chung"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _rulesCController,
+              maxLines: 10,
+              minLines: 3,
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: "Điều khoản chung"),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      );
   _noteA() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesAController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Điều khoản bên A"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _rulesAController,
+              maxLines: 10,
+              minLines: 3,
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: "Điều khoản bên A"),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      );
   _noteB() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _rulesBController,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Điều khoản bên B"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey.withOpacity(0.2),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _rulesBController,
+              maxLines: 10,
+              minLines: 3,
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: "Điều khoản bên B"),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
+      );
   _titletext(String text) => Text(
-    text,
-    style: TextStyle(
-        color: Colors.black.withOpacity(0.5),
-        fontWeight: FontWeight.bold
-    ),
-  );
+        text,
+        style: TextStyle(
+            color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
+      );
 }

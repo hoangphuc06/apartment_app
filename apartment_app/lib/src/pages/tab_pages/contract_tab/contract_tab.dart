@@ -7,14 +7,14 @@ import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_not_liqu
 
 import 'package:flutter/material.dart';
 
-class ContracTab extends StatefulWidget {
-  const ContracTab({Key? key}) : super(key: key);
+class ContractTab extends StatefulWidget {
+  const ContractTab({Key? key}) : super(key: key);
 
   @override
-  _ContracTabState createState() => _ContracTabState();
+  _ContractTabState createState() => _ContractTabState();
 }
 
-class _ContracTabState extends State<ContracTab> {
+class _ContractTabState extends State<ContractTab> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
