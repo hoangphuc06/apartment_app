@@ -1,14 +1,14 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
-import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
+import 'package:apartment_app/src/pages/Bill/view/close_bill.dart';
 import 'package:apartment_app/src/widgets/cards/floor_info_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SelectRoomService extends StatefulWidget {
   // const SelectRoomService({Key? key}) : super(key: key);
-  final String status;
-  SelectRoomService({required this.status});
+  final List<String> listIdRoom;
+  SelectRoomService({required this.listIdRoom});
   @override
   _SelectRoomServiceState createState() => _SelectRoomServiceState();
 }
@@ -35,14 +35,16 @@ class _SelectRoomServiceState extends State<SelectRoomService> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             SizedBox(
               height: 10,
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder(
-                    stream: floorInfoFB.collectionReference.where('status',isEqualTo: this.widget.status).snapshots(),
+                    stream: floorInfoFB.collectionReference
+                        .where('id', whereNotIn: this.widget.listIdRoom)
+                        .where('status', isEqualTo: 'Đã bán')
+                        .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
@@ -59,11 +61,13 @@ class _SelectRoomServiceState extends State<SelectRoomService> {
                                 id: x["id"],
                                 status: x["status"],
                                 funtion: () {
-                                 Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AddBillPage(id: x["id"])));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => CloseBill(
+                                                id: x["id"],
+                                                flag: '0',
+                                              )));
                                 },
                               );
                             });

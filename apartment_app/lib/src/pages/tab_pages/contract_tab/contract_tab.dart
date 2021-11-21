@@ -2,28 +2,30 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/tab_pages/bill_tab/bill_paid.dart';
 import 'package:apartment_app/src/pages/tab_pages/bill_tab/overdue_invoice.dart';
 import 'package:apartment_app/src/pages/tab_pages/bill_tab/unpaid_invoice.dart';
+import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_liquidation.dart';
+import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_not_liquidation.dart';
 
 import 'package:flutter/material.dart';
 
-class BillTab extends StatefulWidget {
-  const BillTab({Key? key}) : super(key: key);
+class ContracTab extends StatefulWidget {
+  const ContracTab({Key? key}) : super(key: key);
 
   @override
-  _BillTabState createState() => _BillTabState();
+  _ContracTabState createState() => _ContracTabState();
 }
 
-class _BillTabState extends State<BillTab> {
+class _ContracTabState extends State<ContracTab> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: myGreen,
           elevation: 0,
           centerTitle: true,
           title: Text(
-            "Hóa đơn",
+            "Hợp đồng",
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
@@ -34,19 +36,16 @@ class _BillTabState extends State<BillTab> {
             indicatorWeight: 5,
             tabs: [
               Tab(
-                text: "Chưa thanh toán",
+                text: "Chưa thanh lý",
               ),
               Tab(
-                text: "Quá hạn thanh toán",
-              ),
-              Tab(
-                text: "Đã thanh toán",
+                text: "Đã thanh lý",
               ),
             ],
           ),
         ),
         body: TabBarView(
-          children: [UnpaidInvoice(), OverdueInvoice(), BillPaid()],
+          children: [ContractNotLiquidation(), ContractLiquidation()],
         ),
       ),
     );
