@@ -34,7 +34,6 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _jobController = TextEditingController();
   final TextEditingController _homeTownController = TextEditingController();
-  final TextEditingController _roleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   final List<Map<String, dynamic>> _items = [
@@ -134,24 +133,6 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                     _jobTextField(),
 
                     SizedBox(height: 30,),
-                    _title("Cư trú"),
-                    SizedBox(height: 10,),
-                    TitleInfoNotNull(text: "Vai trò"),
-                    SizedBox(height: 10,),
-                    Container(
-                      padding: MyStyle().padding_container_tff(),
-                      decoration: MyStyle().style_decoration_container(),
-                      child: SelectFormField(
-                        decoration: MyStyle().style_decoration_tff("Nhập vai trò"),
-                        hintText: "Nhập vai trò",
-                        type: SelectFormFieldType.dropdown, // or can be dialog
-                        items: _itemsRole,
-                        onChanged: (val) => _roleController.text = val,
-                        onSaved: (val) => _roleController.text = val!,
-                      ),
-                    ),
-
-                    SizedBox(height: 30,),
                     _title("Liên hệ"),
                     SizedBox(height: 10,),
                     TitleInfoNull(text: "Số điện thoại"),
@@ -194,12 +175,11 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       String cmnd = _cmndController.text.trim();
       String homeTown = _homeTownController.text.trim();
       String job = _jobController.text.trim();
-      String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
       String note = _noteController.text.trim();
 
-      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email, note)
+      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, phoneNumber, email, note)
           .then((value) => {
         Navigator.pop(context),
       });
@@ -259,7 +239,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
     padding: MyStyle().padding_container_tff(),
     decoration: MyStyle().style_decoration_container(),
     child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập email"),
+      decoration: MyStyle().style_decoration_tff("Nhập CMND/CCCD"),
       style: MyStyle().style_text_tff(),
       controller: _cmndController,
       keyboardType: TextInputType.text,

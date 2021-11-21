@@ -45,7 +45,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
       KTGioiTinh=true;
     else KTGioiTinh=false;
     bool chekRole= true;
-    if(this.role=='Tất cả'||(this.role=='Chủ hộ'&&temp.role=='1')||(this.role=='Người thân chủ hộ'&&temp.role=='2')||(this.role=='Người thuê lại'&&temp.role=='3'))
+    if(this.role=='Tất cả'||(this.role=='Chủ hộ'/*&&temp.role=='1'*/)||(this.role=='Người thân chủ hộ'/*&&temp.role=='2'*/)||(this.role=='Người thuê lại'/*&&temp.role=='3'*/))
       chekRole=true;
     else chekRole=false;
     if((!check||!this.chechInfo(temp))&&KTGioiTinh&&chekRole&&

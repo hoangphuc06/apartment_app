@@ -12,7 +12,6 @@ class Dweller {
   String? email;
   String? homeTown;
   String? job;
-  String? role;
   String? note;
 
   Dweller(
@@ -24,7 +23,6 @@ class Dweller {
       this.cmnd,
       this.homeTown,
       this.job,
-      this.role,
       this.phoneNumber,
       this.email,
       this.note});
@@ -41,7 +39,6 @@ class Dweller {
       email: doc['email'],
       homeTown: doc['homeTown'],
       job: doc["job"],
-      role: doc["role"],
       note: doc["note"]
     );
   }

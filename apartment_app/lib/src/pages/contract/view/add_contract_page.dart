@@ -345,7 +345,6 @@ class _AddContractPageState extends State<AddContractPage> {
                             value['homeTown'],
                             value['job'],
                             value['role'],
-                            value['role'],
                             value['email'],
                             ""),
                       }),
