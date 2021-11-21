@@ -371,11 +371,13 @@ class _AddContractPageState extends State<AddContractPage> {
                   _renterController.text, _roomController.text, false),
               renterFB.updateIdApartment(
                   _renterController.text, _roomController.text),
+              print(_renterController.text),
               renterFB.collectionReference
                   .doc(_renterController.text)
                   .get()
                   .then((value) => {
                         dwellersFB.add(
+                            value['id'],
                             value['idApartment'],
                             value['name'],
                             value['birthday'],
@@ -383,7 +385,7 @@ class _AddContractPageState extends State<AddContractPage> {
                             value['cmnd'],
                             value['homeTown'],
                             value['job'],
-                            value['role'],
+                            value['phoneNumber'],
                             value['email'],
                             ""),
                       }),

@@ -5,6 +5,7 @@ class DwellersFB {
       FirebaseFirestore.instance.collection("dweller");
 
   Future<void> add(
+      String id,
       String idApartment,
       String name,
       String birthday,
@@ -15,8 +16,6 @@ class DwellersFB {
       String phoneNumber,
       String email,
       String note) async {
-    String id = (new DateTime.now().millisecondsSinceEpoch).toString();
-
     return collectionReference
         .doc(id)
         .set({

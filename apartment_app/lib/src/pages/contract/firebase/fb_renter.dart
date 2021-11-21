@@ -12,7 +12,6 @@ class RenterFB {
       String cmnd,
       String homeTown,
       String job,
-      String role,
       String phoneNumber,
       String email,
       bool expired) async {
@@ -29,7 +28,6 @@ class RenterFB {
           "cmnd": cmnd,
           "homeTown": homeTown,
           "job": job,
-          "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
           "expired": expired,
@@ -47,7 +45,6 @@ class RenterFB {
       String cmnd,
       String homeTown,
       String job,
-      String role,
       String phoneNumber,
       String email) async {
     return collectionReference
@@ -61,7 +58,6 @@ class RenterFB {
           "cmnd": cmnd,
           "homeTown": homeTown,
           "job": job,
-          "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
         })

@@ -19,7 +19,6 @@ class AddDwellerPage extends StatefulWidget {
 }
 
 class _AddDwellerPageState extends State<AddDwellerPage> {
-
   final _formkey = GlobalKey<FormState>();
 
   DwellersFB dwellersFB = new DwellersFB();
@@ -78,35 +77,46 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _title("Thông tin chi tiết"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
 
                     //Họ tên
                     TitleInfoNotNull(text: "Tên thành viên"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _nameTextField(),
 
                     // Ngày sinh
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNotNull(text: "Ngày sinh"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     GestureDetector(
                       onTap: () {
                         _selectDate(context);
                       },
-                      child: AbsorbPointer(
-                          child: _birthdayTextField()
-                      ),
+                      child: AbsorbPointer(child: _birthdayTextField()),
                     ),
 
                     // Giới tính
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNotNull(text: "Giới tính"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       padding: MyStyle().padding_container_tff(),
                       decoration: MyStyle().style_decoration_container(),
                       child: SelectFormField(
-                        decoration: MyStyle().style_decoration_tff("Nhập giới tính"),
+                        decoration:
+                            MyStyle().style_decoration_tff("Nhập giới tính"),
                         type: SelectFormFieldType.dropdown, // or can be dialog
                         items: _items,
                         onChanged: (val) => _genderController.text = val,
@@ -115,39 +125,67 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                     ),
 
                     //CMND/CCCD
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNull(text: "CMND/CCCD"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _cmndTextField(),
 
                     //Quê quán
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNotNull(text: "Quê quán"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _homeTownTextField(),
 
                     //Nghề nghiệp
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNotNull(text: "Nghề nghiệp"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _jobTextField(),
 
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     _title("Liên hệ"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNull(text: "Số điện thoại"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _phoneNumberTextField(),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNull(text: "Email"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _emailTextField(),
 
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     _title("Khác"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TitleInfoNull(text: "Ghi chú"),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     _noteTextField(),
                   ],
                 ),
@@ -159,7 +197,9 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                   onpressed: _addDweller,
                 ),
               ),
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
             ],
           ),
         ),
@@ -178,11 +218,13 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
       String note = _noteController.text.trim();
-
-      dwellersFB.add(widget.id_apartment, name, birthday, gender, cmnd, homeTown, job, phoneNumber, email, note)
+      String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+      dwellersFB
+          .add(id, widget.id_apartment, name, birthday, gender, cmnd, homeTown,
+              job, phoneNumber, email, note)
           .then((value) => {
-        Navigator.pop(context),
-      });
+                Navigator.pop(context),
+              });
     }
   }
 
@@ -202,139 +244,133 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
   }
 
   _nameTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      style: MyStyle().style_text_tff(),
-      decoration: MyStyle().style_decoration_tff("Nhập tên"),
-      controller: _nameController,
-      keyboardType: TextInputType.name,
-      validator: (val) {
-        if (val!.isEmpty) {
-          return "Vui lòng nhập tên";
-        }
-        return null;
-      },
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          style: MyStyle().style_text_tff(),
+          decoration: MyStyle().style_decoration_tff("Nhập tên"),
+          controller: _nameController,
+          keyboardType: TextInputType.name,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập tên";
+            }
+            return null;
+          },
+        ),
+      );
 
   _birthdayTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập ngày sinh"),
-      style: MyStyle().style_text_tff(),
-      controller: _birthdayController,
-      keyboardType: TextInputType.datetime,
-      validator: (val) {
-        if (val!.isEmpty) {
-          return "Vui lòng nhập ngày sinh";
-        }
-        return null;
-      },
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập ngày sinh"),
+          style: MyStyle().style_text_tff(),
+          controller: _birthdayController,
+          keyboardType: TextInputType.datetime,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập ngày sinh";
+            }
+            return null;
+          },
+        ),
+      );
 
   _cmndTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập CMND/CCCD"),
-      style: MyStyle().style_text_tff(),
-      controller: _cmndController,
-      keyboardType: TextInputType.text,
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập CMND/CCCD"),
+          style: MyStyle().style_text_tff(),
+          controller: _cmndController,
+          keyboardType: TextInputType.text,
+        ),
+      );
 
   _phoneNumberTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập số điện thoại"),
-      style: MyStyle().style_text_tff(),
-      controller: _phoneNumberController,
-      keyboardType: TextInputType.text,
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập số điện thoại"),
+          style: MyStyle().style_text_tff(),
+          controller: _phoneNumberController,
+          keyboardType: TextInputType.text,
+        ),
+      );
 
   _emailTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập email"),
-      style: MyStyle().style_text_tff(),
-      controller: _emailController,
-      keyboardType: TextInputType.text,
-      validator: (val) {
-        if (val!.isEmpty) {
-          return null;
-        }
-        var isValidEmail = RegExp(
-            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-            .hasMatch(val);
-        if (!isValidEmail) {
-          return "Định dạng email không đúng";
-        }
-      },
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập email"),
+          style: MyStyle().style_text_tff(),
+          controller: _emailController,
+          keyboardType: TextInputType.text,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return null;
+            }
+            var isValidEmail = RegExp(
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                .hasMatch(val);
+            if (!isValidEmail) {
+              return "Định dạng email không đúng";
+            }
+          },
+        ),
+      );
 
   _jobTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập nghề nghiệp"),
-      style: MyStyle().style_text_tff(),
-      controller: _jobController,
-      keyboardType: TextInputType.text,
-      validator: (val) {
-        if (val!.isEmpty) {
-          return "Vui lòng nhập nghề nghiệp";
-        }
-        return null;
-      },
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập nghề nghiệp"),
+          style: MyStyle().style_text_tff(),
+          controller: _jobController,
+          keyboardType: TextInputType.text,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập nghề nghiệp";
+            }
+            return null;
+          },
+        ),
+      );
 
   _homeTownTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập quê quán"),
-      style: MyStyle().style_text_tff(),
-      controller: _homeTownController,
-      keyboardType: TextInputType.name,
-      validator: (val) {
-        if (val!.isEmpty) {
-          return "Vui lòng nhập quê quán";
-        }
-        return null;
-      },
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập quê quán"),
+          style: MyStyle().style_text_tff(),
+          controller: _homeTownController,
+          keyboardType: TextInputType.name,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập quê quán";
+            }
+            return null;
+          },
+        ),
+      );
 
   _noteTextField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập ghi chú"),
-      style: MyStyle().style_text_tff(),
-      controller: _noteController,
-      keyboardType: TextInputType.name,
-      minLines: 3,
-      maxLines: 10,
-    ),
-  );
+        padding: MyStyle().padding_container_tff(),
+        decoration: MyStyle().style_decoration_container(),
+        child: TextFormField(
+          decoration: MyStyle().style_decoration_tff("Nhập ghi chú"),
+          style: MyStyle().style_text_tff(),
+          controller: _noteController,
+          keyboardType: TextInputType.name,
+          minLines: 3,
+          maxLines: 10,
+        ),
+      );
 
   _title(String text) => Text(
-    text,
-    style: TextStyle(
-        color: Colors.black.withOpacity(0.5),
-        fontWeight: FontWeight.bold
-    ),
-  );
+        text,
+        style: TextStyle(
+            color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
+      );
 }
-
-
-
-
