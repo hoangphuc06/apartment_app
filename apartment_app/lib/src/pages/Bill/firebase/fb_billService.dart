@@ -7,14 +7,16 @@ class BillServiceFB {
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection("bill_service");
 
-  Future<void> add(String id,String idBillinfo, String idService) async {
+  Future<void> add(String id, String idBillinfo, String nameService,
+      String chargeService) async {
     return FirebaseFirestore.instance
         .collection("bill_service")
         .doc(id)
         .set({
-          'id':id,
+          'id': id,
           "idBillinfo": idBillinfo,
-          "idService": idService,
+          "nameService": nameService,
+          "chargeService": chargeService,
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));

@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
-import 'package:apartment_app/src/pages/tab_pages/contract_tab.dart';
+import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_liquidation.dart';
+import 'package:apartment_app/src/pages/tab_pages/contract_tab/contract_tab.dart';
 import 'package:flutter/material.dart';
 
 import 'floor_tab.dart';
@@ -33,7 +34,7 @@ class HomeTab extends StatelessWidget {
         body: TabBarView(
           children: [
             FloorTab(),
-            ContractTab(),
+            ContracTab(),
           ],
         ),
       ),

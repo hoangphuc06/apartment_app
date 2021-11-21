@@ -43,7 +43,7 @@ class _SelectRoomServiceState extends State<SelectRoomService> {
                 child: StreamBuilder(
                     stream: floorInfoFB.collectionReference
                         .where('id', whereNotIn: this.widget.listIdRoom)
-                        .where('status', isEqualTo :'Đang thuê')
+                        .where('status', isEqualTo: 'Đã bán')
                         .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
@@ -64,8 +64,10 @@ class _SelectRoomServiceState extends State<SelectRoomService> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              CloseBill(id: x["id"])));
+                                          builder: (context) => CloseBill(
+                                                id: x["id"],
+                                                flag: '0',
+                                              )));
                                 },
                               );
                             });

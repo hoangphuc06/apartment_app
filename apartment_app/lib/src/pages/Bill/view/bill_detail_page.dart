@@ -19,6 +19,7 @@ class BillDetailPage extends StatefulWidget {
 
 class _BillInfoPageState extends State<BillDetailPage> {
   BillInfoFB billInfoFB = new BillInfoFB();
+  BillServiceFB billServiceFB = new BillServiceFB();
 
   final TextEditingController _idcontroler = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
@@ -139,7 +140,41 @@ class _BillInfoPageState extends State<BillDetailPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      _title("Chi tiết"),
+                      _title("Dịch vụ"),
+
+                      StreamBuilder(
+                          stream: billServiceFB.collectionReference
+                              .where('idBillinfo', isEqualTo: this.widget.id)
+                              .snapshots(),
+                          builder:
+                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (!snapshot.hasData) {
+                              return Container();
+                            } else {
+                              return ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, i) {
+                                    QueryDocumentSnapshot y =
+                                        snapshot.data!.docs[i];
+                                    return Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        _detail(y['nameService'],
+                                            y['chargeService'] + ' đ'),
+                                      ],
+                                    );
+                                  });
+                            }
+                          }),
+
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _title("Tổng hợp"),
                       SizedBox(
                         height: 10,
                       ),

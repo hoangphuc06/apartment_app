@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
 import 'package:apartment_app/src/pages/contract/view/liquidation_contract_page.dart';
@@ -11,7 +12,9 @@ import 'package:flutter/material.dart';
 class ContractDetails extends StatefulWidget {
   // const ContractDetails({ Key? key }) : super(key: key);
   final String id;
-  ContractDetails({required this.id});
+  final String flag;
+  final String idRoom;
+  ContractDetails({required this.id, required this.idRoom, required this.flag});
 
   @override
   _ContractDetailsState createState() => _ContractDetailsState();
@@ -19,12 +22,31 @@ class ContractDetails extends StatefulWidget {
 
 class _ContractDetailsState extends State<ContractDetails> {
   ContractFB contractFB = new ContractFB();
+  BillInfoFB billInfoFB = new BillInfoFB();
   final TextEditingController _rulesAController = TextEditingController();
   final TextEditingController _rulesBController = TextEditingController();
   final TextEditingController _rulesCController = TextEditingController();
+  final TextEditingController _check = TextEditingController();
+  final TextEditingController _idBill = TextEditingController();
   @override
   void initState() {
-    // TODO: implement initState
+    print(widget.idRoom);
+    _check.text = '0';
+    _idBill.text = 's';
+    var now = DateTime.now();
+    billInfoFB.collectionReference
+        .where('idRoom', isEqualTo: this.widget.idRoom)
+        .where('monthBill', isEqualTo: (now.toLocal().month).toString())
+        .where('yearBill', isEqualTo: now.toLocal().year.toString())
+        .get()
+        .then((value) => {
+              print(value.docs.length),
+              if (value.docs.length != 0)
+                {
+                  _check.text = '1',
+                  _idBill.text = value.docs[0]['idBillInfo'],
+                }
+            });
     super.initState();
     binding();
   }
@@ -152,19 +174,26 @@ class _ContractDetailsState extends State<ContractDetails> {
                                 onpressed: () => {_onClick()},
                                 color: myRed),
                           ),
-                          Container(
-                            child: RoundedButton(
-                                name: 'Thanh lý',
-                                onpressed: () => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LiquidationContractPage(
-                                                      id: widget.id)))
-                                    },
-                                color: myGreen),
-                          ),
+                          widget.flag == '0'
+                              ? Container(
+                                  child: RoundedButton(
+                                      name: 'Thanh lý',
+                                      onpressed: () => {
+                                            print(_check.text),
+                                            print(_idBill.text),
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        LiquidationContractPage(
+                                                            idBill:
+                                                                _idBill.text,
+                                                            flag: _check.text,
+                                                            id: widget.id)))
+                                          },
+                                      color: myGreen),
+                                )
+                              : Container(),
                         ],
                       ),
                       SizedBox(

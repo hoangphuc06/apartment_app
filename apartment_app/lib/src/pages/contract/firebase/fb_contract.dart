@@ -92,4 +92,12 @@ class ContractFB {
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
   }
+   Future<void> liquidation(String id) async {
+    return FirebaseFirestore.instance
+        .collection("contract")
+        .doc(id)
+        .update({"liquidation": true})
+        .then((value) => print("completed"))
+        .catchError((error) => print("fail"));
+  }
 }

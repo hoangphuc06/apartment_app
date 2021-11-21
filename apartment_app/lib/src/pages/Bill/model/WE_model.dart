@@ -13,6 +13,7 @@ class WE {
   String? chargeRoom;
   String? deposit;
   String? startDay;
+  String? type;
   WE(
       {this.startE,
       this.endE,
@@ -25,5 +26,6 @@ class WE {
       this.totalWE,
       this.chargeRoom,
       this.deposit,
-      this.startDay});
+      this.startDay,
+      this.type});
 }

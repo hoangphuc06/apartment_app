@@ -4,6 +4,7 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billService.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
+import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
@@ -18,18 +19,17 @@ import 'package:flutter/material.dart';
 
 class AddBillPage extends StatefulWidget {
   // const AddBillPage({Key? key}) : super(key: key);
-  final List<String> listChargeService;
-  final List<String> listIdService;
+  final List<BillService> listService;
+  final type;
   final id;
   final flag;
   final WE we;
-  AddBillPage({
-    required this.id,
-    required this.flag,
-    required this.listIdService,
-    required this.listChargeService,
-    required this.we,
-  });
+  AddBillPage(
+      {required this.id,
+      required this.flag,
+      required this.listService,
+      required this.we,
+      required this.type});
 
   @override
   _AddBillPageState createState() => _AddBillPageState();
@@ -63,6 +63,7 @@ class _AddBillPageState extends State<AddBillPage> {
   final TextEditingController _FinalTotal = TextEditingController();
   final TextEditingController _expirationDateController =
       TextEditingController();
+
   bool isSelectRoom = false;
   int temp = 0;
   DateTime selectedDate = new DateTime.now();
@@ -95,8 +96,8 @@ class _AddBillPageState extends State<AddBillPage> {
       _startDayController.text = '01/01/' + now.year.toString();
     }
     var a = 0;
-    for (int i = 0; i < widget.listChargeService.length; i++) {
-      a = a + int.parse(widget.listChargeService[i].toString());
+    for (int i = 0; i < widget.listService.length; i++) {
+      a = a + int.parse(widget.listService[i].charge.toString());
     }
     serviceFee.text = a.toString();
 
@@ -106,7 +107,12 @@ class _AddBillPageState extends State<AddBillPage> {
     var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     var last_date =
         "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
-    _chargeRoom.text = widget.we.chargeRoom!;
+    if (widget.type == 1 && widget.flag == '1') {
+      _chargeRoom.text = '0';
+    } else {
+      _chargeRoom.text = widget.we.chargeRoom!;
+    }
+
     _expirationDateController.text = last_date;
     _billdatecontroler.text = start_date;
     _roomidcontroler.text = this.widget.id;
@@ -221,102 +227,109 @@ class _AddBillPageState extends State<AddBillPage> {
                               height: 10,
                             ),
                           ]))),
-              Card(
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      _title("Tiền nhà"),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        children: [
-                          TitleInfoNull(text: "Khoảng thời gian"),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              //Chọn ngày bắt đầu
-                              Container(
-                                width: width * 0.4,
-                                child: Column(
+              (widget.flag == '1' && widget.type == '1')
+                  ? Container()
+                  : Card(
+                      elevation: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _title("Tiền nhà"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              children: [
+                                TitleInfoNull(text: "Khoảng thời gian"),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    GestureDetector(
-                                        onTap: () {},
-                                        child: AbsorbPointer(
-                                          child: _textformFieldwithIcon(
-                                              _startDayController,
-                                              "Chọn ngày",
-                                              "ngày thanh toán",
-                                              Icons.calendar_today_outlined),
-                                        )),
+                                    //Chọn ngày bắt đầu
+                                    Container(
+                                      width: width * 0.4,
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                              onTap: () {},
+                                              child: AbsorbPointer(
+                                                child: _textformFieldwithIcon(
+                                                    _startDayController,
+                                                    "Chọn ngày",
+                                                    "ngày thanh toán",
+                                                    Icons
+                                                        .calendar_today_outlined),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    //Chọn ngày kết thúc
+                                    Container(
+                                      width: width * 0.4,
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                              onTap: () {},
+                                              child: AbsorbPointer(
+                                                child: _textformFieldwithIcon(
+                                                    _expirationDateController,
+                                                    "Chọn ngày",
+                                                    "hạn thanh toán",
+                                                    Icons
+                                                        .calendar_today_outlined),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              //Chọn ngày kết thúc
-                              Container(
-                                width: width * 0.4,
-                                child: Column(
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    GestureDetector(
-                                        onTap: () {},
-                                        child: AbsorbPointer(
-                                          child: _textformFieldwithIcon(
-                                              _expirationDateController,
-                                              "Chọn ngày",
-                                              "hạn thanh toán",
-                                              Icons.calendar_today_outlined),
-                                        )),
+                                    Text(
+                                      'Thành tiền',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: width * 0.3,
+                                      child: TextFormField(
+                                        decoration:
+                                            InputDecoration(enabled: false),
+                                        controller: _chargeRoom,
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 17,
+                                            color: Colors.black),
+                                      ),
+                                    ),
                                   ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Thành tiền',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 17,
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.3,
-                                child: TextFormField(
-                                  decoration: InputDecoration(enabled: false),
-                                  controller: _chargeRoom,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 17,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
               widget.flag == '0'
                   ? Card(
                       elevation: 2,
@@ -539,6 +552,7 @@ class _AddBillPageState extends State<AddBillPage> {
       );
   void _onClick() {
     if (_fomkey.currentState!.validate()) {
+      print(widget.type);
       _addBill();
     }
   }
@@ -547,10 +561,13 @@ class _AddBillPageState extends State<AddBillPage> {
     var count = 0;
     var now = DateTime.now();
     var id = (new DateTime.now().microsecondsSinceEpoch);
-    if (widget.listIdService.length != 0)
-      for (int i = 0; i < widget.listIdService.length; i++) {
-        billServiceFB.add((id + i).toString(), id.toString(),
-            widget.listIdService[i].toString());
+    if (widget.listService.length != 0)
+      for (int i = 0; i < widget.listService.length; i++) {
+        billServiceFB.add(
+            (id + i).toString(),
+            id.toString(),
+            widget.listService[i].name.toString(),
+            widget.listService[i].charge.toString());
       }
     billInfoFB
         .add(
@@ -589,7 +606,11 @@ class _AddBillPageState extends State<AddBillPage> {
               _expirationDateController.clear(),
               _startDayController.clear(),
               Navigator.popUntil(context, (route) {
-                return count++ == 3;
+                if (widget.type == '0') {
+                  return count++ == 3;
+                } else {
+                  return count++ == 4;
+                }
               })
             });
   }

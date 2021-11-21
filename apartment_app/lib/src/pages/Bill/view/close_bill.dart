@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
+import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
@@ -14,8 +15,8 @@ import 'package:flutter/material.dart';
 class CloseBill extends StatefulWidget {
   // const CloseBill({ Key? key }) : super(key: key);
   late String id;
-
-  CloseBill({required this.id});
+  late String flag;
+  CloseBill({required this.id, required this.flag});
   @override
   _CloseBillState createState() => _CloseBillState();
 }
@@ -36,12 +37,12 @@ class _CloseBillState extends State<CloseBill> {
   final TextEditingController _check = TextEditingController();
   final TextEditingController _deposit = TextEditingController();
   final TextEditingController _startDay = TextEditingController();
+  final TextEditingController _type = TextEditingController();
   ContractFB contractFB = new ContractFB();
   ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
   ServiceFB serviceFB = new ServiceFB();
   BillInfoFB billInfoFB = new BillInfoFB();
-  List<String> listChargeService = <String>[];
-  List<String> listIdService = <String>[];
+  List<BillService> listService = <BillService>[];
 
   Future<void> loadData() async {
     ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
@@ -51,11 +52,14 @@ class _CloseBillState extends State<CloseBill> {
     await query.forEach((x) {
       x.docs.asMap().forEach((key, value) {
         var t = x.docs[key];
-        listIdService.add(t['idService']);
         serviceFB.collectionReference
             .doc(t['idService'])
             .get()
-            .then((value) => {listChargeService.add(value['charge'])});
+            .then((value) => {
+                  listService.add(
+                    BillService(name: value['name'], charge: value['charge']),
+                  )
+                });
       });
     });
   }
@@ -76,7 +80,8 @@ class _CloseBillState extends State<CloseBill> {
         .then((value) => {
               _chargeRoom.text = value.docs[0]['roomCharge'],
               _deposit.text = value.docs[0]['deposit'],
-              _startDay.text =value.docs[0]['startDay'],
+              _startDay.text = value.docs[0]['startDay'],
+              _type.text = value.docs[0]['type']
             });
     var now = DateTime.now();
     billInfoFB.collectionReference
@@ -567,15 +572,16 @@ class _CloseBillState extends State<CloseBill> {
           totalWE: _TotalWE.text,
           chargeRoom: _chargeRoom.text,
           deposit: _deposit.text,
-          startDay: _startDay.text);
+          startDay: _startDay.text,
+          type: _type.text);
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => AddBillPage(
+                    type: widget.flag,
                     flag: _check.text,
                     id: widget.id,
-                    listChargeService: listChargeService,
-                    listIdService: listIdService,
+                    listService: listService,
                     we: we,
                   )));
     }
