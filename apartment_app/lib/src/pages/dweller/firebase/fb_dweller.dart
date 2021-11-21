@@ -12,7 +12,6 @@ class DwellersFB {
       String cmnd,
       String homeTown,
       String job,
-      String role,
       String phoneNumber,
       String email,
       String note) async {
@@ -29,7 +28,6 @@ class DwellersFB {
           "cmnd": cmnd,
           "homeTown": homeTown,
           "job": job,
-          "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
           "note": note
@@ -47,7 +45,6 @@ class DwellersFB {
       String cmnd,
       String homeTown,
       String job,
-      String role,
       String phoneNumber,
       String email,
       String note) async {
@@ -62,7 +59,6 @@ class DwellersFB {
           "cmnd": cmnd,
           "homeTown": homeTown,
           "job": job,
-          "role": role,
           "phoneNumber": phoneNumber,
           "email": email,
           "note": note

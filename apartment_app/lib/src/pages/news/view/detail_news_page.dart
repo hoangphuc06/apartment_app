@@ -1,4 +1,7 @@
+import 'package:animated_float_action_button/animated_floating_action_button.dart';
+import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/news/model/news_model.dart';
+import 'package:apartment_app/src/pages/news/view/edit_news_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -67,6 +70,16 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: myGreen,
+        child: Icon(Icons.edit, color: Colors.white,),
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditNewsPage(widget.news)));
+        },
+      ),
     );
   }
 
@@ -85,4 +98,5 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       SizedBox(height: 10,),
     ],
   );
+
 }

@@ -37,7 +37,6 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _jobController = TextEditingController();
   final TextEditingController _homeTownController = TextEditingController();
-  final TextEditingController _roleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
 
@@ -81,7 +80,6 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
     _cmndController.text = this.widget.dweller.cmnd.toString();
     _homeTownController.text = this.widget.dweller.homeTown.toString();
     _jobController.text = this.widget.dweller.job.toString();
-    _roleController.text = this.widget.dweller.role.toString();
     _phoneNumberController.text = this.widget.dweller.phoneNumber.toString();
     _emailController.text = this.widget.dweller.email.toString();
     _noteController.text = this.widget.dweller.note.toString();
@@ -160,25 +158,6 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
                     _jobTextField(),
 
                     SizedBox(height: 30,),
-                    _title("Cư trú"),
-                    SizedBox(height: 10,),
-                    TitleInfoNotNull(text: "Vai trò"),
-                    SizedBox(height: 10,),
-                    Container(
-                      padding: MyStyle().padding_container_tff(),
-                      decoration: MyStyle().style_decoration_container(),
-                      child: SelectFormField(
-                        initialValue: this.widget.dweller.role,
-                        decoration: MyStyle().style_decoration_tff("Nhập vai trò"),
-                        hintText: "Nhập vai trò",
-                        type: SelectFormFieldType.dropdown, // or can be dialog
-                        items: _itemsRole,
-                        onChanged: (val) => _roleController.text = val,
-                        onSaved: (val) => _roleController.text = val!,
-                      ),
-                    ),
-
-                    SizedBox(height: 30,),
                     _title("Liên hệ"),
                     SizedBox(height: 10,),
                     TitleInfoNull(text: "Số điện thoại"),
@@ -220,12 +199,11 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
     String cmnd = _cmndController.text.trim();
     String homeTown = _homeTownController.text.trim();
     String job = _jobController.text.trim();
-    String role = _roleController.text.trim();
     String phoneNumber = _phoneNumberController.text.trim();
     String email = _emailController.text.trim();
     String note = _noteController.text.trim();
 
-    dwellersFB.update(widget.dweller.id.toString(),widget.dweller.idApartment.toString(), name, birthday, gender, cmnd, homeTown, job, role, phoneNumber, email, note)
+    dwellersFB.update(widget.dweller.id.toString(),widget.dweller.idApartment.toString(), name, birthday, gender, cmnd, homeTown, job, phoneNumber, email, note)
       .then((value) => {
         Navigator.pop(context,Dweller(
           id: widget.dweller.id.toString(),
@@ -236,7 +214,6 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
           cmnd: cmnd,
           homeTown: homeTown,
           job: job,
-          role: role,
           phoneNumber: phoneNumber,
           email: email,
         )),
@@ -296,7 +273,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
     padding: MyStyle().padding_container_tff(),
     decoration: MyStyle().style_decoration_container(),
     child: TextFormField(
-      decoration: MyStyle().style_decoration_tff("Nhập email"),
+      decoration: MyStyle().style_decoration_tff("Nhập CMND/CCCD"),
       style: MyStyle().style_text_tff(),
       controller: _cmndController,
       keyboardType: TextInputType.text,

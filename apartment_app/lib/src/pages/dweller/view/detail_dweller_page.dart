@@ -59,8 +59,6 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
                       _title("Cư trú"),
                       SizedBox(height: 10,),
                       _detail("Căn hộ", x["idApartment"]),
-                      SizedBox(height: 10,),
-                      _detail("Vai trò", x["role"]=="1"?"Chủ hộ":x["role"]=="2"?"Người thân chủ hộ":"Người thuê lại"),
 
                       //Liên hệ
                       SizedBox(height: 30,),

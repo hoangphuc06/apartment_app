@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/news/firebase/news_fb.dart';
+import 'package:apartment_app/src/pages/news/model/news_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
@@ -12,14 +13,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-class AddNewsPage extends StatefulWidget {
-  const AddNewsPage({Key? key}) : super(key: key);
+class EditNewsPage extends StatefulWidget {
+  final News news;
+  EditNewsPage(this.news);
 
   @override
-  _AddNewsPageState createState() => _AddNewsPageState();
+  _EditNewsPageState createState() => _EditNewsPageState();
 }
 
-class _AddNewsPageState extends State<AddNewsPage> {
+class _EditNewsPageState extends State<EditNewsPage> {
 
   final _formkey = GlobalKey<FormState>();
   File? file;
@@ -29,12 +31,23 @@ class _AddNewsPageState extends State<AddNewsPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initInfo();
+  }
+
+  void initInfo() {
+    _titleController.text = this.widget.news.title.toString();
+    _descriptionController.text = this.widget.news.description.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar("Thêm tin tức"),
+      appBar: myAppBar("Chỉnh sửa tin tức"),
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,
@@ -48,7 +61,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   children: [
                     _title("Thông tin chi tiết"),
                     SizedBox(height: 10,),
-                    
+
                     TitleInfoNotNull(text: "Tiêu đề"),
                     SizedBox(height: 10,),
                     _titleTextField(),
@@ -65,7 +78,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                       onTap: (){
                         _selectImage();
                       },
-                      child: file == null ? Container(
+                      child: widget.news.image.toString()  == "" && file==null ? Container(
                         height: 160,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -74,9 +87,8 @@ class _AddNewsPageState extends State<AddNewsPage> {
                         child: Center(
                           child: Text("Chọn hình ảnh"),
                         ),
-                      )
-                          : Container(
-                          child: Image.file(file!)),
+                      ) : file == null ? Image.network(widget.news.image.toString())
+                        : Image.file(file!),
                     ),
                   ],
                 ),
@@ -84,12 +96,12 @@ class _AddNewsPageState extends State<AddNewsPage> {
               Container(
                 padding: EdgeInsets.all(16),
                 child: MainButton(
-                  name: "Thêm",
+                  name: "Sửa",
                   onpressed: (){
                     if(file != null)
                       _upload();
-                    else URL = "";
-                    _AddNews();
+                    else URL = widget.news.image.toString();
+                    _EditNews();
                   },
                 ),
               ),
@@ -101,14 +113,19 @@ class _AddNewsPageState extends State<AddNewsPage> {
     );
   }
 
-  void _AddNews(){
-    if (_formkey.currentState!.validate()) {
-      newsFB.add(URL!, _descriptionController.text, _titleController.text)
+  void _EditNews(){
+      String title = _titleController.text.trim();
+      String des = _descriptionController.text.trim();
+      newsFB.edit(widget.news.timestamp.toString(),URL!, _descriptionController.text, _titleController.text)
           .then((value) => {
-            Navigator.pop(context),
+      Navigator.pop(context,News(
+        title: title,
+        description: des,
+        image: URL,
+        timestamp: widget.news.timestamp.toString()
+      ))
       });
     }
-  }
 
   _title(String text) => Text(
     text,
@@ -158,4 +175,5 @@ class _AddNewsPageState extends State<AddNewsPage> {
     await ref.putFile(file!);
     URL = await ref.getDownloadURL();
   }
+
 }
