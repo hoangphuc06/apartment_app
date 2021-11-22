@@ -6,6 +6,7 @@ import 'package:apartment_app/src/pages/floor_info_page.dart';
 import 'package:apartment_app/src/pages/news/view/list_news_page.dart';
 import 'package:apartment_app/src/pages/notification/view/notification_page.dart';
 import 'package:apartment_app/src/pages/service/view/manage_service_page.dart';
+import 'package:apartment_app/src/pages/statistic/view/statistic_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/contract_tab.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/floor_card.dart';
@@ -170,6 +171,9 @@ class _HomePageState extends State<HomePage> {
                     }),
                     _lableButton(size, Icons.build, "Sửa chữa", (){
 
+                    }),
+                    _lableButton(size, Icons.bar_chart_sharp, "Thống kê", (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> StatisticPage()));
                     }),
                   ],
                 ),

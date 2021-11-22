@@ -30,8 +30,6 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   String? state='Tất cả';
   bool check=false;
   String? gioiTinh= 'Tất cả';
-  String role='Tất cả';
-  List<String> roleindex=['Tất cả','Chủ hộ','Người thân chủ hộ','Người thuê lại'];
   bool setVisible= true;
   List<String> gt=['Tất cả','Nam','Nữ'];
   bool chechInfo(Dweller temp){
@@ -45,11 +43,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
     if(this.gioiTinh=='Tất cả'||(this.gioiTinh=='Nam'&&temp.gender=='0')||(this.gioiTinh=='Nữ'&&temp.gender=='1'))
       KTGioiTinh=true;
     else KTGioiTinh=false;
-    bool chekRole= true;
-    if(this.role=='Tất cả'||(this.role=='Chủ hộ'&&temp.role=='1')||(this.role=='Người thân chủ hộ'&&temp.role=='2')||(this.role=='Người thuê lại'&&temp.role=='3'))
-      chekRole=true;
-    else chekRole=false;
-    if((!check||this.chechInfo(temp))&&KTGioiTinh&&chekRole&&
+    if((!check||this.chechInfo(temp))&&KTGioiTinh&&
         ((this.option&&(temp.name!.contains(this.searchController.text)||this.searchController.text.isEmpty))
             ||(!this.option&&(temp.cmnd!.contains(this.searchController.text)||this.searchController.text.isEmpty)))
     )
@@ -88,21 +82,21 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
       );
     }).toList(),
   );
-  _roleDownList() => DropdownButton(
-    hint: Text(this.role),
-    iconSize: 36,
-    onChanged: (temp) {
-      setState(() {
-        this.role = temp.toString();
-      });
-    },
-    items: this.roleindex.map<DropdownMenuItem<String>>((String value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(value),
-      );
-    }).toList(),
-  );
+  // _roleDownList() => DropdownButton(
+  //   hint: Text(this.role),
+  //   iconSize: 36,
+  //   onChanged: (temp) {
+  //     setState(() {
+  //       this.role = temp.toString();
+  //     });
+  //   },
+  //   items: this.roleindex.map<DropdownMenuItem<String>>((String value) {
+  //     return DropdownMenuItem<String>(
+  //       value: value,
+  //       child: Text(value),
+  //     );
+  //   }).toList(),
+  // );
   @override
   void didChangeDependencies()  async {
     super.didChangeDependencies();
@@ -121,48 +115,41 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(16),
         child: Column(
+
           children: [
+            SizedBox(height: 15,),
             Container(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _SearchBar(),
+                  ),
+                  IconButton(
+                      color:myGreen ,
+                      padding: EdgeInsets.all(0),
+                      onPressed: () {
+                        this.setVisible=!this.setVisible;
+                        setState(() {});
+                      },
+                      iconSize: 45,
+                      icon: Icon(this.setVisible? Icons.article_outlined:Icons.article)),
+                ],
+              ),
+            ),
+            SizedBox(height: 15,),
+            Container(
               decoration: BoxDecoration(
                   color: Colors.blueGrey.withOpacity(0.18),
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
               child: Container(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 5, right: 5),
-                      child: Row(
-                        children: [
-                          Text('Tìm kiếm dân cư',style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),),
-                          Spacer(),
-                          IconButton(
-                              onPressed: () {
-                                this.setVisible=!this.setVisible;
-                                setState(() {});
-                              },
-                              iconSize: 35,
-                              icon: Icon(this.setVisible? Icons.arrow_drop_up_outlined:Icons.arrow_drop_down_outlined)),
-                        ],
-                      ),
-                    ),
-                    Visibility(
+              child:      Visibility(
                         visible:  this.setVisible,
                         child:Column(
                       children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: _SearchBar(),
-                            ),
-                          ],
-                        ),
-                      ),
                       ListTile(
                         title: Text('Họ tên', style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         leading: Radio(
@@ -208,19 +195,6 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                           ],
                         ),
                       ),
-                        Container(
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Vai trò:',
-                                style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                              ),
-                              Spacer(),
-                              _roleDownList()
-                            ],
-                          ),
-                        ),
                       Container(
                         padding: EdgeInsets.only(left: 16, right: 16),
                         child: Row(
@@ -241,8 +215,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
 
                     ],)),
 
-                  ],
-                ),
+
               ),
             ),
             SizedBox(height: 7,),
@@ -254,12 +227,12 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                         return Center(child: Text("No Data"));
                       }
                       this.Cache.clear();
-                      snapshot.data!.docs.forEach((element) {
-                        Dweller temp= Dweller.fromDocument(element);
-                        if(this._filter(temp))
-                          this.Cache.add(temp);
-                      }
-                      );
+                      // snapshot.data!.docs.forEach((element) {
+                      //   Dweller temp= Dweller.fromDocument(element);
+                      //   if(this._filter(temp))
+                      //     this.Cache.add(temp);
+                      // }
+                      // );
                       return ListView.builder(
                           itemCount: this.Cache.length,
                           itemBuilder: (context, index) {

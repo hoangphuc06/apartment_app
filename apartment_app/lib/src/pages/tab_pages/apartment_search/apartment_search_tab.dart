@@ -107,16 +107,14 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
    }
   _SearchBar() => TextField(
     style: MyStyle().style_text_tff(),
-
     controller: this.searchController,
     decoration: InputDecoration(
-      icon: Icon(Icons.search),
+      prefixIcon: Icon(Icons.search,size: 27,),
       hintText: this.hitText,
     ),
     keyboardType: this.option? TextInputType.name:TextInputType.number,
     onChanged: (value){
       setState(() {
-
       });
     },
   );
@@ -143,48 +141,39 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
         child: Container(
           child: Column(
             children: [
+              SizedBox(height: 15,),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Container(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _SearchBar(),
+                      ),
+                      IconButton(
+                          color:myGreen ,
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            this.setVisible=!this.setVisible;
+                            setState(() {});
+                          },
+                          iconSize: 45,
+                          icon: Icon(this.setVisible? Icons.article_outlined:Icons.article)),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 15,),
+              Container(
                 decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.18),
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
 
                 child: Container(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        child: Row(
-                          children: [
-                           Text('Tìm kiếm căn hộ',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: myGreen)),
-                            Spacer(),
-                            IconButton(
-                              color:myGreen ,
-                              padding: EdgeInsets.all(0),
-                                onPressed: () {
-                                  this.setVisible=!this.setVisible;
-                                  setState(() {});
-                                },
-                                iconSize: 35,
-                                icon: Icon(this.setVisible? Icons.arrow_drop_up_outlined:Icons.arrow_drop_down_outlined)),
-                          ],
-                        ),
-                      ),
-                      Visibility(
+                  child: Visibility(
                         visible: this.setVisible,
                           child: Column(children: [
-                            Container(
-                              padding: EdgeInsets.only(left: 8, right: 8),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _SearchBar(),
-                                  ),
-                                  SizedBox(width: 20,),
-                                ],
-                              ),
-                            ),
                             Container(
                               child: ListTile(
                                 title: Text('Theo tên',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
@@ -263,9 +252,6 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                             ),
                           ],)
                       ),
-
-                    ],
-                  ),
                 ),
               ),
 
