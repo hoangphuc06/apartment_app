@@ -19,7 +19,7 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
    StatisticModel model=new StatisticModel(0,0,0,0,0);
   String selectYear=DateFormat('yyyy').format( DateTime.now());
   String selectMonth=DateFormat('MM').format( DateTime.now());
-  billinfoInfoFB fb= new billinfoInfoFB();
+  BillInfoFB fb= new BillInfoFB();
   List<chart.Series<typeCharge, String>> _createSampleData( int fine, int chargeE , int chargeW, int total) {
     final data = [
       new typeCharge('Tiền phạt', fine,myRed),
