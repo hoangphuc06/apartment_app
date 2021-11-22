@@ -6,8 +6,10 @@ import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
+import 'package:apartment_app/src/widgets/dialog/loading_dialog.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
 
   final _formkey = GlobalKey<FormState>();
   File? file;
-  String? URL;
+  String URL = "";
   NewsFB newsFB = new NewsFB();
 
   final TextEditingController _titleController = TextEditingController();
@@ -88,7 +90,6 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   onpressed: (){
                     if(file != null)
                       _upload();
-                    else URL = "";
                     _AddNews();
                   },
                 ),
@@ -101,11 +102,11 @@ class _AddNewsPageState extends State<AddNewsPage> {
     );
   }
 
-  void _AddNews(){
+  Future<void> _AddNews() async {
     if (_formkey.currentState!.validate()) {
-      newsFB.add(URL!, _descriptionController.text, _titleController.text)
-          .then((value) => {
-            Navigator.pop(context),
+      String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+      newsFB.add(URL, _descriptionController.text, _titleController.text).then((value) => {
+        Navigator.pop(context)
       });
     }
   }
@@ -155,7 +156,26 @@ class _AddNewsPageState extends State<AddNewsPage> {
   Future _upload() async{
     String filename = DateTime.now().millisecondsSinceEpoch.toString();
     Reference ref = FirebaseStorage.instance.ref().child("news").child("post_$filename");
+    LoadingDialog.showLoadingDialog(context, "Đang tải lên bài viết...");
     await ref.putFile(file!);
     URL = await ref.getDownloadURL();
+    print(URL);
+    LoadingDialog.hideLoadingDialog(context);
+    await _AddNews();
+    // if (_formkey.currentState!.validate()) {
+    //   String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+    //   await FirebaseFirestore.instance.collection("news").doc(id).set({
+    //     "timestamp": id,
+    //     "image": URL,
+    //     "description": _descriptionController.text.trim(),
+    //     "title": _titleController.text.trim(),
+    //   })
+    //       .then((value) =>{
+    //         print("completed"),
+    //         Navigator.pop(context)
+    //       })
+    //       .catchError((error)=>print("fail"));
+    // }
+
   }
 }

@@ -17,7 +17,7 @@ class NewsFB
         .catchError((error)=>print("fail"));
   }
   Future<void> edit(String id,String URL,String description, String title) async {
-    return FirebaseFirestore.instance.collection("news").doc(id).update({
+    return await FirebaseFirestore.instance.collection("news").doc(id).update({
       "image": URL,
       "description": description,
       "title": title,

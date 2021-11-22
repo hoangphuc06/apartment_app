@@ -7,6 +7,7 @@ import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
+import 'package:apartment_app/src/widgets/dialog/loading_dialog.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,7 +26,7 @@ class _EditNewsPageState extends State<EditNewsPage> {
 
   final _formkey = GlobalKey<FormState>();
   File? file;
-  String? URL;
+  String URL = "";
   NewsFB newsFB = new NewsFB();
 
   final TextEditingController _titleController = TextEditingController();
@@ -40,6 +41,7 @@ class _EditNewsPageState extends State<EditNewsPage> {
   void initInfo() {
     _titleController.text = this.widget.news.title.toString();
     _descriptionController.text = this.widget.news.description.toString();
+    URL = this.widget.news.image.toString();
   }
 
   @override
@@ -100,8 +102,7 @@ class _EditNewsPageState extends State<EditNewsPage> {
                   onpressed: (){
                     if(file != null)
                       _upload();
-                    else URL = widget.news.image.toString();
-                    _EditNews();
+                    else _EditNews();
                   },
                 ),
               ),
@@ -113,10 +114,10 @@ class _EditNewsPageState extends State<EditNewsPage> {
     );
   }
 
-  void _EditNews(){
+  Future<void> _EditNews() async {
       String title = _titleController.text.trim();
       String des = _descriptionController.text.trim();
-      newsFB.edit(widget.news.timestamp.toString(),URL!, _descriptionController.text, _titleController.text)
+      newsFB.edit(widget.news.timestamp.toString(),URL, _descriptionController.text, _titleController.text)
           .then((value) => {
       Navigator.pop(context,News(
         title: title,
@@ -172,8 +173,11 @@ class _EditNewsPageState extends State<EditNewsPage> {
   Future _upload() async{
     String filename = DateTime.now().millisecondsSinceEpoch.toString();
     Reference ref = FirebaseStorage.instance.ref().child("news").child("post_$filename");
+    LoadingDialog.showLoadingDialog(context, "Đang chỉnh sửa bài viết...");
     await ref.putFile(file!);
     URL = await ref.getDownloadURL();
+    LoadingDialog.hideLoadingDialog(context);
+    await _EditNews();
   }
 
 }
