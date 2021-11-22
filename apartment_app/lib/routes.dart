@@ -16,6 +16,7 @@ import 'package:apartment_app/src/pages/notification/view/notification_page.dart
 import 'package:apartment_app/src/pages/register_page.dart';
 import 'package:apartment_app/src/pages/reset_password/view/reset_password_page.dart';
 import 'package:apartment_app/src/pages/splash_page.dart';
+import 'package:apartment_app/src/pages/statistic/view/statistic_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/floor_tab.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
 import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
@@ -61,5 +62,7 @@ final routes = <String, WidgetBuilder>{
   //Hoa don
  
   //Hop dong
+  //Thong ke
+  'statistic_page':(BuildContext context) =>StatisticPage(),
 
 };
