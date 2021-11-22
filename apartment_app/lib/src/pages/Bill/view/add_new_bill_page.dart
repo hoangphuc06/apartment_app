@@ -594,7 +594,8 @@ class _AddBillPageState extends State<AddBillPage> {
             widget.we.totalW!,
             _FinalTotal.text,
             _startDayController.text,
-            _expirationDateController.text)
+            _expirationDateController.text,
+            widget.we.idContract!)
         .then((value) => {
               _billdatecontroler.clear(),
               _discount.clear(),

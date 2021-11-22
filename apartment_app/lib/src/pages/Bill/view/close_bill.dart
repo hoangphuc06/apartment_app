@@ -64,6 +64,7 @@ class _CloseBillState extends State<CloseBill> {
     });
   }
 
+  final TextEditingController _idContract = TextEditingController();
   bool check = false;
   @override
   void initState() {
@@ -81,7 +82,8 @@ class _CloseBillState extends State<CloseBill> {
               _chargeRoom.text = value.docs[0]['roomCharge'],
               _deposit.text = value.docs[0]['deposit'],
               _startDay.text = value.docs[0]['startDay'],
-              _type.text = value.docs[0]['type']
+              _type.text = value.docs[0]['type'],
+              _idContract.text= value.docs[0]['id']
             });
     var now = DateTime.now();
     billInfoFB.collectionReference
@@ -573,7 +575,8 @@ class _CloseBillState extends State<CloseBill> {
           chargeRoom: _chargeRoom.text,
           deposit: _deposit.text,
           startDay: _startDay.text,
-          type: _type.text);
+          type: _type.text,
+          idContract: _idContract.text);
       Navigator.push(
           context,
           MaterialPageRoute(

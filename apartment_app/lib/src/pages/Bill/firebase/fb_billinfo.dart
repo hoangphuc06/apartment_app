@@ -29,7 +29,8 @@ class BillInfoFB {
       String totalW,
       String total,
       String startBill,
-      String endBill) async {
+      String endBill,
+      String idContract) async {
     return FirebaseFirestore.instance
         .collection("billinfo")
         .doc(id)
@@ -58,18 +59,23 @@ class BillInfoFB {
           "total": total,
           "startBill": startBill,
           "endBill": endBill,
+          "idContract": idContract,
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
   }
 
-  Future<void> updateStatus(String id,String status) async{
-    return FirebaseFirestore.instance.collection("billinfo").doc(id).update({
-      "status" : status,
-    }
-    ).then((value) => print("completed"))
-        .catchError((error)=>print("fail"));
+  Future<void> updateStatus(String id, String status) async {
+    return FirebaseFirestore.instance
+        .collection("billinfo")
+        .doc(id)
+        .update({
+          "status": status,
+        })
+        .then((value) => print("completed"))
+        .catchError((error) => print("fail"));
   }
+
   Future<void> delete(String id) async {
     return FirebaseFirestore.instance.collection("billinfo").doc(id).delete();
   }

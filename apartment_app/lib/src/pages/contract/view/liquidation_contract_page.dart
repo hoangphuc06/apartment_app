@@ -7,6 +7,8 @@ import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
 import 'package:apartment_app/src/pages/Bill/view/close_bill.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
@@ -32,6 +34,8 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
   ContractFB contractFB = new ContractFB();
   BillInfoFB billInfoFB = new BillInfoFB();
   BillServiceFB billServiceFB = new BillServiceFB();
+  RentedRoomFB rentedRoomFB = new RentedRoomFB();
+
   Task task = new Task();
   DateTime selectedDate = DateTime.now();
   final TextEditingController _DateController = TextEditingController();
@@ -460,6 +464,14 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
   void _onClick() {
     var count = 0;
     contractFB.liquidation(widget.id);
+    rentedRoomFB.collectionReference
+        .where('idRoom', isEqualTo: _idRoom.text)
+        .where('expired', isEqualTo: false)
+        .get()
+        .then((value) => {
+              print(value.docs[0]['id']),
+              rentedRoomFB.liquidation(value.docs[0]['id'])
+            });
     Navigator.popUntil(context, (route) {
       return count++ == 2;
     });
