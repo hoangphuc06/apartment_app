@@ -46,7 +46,6 @@ class RentedRoomFB {
   Future<void> updateIdRenter(
     String id,
     String idRenter,
-
   ) async {
     return FirebaseFirestore.instance
         .collection("rentedRoom")
@@ -57,10 +56,10 @@ class RentedRoomFB {
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
   }
-   Future<void> updateIdRoom(
+
+  Future<void> updateIdRoom(
     String id,
     String idRoom,
-
   ) async {
     return FirebaseFirestore.instance
         .collection("rentedRoom")
@@ -72,5 +71,14 @@ class RentedRoomFB {
         .catchError((error) => print("fail"));
   }
 
-  
+  Future<void> liquidation(
+    String id,
+  ) async {
+    return FirebaseFirestore.instance
+        .collection("rentedRoom")
+        .doc(id)
+        .update({"expired": true})
+        .then((value) => print("completed"))
+        .catchError((error) => print("fail"));
+  }
 }
