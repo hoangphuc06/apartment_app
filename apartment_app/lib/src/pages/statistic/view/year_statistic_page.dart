@@ -14,6 +14,7 @@ class  YearStatisticPage extends StatefulWidget {
 
 class _YearStatisticPageState extends State<YearStatisticPage>{
   List<String>yearlist=[];
+  List<StatisticModel> listStatistic=[];
   late final List<chart.Series<typeCharge,String>> seriesList;
   StatisticModel model=new StatisticModel(0,0,0,0,0);
   String selectYear=DateFormat('yyyy').format( DateTime.now());
@@ -35,6 +36,55 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
         data: data,
 
       )
+    ];
+  }
+  List<chart.Series<typeCharge, String>> createSampleData(List<StatisticModel> month) {
+    List<typeCharge> chargeE = [];
+    List<typeCharge> chargeW = [];
+    List<typeCharge> fine = [];
+    List<typeCharge> total = [];
+    int index=0;
+      month.forEach((element) {
+        index ++;
+        print(index);
+        chargeE.add(new typeCharge(index.toString(), month[index-1].chargeE, myYellow));
+        chargeW.add(new typeCharge(index.toString(), month[index-1].chargeW, myBlue));
+        fine.add(new typeCharge(index.toString(), month[index-1].fine, myRed));
+        total.add(new typeCharge(index.toString(), month[index-1].total, myGreen));
+      });
+    return [
+      // Blue bars with a lighter center color.
+      new chart.Series<typeCharge, String>(
+        id: 'water charge',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: chargeW,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
+      // Solid red bars. Fill color will default to the series color if no
+      // fillColorFn is configured.
+      new chart.Series<typeCharge, String>(
+        id: 'electric charge',
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: chargeE,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+        domainFn: (typeCharge charge, _) => charge.name,
+      ),
+      // Hollow green bars.
+      new chart.Series<typeCharge, String>(
+        id: 'fine',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: fine,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
+      new chart.Series<typeCharge, String>(
+        id: 'total',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: total,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
     ];
   }
   _yearDownList() => DropdownButton(
@@ -118,7 +168,10 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                         return Center(child: Text("No Data"),);
                       }
                       this.model= new StatisticModel(0,0,0,0,0);
-
+                      this.listStatistic=[];
+                      for(int i=0; i<12;i++){
+                          this.listStatistic.add(new StatisticModel(0,0,0,0,0));
+                      }
                       snapshot.data!.docs.forEach((element) {
                         if(element['yearBill']==this.selectYear)
                         {
@@ -127,11 +180,16 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                           this.model.chargeE+=int.parse(element['totalE']);
                           this.model.chargeW+=int.parse(element['totalW']);
                           this.model.service+=int.parse(element['serviceFee']);
-
+                          int month=int.parse(element['monthBill']);
+                          listStatistic[month-1].total+=int.parse(element['total']);
+                          listStatistic[month-1].fine+=int.parse(element['fine']);
+                          listStatistic[month-1].chargeE+=int.parse(element['totalE']);
+                          listStatistic[month-1].chargeW+=int.parse(element['totalW']);
+                          listStatistic[month-1].service+=int.parse(element['serviceFee']);
                         }
                       });
 
-                      return Column(
+                      return ListView(
                         children: [
                           _detail('Tiền điện ', this.model.fine.toString(),myYellow),
                           SizedBox(height: 10,),
@@ -140,8 +198,36 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                           _detail('Tiền phat', this.model.chargeE.toString(),myRed),
                           SizedBox(height: 10,),
                           _detail('Tổng cộng', this.model.total.toString(),myGreen),
-                          SizedBox(height: 25,),
-                          Expanded(child: chart.BarChart(this._createSampleData( model.fine,model.chargeE,model.chargeW,model.total), animate: true,),),
+                          SizedBox(height: 50,),
+                         Container(
+                           height: 450,
+                           child: ListView(
+                             scrollDirection: Axis.horizontal,
+                             children: [
+                               SizedBox(
+                                 width: 1500,
+                                 child: chart.BarChart(this.createSampleData(this.listStatistic),
+                                   animate: true,
+                                   defaultRenderer: new chart.BarRendererConfig(
+                                       groupingType: chart.BarGroupingType.grouped, ),
+                                 ),
+                               )
+                             ],
+                           ),
+                         ),
+                         // Expanded(child: chart.BarChart(this._createSampleData( model.fine,model.chargeE,model.chargeW,model.total), animate: true,),),
+                         //      SizedBox(
+                         //      height:600,
+                         //      child: chart.BarChart(this.createSampleData(),
+                         //        animate: true,
+                         //        defaultRenderer: new chart.BarRendererConfig(
+                         //            groupingType: chart.BarGroupingType.grouped, strokeWidthPx: 2.0),
+                         //        vertical: false,
+                         //      ),
+                         //    ),
+
+
+
                           SizedBox(height: 25,),
                         ],
 
