@@ -30,8 +30,119 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   String? state='Tất cả';
   bool check=false;
   String? gioiTinh= 'Tất cả';
-  bool setVisible= true;
   List<String> gt=['Tất cả','Nam','Nữ'];
+  void filterBottomSheep() {
+    showModalBottomSheet(builder: (BuildContext context) {
+      return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState1) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          height: 350,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Tìm kiếm theo',style: TextStyle(fontSize: 24,color: myGreen,fontWeight: FontWeight.bold),)
+                ],
+              ),
+              SizedBox(height: 20,),
+              ListTile(
+                title: Text('Họ tên', style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                leading: Radio(
+                  value: 1,
+                  groupValue: this.radioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      hitText= 'Họ và tên';
+                      this.radioValue = 1;
+                      this.searchController.text='';
+                      option=true;
+                    });
+                    setState1((){
+
+                    });
+                  },
+                  activeColor: Colors.green,
+                ),
+              ),
+              ListTile(
+                title: Text('CMND/CCCD',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                leading: Radio(
+                  value: 2,
+                  groupValue: this.radioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      this.radioValue=2;
+                      this.searchController.text='';
+                      this.hitText='Số CMND/CCCD';
+                      this.option= false;
+                    });
+                    setState1((){
+                    });
+                  },
+                  activeColor: Colors.green,
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      'Giới tính:',
+                      style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                    DropdownButton(
+                      hint: Text(this.gioiTinh.toString(),  style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: this.gioiTinh.toString()=='Nam'? myRed :  this.gioiTinh.toString()=='Nam'? myYellow: Colors.grey,
+                      ),),
+                      iconSize: 36,
+                      onChanged: (temp) {
+                        setState(() {
+                          this.gioiTinh = temp.toString();
+                        });
+                        setState1((){
+                        });
+                      },
+                      items: this.gt.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      'Chưa đầy đủ thông tin:',
+                      style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Checkbox(value: check,
+                        onChanged: (value){
+                          setState(() {
+                            this.check=value!;
+                          });
+                          setState1((){
+                          });
+                        })
+                  ],
+                ),
+              ),
+
+            ],),
+        );
+      },
+
+      );
+
+    }, context: context);
+  }
   bool chechInfo(Dweller temp){
     if(temp.homeTown!.isEmpty||temp.phoneNumber!.isEmpty||temp.gender!.isEmpty
         ||temp.email!.isEmpty||temp.name!.isEmpty||temp.birthday!.isEmpty)
@@ -64,45 +175,6 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
       icon: Icon(Icons.search)
     ),
   );
-  _dropDownList() => DropdownButton(
-    hint: Text(this.gioiTinh.toString(),  style: TextStyle(
-      fontWeight: FontWeight.bold,
-      color: this.gioiTinh.toString()=='Nam'? myRed :  this.gioiTinh.toString()=='Nam'? myYellow: Colors.grey,
-    ),),
-    iconSize: 36,
-    onChanged: (temp) {
-      setState(() {
-        this.gioiTinh = temp.toString();
-      });
-    },
-    items: this.gt.map<DropdownMenuItem<String>>((String value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(value),
-      );
-    }).toList(),
-  );
-  // _roleDownList() => DropdownButton(
-  //   hint: Text(this.role),
-  //   iconSize: 36,
-  //   onChanged: (temp) {
-  //     setState(() {
-  //       this.role = temp.toString();
-  //     });
-  //   },
-  //   items: this.roleindex.map<DropdownMenuItem<String>>((String value) {
-  //     return DropdownMenuItem<String>(
-  //       value: value,
-  //       child: Text(value),
-  //     );
-  //   }).toList(),
-  // );
-  @override
-  void didChangeDependencies()  async {
-    super.didChangeDependencies();
-
-    //try to load all your data in this method :)
-  }
   @override
   void initState() {
     // TODO: implement initState
@@ -131,94 +203,14 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                       color:myGreen ,
                       padding: EdgeInsets.all(0),
                       onPressed: () {
-                        this.setVisible=!this.setVisible;
-                        setState(() {});
+                        filterBottomSheep();
                       },
                       iconSize: 45,
-                      icon: Icon(this.setVisible? Icons.article_outlined:Icons.article)),
+                      icon:Icon(Icons.filter_list))
                 ],
               ),
             ),
             SizedBox(height: 15,),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.blueGrey.withOpacity(0.18),
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-              child: Container(
-              child:      Visibility(
-                        visible:  this.setVisible,
-                        child:Column(
-                      children: [
-                      ListTile(
-                        title: Text('Họ tên', style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                        leading: Radio(
-                          value: 1,
-                          groupValue: this.radioValue,
-                          onChanged: (value) {
-                            setState(() {
-                              hitText= 'Họ và tên';
-                              this.radioValue = 1;
-                              this.searchController.text='';
-                              option=true;
-                            });
-                          },
-                          activeColor: Colors.green,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text('CMND/CCCD',style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                        leading: Radio(
-                          value: 2,
-                          groupValue: this.radioValue,
-                          onChanged: (value) {
-                            setState(() {
-                              this.radioValue=2;
-                              this.searchController.text='';
-                              this.hitText='Số CMND/CCCD';
-                              this.option= false;
-                            });
-                          },
-                          activeColor: Colors.green,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Giới tính:',
-                              style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                            ),
-                            Spacer(),
-                            _dropDownList()
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Chưa đầy đủ thông tin:',
-                              style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                            ),
-                            Checkbox(value: check,
-                                onChanged: (value){
-                                  setState(() {
-                                    this.check=value!;
-                                  });
-                                })
-                          ],
-                        ),
-                      ),
-
-                    ],)),
-
-
-              ),
-            ),
-            SizedBox(height: 7,),
             Expanded(
                 child: StreamBuilder(
                     stream: this.fb.collectionReference.snapshots(),
@@ -227,12 +219,11 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                         return Center(child: Text("No Data"));
                       }
                       this.Cache.clear();
-                      // snapshot.data!.docs.forEach((element) {
-                      //   Dweller temp= Dweller.fromDocument(element);
-                      //   if(this._filter(temp))
-                      //     this.Cache.add(temp);
-                      // }
-                      // );
+                      snapshot.data!.docs.forEach((element) {
+                        Dweller temp = Dweller.fromDocument(element);
+                        if (this._filter(temp))
+                          this.Cache.add(temp);
+                      });
                       return ListView.builder(
                           itemCount: this.Cache.length,
                           itemBuilder: (context, index) {
