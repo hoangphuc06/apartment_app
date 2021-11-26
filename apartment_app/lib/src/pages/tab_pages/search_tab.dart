@@ -1,6 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'apartment_search/apartment_search_tab.dart';
+import 'contract_search/view/contract_search_page.dart';
 import 'dweller_search/dweller_search_tab.dart';
 
 
@@ -15,7 +16,7 @@ class _SearchTabState extends State<SearchTab> {
   @override
   Widget build(BuildContext context) {
     return   DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -33,6 +34,7 @@ class _SearchTabState extends State<SearchTab> {
             tabs: [
               Tab(text: "Căn hộ",),
               Tab(text: "Dân cư",),
+              Tab(text: "Hợp đồng",),
             ],
           ),
         ),
@@ -41,6 +43,7 @@ class _SearchTabState extends State<SearchTab> {
           children: [
             ApartmentSearchTab(),
             DwellerSearchTab(),
+            ContractSearchTab(),
           ],
         ),
       ),
