@@ -90,7 +90,7 @@ class _AddNewsPageState extends State<AddNewsPage> {
                   onpressed: (){
                     if(file != null)
                       _upload();
-                    _AddNews();
+                    else _AddNews();
                   },
                 ),
               ),
