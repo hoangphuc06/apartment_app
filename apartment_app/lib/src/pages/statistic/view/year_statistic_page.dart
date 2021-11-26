@@ -191,11 +191,11 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
 
                       return ListView(
                         children: [
-                          _detail('Tiền điện ', this.model.fine.toString(),myYellow),
+                          _detail('Tiền điện ', this.model.chargeE.toString(),myYellow),
                           SizedBox(height: 10,),
                           _detail('Tiền nước', this.model.chargeW.toString(),myBlue),
                           SizedBox(height: 10,),
-                          _detail('Tiền phat', this.model.chargeE.toString(),myRed),
+                          _detail('Tiền phat', this.model.fine.toString(),myRed),
                           SizedBox(height: 10,),
                           _detail('Tổng cộng', this.model.total.toString(),myGreen),
                           SizedBox(height: 50,),

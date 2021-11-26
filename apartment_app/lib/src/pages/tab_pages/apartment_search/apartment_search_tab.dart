@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:async';
 import 'dart:collection';
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor.dart';
 import 'package:apartment_app/src/pages/apartment/view/apartment_detail_page.dart';
 import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
@@ -33,13 +34,16 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   List<String> ListCategory = [];
+  List<String> floorList = [];
   Map<String, String> idAndName = new HashMap<String, String>();
   int radioValue = 1;
   bool option = true;
   String tt = '';
-  List<String> stateindex = ['Trống', 'Đang thuê', 'Đã bán', 'Tất cả'];
-  String hitText = 'Tên căn hộ';
-  String? state = 'Tất cả';
+  FloorFB floorFB= new FloorFB();
+  List<String> stateindex = ['Trống', 'Đang thuê', 'Đã bán', 'Tất cả            '];
+  String hitText = 'Tên căn hộ   ';
+  String? state = 'Tất cả            ';
+  String? floor='Tất cả            ';
   String? Category = 'Tất cả';
 
   void filterBottomSheep() {
@@ -49,7 +53,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
             builder: (BuildContext context,
                 void Function(void Function()) setState1) {
               return Container(
-                height: 350,
+                height: 270,
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
@@ -67,48 +71,6 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                     ),
                     SizedBox(
                       height: 20,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Theo tên',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      leading: Radio(
-                        value: 1,
-                        groupValue: this.radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            hitText = 'Tên căn hộ';
-                            this.radioValue = 1;
-                            this.searchController.text = '';
-                            option = true;
-                          });
-                          setState1(() {});
-                        },
-                        activeColor: Colors.green,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Theo tầng',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      ),
-                      leading: Radio(
-                        value: 2,
-                        groupValue: this.radioValue,
-                        onChanged: (value) {
-                          setState(() {
-                            this.radioValue = 2;
-                            this.searchController.text = '';
-                            this.hitText = 'Thứ tự tầng của căn hộ';
-                            this.option = false;
-                          });
-                          setState1(() {});
-                        },
-                        activeColor: Colors.green,
-                      ),
                     ),
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 16),
@@ -157,6 +119,52 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                               );
                             }).toList(),
                           ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Tầng:',
+                            style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          StreamBuilder(
+                              stream: this.floorFB.collectionReference.snapshots(),
+                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(child: Text("No Data"),);
+                                }
+                                this.floorList.clear();
+                                floorList.add('Tất cả            ');
+                                snapshot.data!.docs.forEach((element) {
+                                  if(!this.floorList.contains(element['id']))
+                                    this.floorList.add(element['id']);
+                                }
+                                );
+                                return  DropdownButton(
+                                  hint: Text(this.floor.toString(),  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),),
+                                  iconSize: 36,
+                                  onChanged: (temp) {
+                                    setState(() {
+                                      this.floor = temp.toString();
+                                    });
+                                    setState1((){
+                                    });
+                                  },
+                                  items: this.floorList.map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                );
+                              }),
                         ],
                       ),
                     ),
@@ -226,12 +234,13 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
     String value = this.idAndName.keys.firstWhere(
         (element) => this.idAndName[element] == this.Category,
         orElse: () => '');
-    print('so sanh ${value} :::::${temp.categoryid}');
-    print(this.radioValue.toString());
+    bool checkFloor=true;
+    if(this.floor=='Tất cả            '||temp.floorid==this.floor) checkFloor=true;
+    else checkFloor=false;
     if ((temp.status == this.state ||
             this.state == null ||
-            this.state == 'Tất cả') &&
-        (temp.categoryid == value || value == '') &&
+            this.state == 'Tất cả            ') &&
+        (temp.categoryid == value || value == '') && checkFloor&&
         ((this.option &&
                 (temp.id!.contains(this.searchController.text) ||
                     this.searchController.text.isEmpty)) ||
