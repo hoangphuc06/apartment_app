@@ -4,8 +4,10 @@ import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_owner.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
+import 'package:apartment_app/src/pages/contract/view/selectOnwer.dart';
 
 import 'package:apartment_app/src/pages/contract/view/selectRenter.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
@@ -38,6 +40,8 @@ class _AddContractPageState extends State<AddContractPage> {
 
   RenterFB renterFB = new RenterFB();
 
+  OwnerFB ownerFB = new OwnerFB();
+
   FloorInfoFB floorInfoFB = new FloorInfoFB();
   CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   CategoryApartment? categoryApartment;
@@ -60,6 +64,7 @@ class _AddContractPageState extends State<AddContractPage> {
   final TextEditingController _typeController = TextEditingController();
 
   final TextEditingController _nameRenter = TextEditingController();
+  final TextEditingController _nameOwner = TextEditingController();
   final List<Map<String, dynamic>> _items = [
     {
       'value': '0',
@@ -136,7 +141,29 @@ class _AddContractPageState extends State<AddContractPage> {
                   initialValue: _typeController.text,
                   type: SelectFormFieldType.dropdown, // or can be dialog
                   items: _items,
-                  onChanged: (val) => _typeController.text = val,
+                  onChanged: (val) {
+                    _typeController.text = val;
+                    if (_roomController.text.isNotEmpty) {
+                      floorInfoFB.collectionReference
+                          .doc(_roomController.text)
+                          .get()
+                          .then((value) => {
+                                categoryApartmentFB.collectionReference
+                                    .doc(value["categoryid"])
+                                    .get()
+                                    .then((data) => {
+                                          if (_typeController.text == '0')
+                                            _roomChargeController.text =
+                                                data["rentalPrice"]
+                                          else
+                                            {
+                                              _roomChargeController.text =
+                                                  data["price"]
+                                            }
+                                        })
+                              });
+                    }
+                  },
                   onSaved: (val) => _typeController.text = val!,
                 ),
               ),
@@ -147,7 +174,15 @@ class _AddContractPageState extends State<AddContractPage> {
               SizedBox(
                 height: 10,
               ),
-              _nameTextFormField(),
+              GestureDetector(
+                  onTap: () {
+                    _gotoPageOwner();
+                  },
+                  child: AbsorbPointer(
+                      child: _textformField(
+                          _nameOwner,
+                          "Chọn đại diện cho thuê/bán nhà",
+                          "đại diện cho thuê/bán nhà"))),
               SizedBox(
                 height: 10,
               ),
@@ -182,77 +217,7 @@ class _AddContractPageState extends State<AddContractPage> {
                         height,
                         Icons.calendar_today_outlined),
                   )),
-              //SizedBox(height: 10,),
-              // TitleInfoNotNull(text: "Ngày kết thúc"),
-              // SizedBox(height: 10,),
-              // GestureDetector(
-              //     onTap: () => _selectDate(
-              //         context, _expirationDateController),
-              //     child: AbsorbPointer(
-              //       child: _textformFieldwithIcon(
-              //           _expirationDateController,
-              //           "Chọn ngày",
-              //           "ngày kết thúc",
-              //           height,
-              //           Icons.calendar_today_outlined),
-              //     )
-              // ),
-              // SizedBox(height: 10,),
-              // TitleInfoNotNull(text: "Ngày bắt đầu tính tiền"),
-              // SizedBox(height: 10,),
-              // GestureDetector(
-              //     onTap: () => _selectDate(
-              //         context, _billingStartDateController),
-              //     child: AbsorbPointer(
-              //       child: _textformFieldwithIcon(
-              //           _billingStartDateController,
-              //           "Chọn ngày bắt đầu tính tiền",
-              //           "ngày bắt đầu tính tiền",
-              //           height,
-              //           Icons.calendar_today_outlined),
-              //     )
-              // ),
-              // SizedBox(height: 10,),
-              // TitleInfoNotNull(text: "Kỳ thanh toán tiền phòng"),
-              // SizedBox(height: 10,),
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 8),
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.all(Radius.circular(10)),
-              //       color: Colors.blueGrey.withOpacity(0.2)
-              //   ),
-              //   child: DropdownButtonFormField<String>(
-              //     value: _roomPaymentPeriodController,
-              //     items: [
-              //       "1 Tháng",
-              //       "2 Tháng",
-              //       "3 Tháng",
-              //       "4 Tháng",
-              //       "5 Tháng",
-              //       "6 Tháng",
-              //       "7 Tháng",
-              //       "8 Tháng",
-              //       "9 Tháng",
-              //       "10 Tháng",
-              //       "11 Tháng",
-              //       "12 Tháng"
-              //     ]
-              //         .map((label) => DropdownMenuItem(
-              //       child: Text(label),
-              //       value: label,
-              //     ))
-              //         .toList(),
-              //     decoration: InputDecoration(
-              //         border: InputBorder.none
-              //     ),
-              //     hint: Text('Kỳ thanh toán'),
-              //     onChanged: (value) {
-              //       setState(() {
-              //         _roomPaymentPeriodController = value;
-              //       });
-              //     },
-              //   ),
-              // ),
+
               SizedBox(
                 height: 30,
               ),
@@ -348,6 +313,7 @@ class _AddContractPageState extends State<AddContractPage> {
     contractFB
         .add(
           _hostController.text,
+          _nameOwner.text,
           _roomController.text,
           _startDayController.text,
           _expirationDateController.text,
@@ -356,6 +322,7 @@ class _AddContractPageState extends State<AddContractPage> {
           _roomChargeController.text,
           _depositController.text,
           _renterController.text,
+          _nameRenter.text,
           _rulesAController.text,
           _rulesBController.text,
           _rulesCController.text,
@@ -495,8 +462,12 @@ class _AddContractPageState extends State<AddContractPage> {
               categoryApartmentFB.collectionReference
                   .doc(value["categoryid"])
                   .get()
-                  .then((data) =>
-                      {_roomChargeController.text = data["rentalPrice"]})
+                  .then((data) => {
+                        if (_typeController.text == '0')
+                          _roomChargeController.text = data["rentalPrice"]
+                        else
+                          {_roomChargeController.text = data["price"]}
+                      })
             });
       });
     }
@@ -512,6 +483,20 @@ class _AddContractPageState extends State<AddContractPage> {
             .doc(id)
             .get()
             .then((value) => {_nameRenter.text = value["name"]});
+      });
+    }
+  }
+
+  void _gotoPageOwner() async {
+    var id = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => SelectOwner()));
+    if (id != null) {
+      setState(() {
+        _hostController.text = id;
+        ownerFB.collectionReference
+            .doc(id)
+            .get()
+            .then((value) => {_nameOwner.text = value["name"]});
       });
     }
   }

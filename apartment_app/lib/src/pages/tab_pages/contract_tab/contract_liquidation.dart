@@ -62,6 +62,7 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ContractDetails(
+                                            listContract: [],
                                             id: x["id"],
                                             idRoom: x['room'],
                                             flag: '1',

@@ -2,6 +2,7 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/pages/Bill/view/bill_detail_page.dart';
 import 'package:apartment_app/src/pages/Bill/view/selectRoomService.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/view/selectRoom.dart';
 import 'package:apartment_app/src/widgets/cards/bill_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,7 +18,7 @@ class UnpaidInvoice extends StatefulWidget {
 class _UnpaidInvoiceState extends State<UnpaidInvoice> {
   bool isPaid = false;
   BillInfoFB billInfoFB = new BillInfoFB();
-
+  ContractFB contractFB = new ContractFB();
   List<String> listIdRoom = <String>[];
 
   Future<void> loadData() async {
@@ -35,8 +36,24 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
     });
   }
 
+  List<String> listIdRoom2 = <String>[];
+  Future<void> loadData1() async {
+    var now = DateTime.now();
+    listIdRoom2.add('a');
+    Stream<QuerySnapshot> query = contractFB.collectionReference
+        .where('liquidation', isEqualTo: true)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listIdRoom2.add(t['room']);
+      });
+    });
+  }
+
   @override
   void initState() {
+    loadData1();
     loadData();
     super.initState();
   }
@@ -98,7 +115,8 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => SelectRoomService(
-                          listIdRoom: listIdRoom,
+                          listIdRoom1: listIdRoom,
+                          listIdRoom2: listIdRoom2,
                         )));
           },
         ));

@@ -15,6 +15,28 @@ class ContractNotLiquidation extends StatefulWidget {
 }
 
 class _ContractNotLiquidationState extends State<ContractNotLiquidation> {
+  List<String> listContract = <String>[];
+
+  Future<void> loadData() async {
+    ContractFB contractFB = new ContractFB();
+    listContract.add('h');
+    Stream<QuerySnapshot> query = contractFB.collectionReference
+        .where('liquidation', isEqualTo: false)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listContract.add(t['id']);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ContractFB contractFB = new ContractFB();
@@ -62,6 +84,7 @@ class _ContractNotLiquidationState extends State<ContractNotLiquidation> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ContractDetails(
+                                            listContract: listContract,
                                             id: x["id"],
                                             idRoom: x['room'],
                                             flag: '0',

@@ -1,12 +1,19 @@
+import 'package:apartment_app/src/PDF/pdf_api.dart';
+import 'package:apartment_app/src/PDF/pdf_form_bill.dart';
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billService.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
+import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
+import 'package:apartment_app/src/pages/Bill/model/bill_model.dart';
+import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
+import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 import 'package:apartment_app/src/widgets/buttons/roundedButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:select_form_field/select_form_field.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class BillDetailPage extends StatefulWidget {
   String id;
@@ -19,8 +26,9 @@ class BillDetailPage extends StatefulWidget {
 
 class _BillInfoPageState extends State<BillDetailPage> {
   BillInfoFB billInfoFB = new BillInfoFB();
+  ServiceFB serviceFB = new ServiceFB();
   BillServiceFB billServiceFB = new BillServiceFB();
-
+  List<BillService> listService = <BillService>[];
   final TextEditingController _idcontroler = TextEditingController();
   final TextEditingController _roomidcontroler = TextEditingController();
   final TextEditingController _billdatecontroler = TextEditingController();
@@ -50,12 +58,31 @@ class _BillInfoPageState extends State<BillDetailPage> {
       });
   }
 
+  Future<void> loadData() async {
+    Stream<QuerySnapshot> query = billServiceFB.collectionReference
+        .where('idBillinfo', isEqualTo: widget.id)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listService.add(
+            BillService(name: t['nameService'], charge: t['chargeService']));
+      });
+    });
+  }
+
+  BillModel billModel = new BillModel();
   @override
   void initState() {
-    billInfoFB.collectionReference
-        .doc(widget.id)
-        .get()
-        .then((value) => {_noteController.text = value['note']});
+    billInfoFB.collectionReference.doc(widget.id).get().then((value) => {
+          _noteController.text = value['note'],
+          billModel = BillModel.fromDocument(value),
+          billServiceFB.collectionReference
+              .where('idBillinfo', isEqualTo: value['idBillInfo'])
+              .get()
+              .then((value) => {})
+        });
+    loadData();
     super.initState();
   }
 
@@ -73,15 +100,16 @@ class _BillInfoPageState extends State<BillDetailPage> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                final pdfFile =
+                    await PdFFormBill.generate(billModel, listService);
+
+                PdfApi.openFile(pdfFile);
+              },
               icon: Icon(
                 Icons.find_in_page_outlined,
                 size: 30,
               ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.share),
             ),
           ],
           leading: IconButton(
@@ -216,7 +244,7 @@ class _BillInfoPageState extends State<BillDetailPage> {
                                 ),
                                 Container(
                                   child: RoundedButton(
-                                      name: 'Thanh lý',
+                                      name: 'Thanh toán',
                                       onpressed: () => {
                                             billInfoFB.updateStatus(
                                                 x['idBillInfo'],

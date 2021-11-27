@@ -76,6 +76,18 @@ class BillInfoFB {
         .catchError((error) => print("fail"));
   }
 
+   Future<void> updateDeposit(String id, String deposit, String total) async {
+    return FirebaseFirestore.instance
+        .collection("billinfo")
+        .doc(id)
+        .update({
+          "deposit": deposit,
+          "total":total,
+        })
+        .then((value) => print("completed"))
+        .catchError((error) => print("fail"));
+  }
+
   Future<void> delete(String id) async {
     return FirebaseFirestore.instance.collection("billinfo").doc(id).delete();
   }

@@ -1,19 +1,23 @@
 import 'dart:convert';
 
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billService.dart';
 import 'package:apartment_app/src/pages/Bill/firebase/fb_billinfo.dart';
 import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
 import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
+import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 
@@ -21,12 +25,14 @@ class AddBillPage extends StatefulWidget {
   // const AddBillPage({Key? key}) : super(key: key);
   final List<BillService> listService;
   final type;
+  final liquidation;
   final id;
   final flag;
   final WE we;
   AddBillPage(
       {required this.id,
       required this.flag,
+      required this.liquidation,
       required this.listService,
       required this.we,
       required this.type});
@@ -41,6 +47,9 @@ class _AddBillPageState extends State<AddBillPage> {
   ContractFB contractFB = new ContractFB();
   ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
   ServiceFB serviceFB = new ServiceFB();
+  DwellersFB dwellersFB = new DwellersFB();
+  RentedRoomFB rentedRoomFB = new RentedRoomFB();
+  FloorInfoFB floorInfoFB = new FloorInfoFB();
   Object? selectedCurrency;
 
   final _fomkey = GlobalKey<FormState>();
@@ -92,8 +101,16 @@ class _AddBillPageState extends State<AddBillPage> {
       _startDayController.text = widget.we.startDay!;
       _depositController.text = this.widget.we.deposit!;
     } else {
-      _depositController.text = '0';
       _startDayController.text = '01/01/' + now.year.toString();
+      if (widget.liquidation == '1') {
+        if (this.widget.we.deposit! != '0')
+          _depositController.text = '-' + this.widget.we.deposit!;
+        else {
+          _depositController.text = this.widget.we.deposit!;
+        }
+      } else {
+        _depositController.text = '0';
+      }
     }
     var a = 0;
     for (int i = 0; i < widget.listService.length; i++) {
@@ -107,7 +124,8 @@ class _AddBillPageState extends State<AddBillPage> {
     var lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
     var last_date =
         "${lastDayOfMonth.toLocal().day}/${lastDayOfMonth.toLocal().month}/${lastDayOfMonth.toLocal().year}";
-    if (widget.type == 1 && widget.flag == '1') {
+    if (widget.we.type == '1' && widget.liquidation == '1' ||
+        widget.we.type == '1' && widget.flag == '1') {
       _chargeRoom.text = '0';
     } else {
       _chargeRoom.text = widget.we.chargeRoom!;
@@ -126,7 +144,7 @@ class _AddBillPageState extends State<AddBillPage> {
             int.parse(serviceFee.text))
         .toString();
     _FinalTotal.text = _Total.text;
-
+    print(widget.we.type);
     super.initState();
   }
 
@@ -227,75 +245,128 @@ class _AddBillPageState extends State<AddBillPage> {
                               height: 10,
                             ),
                           ]))),
-              (widget.flag == '1' && widget.type == '1')
-                  ? Container()
-                  : Card(
-                      elevation: 2,
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            _title("Tiền nhà"),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Column(
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("Tiền nhà"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      widget.flag == '0' && widget.liquidation == '1'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TitleInfoNull(text: "Khoảng thời gian"),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                Text(
+                                  'Thành tiền',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                Container(
+                                  width: width * 0.3,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(enabled: false),
+                                    controller: _chargeRoom,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : widget.we.type == '0'
+                              ? Column(
                                   children: [
-                                    //Chọn ngày bắt đầu
-                                    Container(
-                                      width: width * 0.4,
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: AbsorbPointer(
-                                                child: _textformFieldwithIcon(
-                                                    _startDayController,
-                                                    "Chọn ngày",
-                                                    "ngày thanh toán",
-                                                    Icons
-                                                        .calendar_today_outlined),
-                                              )),
-                                        ],
-                                      ),
+                                    TitleInfoNull(text: "Khoảng thời gian"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        //Chọn ngày bắt đầu
+                                        Container(
+                                          width: width * 0.4,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                  onTap: () {},
+                                                  child: AbsorbPointer(
+                                                    child: _textformFieldwithIcon(
+                                                        _startDayController,
+                                                        "Chọn ngày",
+                                                        "ngày thanh toán",
+                                                        Icons
+                                                            .calendar_today_outlined),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        //Chọn ngày kết thúc
+                                        Container(
+                                          width: width * 0.4,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                  onTap: () {},
+                                                  child: AbsorbPointer(
+                                                    child: _textformFieldwithIcon(
+                                                        _expirationDateController,
+                                                        "Chọn ngày",
+                                                        "hạn thanh toán",
+                                                        Icons
+                                                            .calendar_today_outlined),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    //Chọn ngày kết thúc
-                                    Container(
-                                      width: width * 0.4,
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: AbsorbPointer(
-                                                child: _textformFieldwithIcon(
-                                                    _expirationDateController,
-                                                    "Chọn ngày",
-                                                    "hạn thanh toán",
-                                                    Icons
-                                                        .calendar_today_outlined),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Thành tiền',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width * 0.3,
+                                          child: TextFormField(
+                                            decoration:
+                                                InputDecoration(enabled: false),
+                                            controller: _chargeRoom,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 17,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                   ],
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
+                                )
+                              : Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -320,17 +391,15 @@ class _AddBillPageState extends State<AddBillPage> {
                                       ),
                                     ),
                                   ],
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
+                                ),
+                      SizedBox(
+                        height: 10,
                       ),
-                    ),
-              widget.flag == '0'
+                    ],
+                  ),
+                ),
+              ),
+              (widget.flag == '0' || widget.liquidation == '1')
                   ? Card(
                       elevation: 2,
                       child: Container(
@@ -379,7 +448,7 @@ class _AddBillPageState extends State<AddBillPage> {
                       SizedBox(
                         height: 20,
                       ),
-                      widget.flag == '0'
+                      (widget.flag == '0' || widget.liquidation == '1')
                           ? Column(
                               children: [
                                 _textinRow(
@@ -465,10 +534,16 @@ class _AddBillPageState extends State<AddBillPage> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: MainButton(name: "Thêm", onpressed: _onClick),
-              ),
+              widget.liquidation == '0'
+                  ? Container(
+                      padding: EdgeInsets.all(16),
+                      child: MainButton(name: "Thêm", onpressed: _onClick),
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(16),
+                      child: MainButton(
+                          name: "Thanh lý", onpressed: _onClickLiquidation),
+                    ),
             ],
           ),
         ),
@@ -557,6 +632,23 @@ class _AddBillPageState extends State<AddBillPage> {
     }
   }
 
+  void _onClickLiquidation() {
+    if (_fomkey.currentState!.validate()) {
+      contractFB.liquidation(widget.we.idContract!);
+      rentedRoomFB.collectionReference
+          .where('idRoom', isEqualTo: widget.id)
+          .where('expired', isEqualTo: false)
+          .get()
+          .then((value) => {
+                print(value.docs[0]['id']),
+                rentedRoomFB.liquidation(value.docs[0]['id'])
+              });
+      deleteDweller();
+      floorInfoFB.updateStatus(widget.id, 'Trống');
+      _addBill();
+    }
+  }
+
   void _addBill() {
     var count = 0;
     var now = DateTime.now();
@@ -614,5 +706,17 @@ class _AddBillPageState extends State<AddBillPage> {
                 }
               })
             });
+  }
+
+  Future<void> deleteDweller() async {
+    Stream<QuerySnapshot> query = dwellersFB.collectionReference
+        .where('idApartment', isEqualTo: widget.id)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        dwellersFB.delete(t['idRealTime']);
+      });
+    });
   }
 }
