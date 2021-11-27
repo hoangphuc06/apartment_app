@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/model/card.dart';
+import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/otherListItem.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,6 +82,7 @@ class _OthersTabState extends State<OthersTab> {
               SizedBox(height: 10,),
 
               _tab_detail("Đổi mật khẩu", (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> UpdatePassWordPage()));
                 print("2");
               }),
 
