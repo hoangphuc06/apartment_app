@@ -23,6 +23,7 @@ class ContractDetails extends StatefulWidget {
 class _ContractDetailsState extends State<ContractDetails> {
   ContractFB contractFB = new ContractFB();
   BillInfoFB billInfoFB = new BillInfoFB();
+  bool _isAdd = false;
   final TextEditingController _rulesAController = TextEditingController();
   final TextEditingController _rulesBController = TextEditingController();
   final TextEditingController _rulesCController = TextEditingController();
@@ -171,7 +172,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                             padding: EdgeInsets.only(right: 8),
                             child: RoundedButton(
                                 name: 'Xóa',
-                                onpressed: () => {_onClick()},
+                                onpressed: _isAdd == false ? () => _AddConfirm(context) : null,
                                 color: myRed),
                           ),
                           widget.flag == '0'
@@ -323,4 +324,34 @@ class _ContractDetailsState extends State<ContractDetails> {
           ],
         ),
       );
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa hợp đồng này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    _onClick();
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
 }
