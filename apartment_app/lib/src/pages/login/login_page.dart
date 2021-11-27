@@ -12,7 +12,7 @@ import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../app.dart';
+import '../../app.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
