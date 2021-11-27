@@ -19,6 +19,7 @@ class ServiceDetailPage extends StatefulWidget {
 class _ServiceDetailPageState extends State<ServiceDetailPage> {
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
   ServiceFB fb = new ServiceFB();
+  bool _isAdd = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,12 +105,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   }
   Widget delete() {
     return FloatActionButtonText(
-      onPressed: (){
-        fabKey.currentState!.animate();
-        this.fb.delete(widget.service.id.toString());
-        Navigator.pop(context);
-
-      },
+      onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
       icon: Icons.delete,
       textLeft: -80,
       text: "Xóa",
@@ -182,4 +178,36 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
       ],
     ),
   );
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa dịch vụ này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    fabKey.currentState!.animate();
+                    this.fb.delete(widget.service.id.toString());
+                    Navigator.pop(context);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
 }

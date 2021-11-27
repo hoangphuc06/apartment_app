@@ -18,6 +18,7 @@ class CategotyApartmentDetailPage extends StatefulWidget {
 class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPage> {
 
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  bool _isAdd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -111,9 +112,7 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
 
   Widget delete() {
     return FloatActionButtonText(
-      onPressed: (){
-        fabKey.currentState!.animate();
-      },
+      onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
       icon: Icons.delete,
       textLeft: -80,
       text: "Xóa",
@@ -186,4 +185,34 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
       ],
     ),
   );
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa loại căn hộ này này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    fabKey.currentState!.animate();
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
 }
