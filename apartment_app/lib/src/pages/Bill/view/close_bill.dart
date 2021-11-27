@@ -15,8 +15,14 @@ import 'package:flutter/material.dart';
 class CloseBill extends StatefulWidget {
   // const CloseBill({ Key? key }) : super(key: key);
   late String id;
+  late String liquidation;
+  List<String> listContract;
   late String flag;
-  CloseBill({required this.id, required this.flag});
+  CloseBill(
+      {required this.id,
+      required this.flag,
+      required this.liquidation,
+      required this.listContract});
   @override
   _CloseBillState createState() => _CloseBillState();
 }
@@ -77,13 +83,14 @@ class _CloseBillState extends State<CloseBill> {
     _check.text = '0';
     contractFB.collectionReference
         .where('room', isEqualTo: this.widget.id)
+        .where('liquidation', isEqualTo: false)
         .get()
         .then((value) => {
               _chargeRoom.text = value.docs[0]['roomCharge'],
               _deposit.text = value.docs[0]['deposit'],
               _startDay.text = value.docs[0]['startDay'],
               _type.text = value.docs[0]['type'],
-              _idContract.text= value.docs[0]['id']
+              _idContract.text = value.docs[0]['id']
             });
     var now = DateTime.now();
     billInfoFB.collectionReference
@@ -581,6 +588,7 @@ class _CloseBillState extends State<CloseBill> {
           context,
           MaterialPageRoute(
               builder: (context) => AddBillPage(
+                    liquidation: widget.liquidation,
                     type: widget.flag,
                     flag: _check.text,
                     id: widget.id,

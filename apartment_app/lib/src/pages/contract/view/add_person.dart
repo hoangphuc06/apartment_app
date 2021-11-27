@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_owner.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
@@ -11,18 +12,20 @@ import 'package:dropdown_formfield/dropdown_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:select_form_field/select_form_field.dart';
 
-class AddRenter extends StatefulWidget {
-  const AddRenter({Key? key}) : super(key: key);
-
+class AddPerson extends StatefulWidget {
+  // const AddPerson({Key? key}) : super(key: key);
+  final String flag;
+  AddPerson({required this.flag});
   @override
-  _AddRenterState createState() => _AddRenterState();
+  _AddPersonState createState() => _AddPersonState();
 }
 
-class _AddRenterState extends State<AddRenter> {
+class _AddPersonState extends State<AddPerson> {
   final _formkey = GlobalKey<FormState>();
 
   DwellersFB dwellersFB = new DwellersFB();
   RenterFB renterFB = new RenterFB();
+  OwnerFB ownerFB = new OwnerFB();
   DateTime selectedDate = DateTime.now();
 
   final TextEditingController _nameController = TextEditingController();
@@ -169,7 +172,7 @@ class _AddRenterState extends State<AddRenter> {
 
               MainButton(
                 name: "Thêm",
-                onpressed: _addRenter,
+                onpressed: _AddPerson,
               ),
               SizedBox(
                 height: 50,
@@ -181,7 +184,7 @@ class _AddRenterState extends State<AddRenter> {
     );
   }
 
-  void _addRenter() {
+  void _AddPerson() {
     if (_formkey.currentState!.validate()) {
       String name = _nameController.text.trim();
       String birthday = _birthdayController.text.trim();
@@ -192,14 +195,21 @@ class _AddRenterState extends State<AddRenter> {
       String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
-
-      renterFB
-          .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
-              email, false)
-          .then((value) => {
-                Navigator.pop(context),
-              });
-      ;
+      if (widget.flag == '0') {
+        renterFB
+            .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
+                email, false)
+            .then((value) => {
+                  Navigator.pop(context),
+                });
+      } else {
+        ownerFB
+            .add(
+                name, birthday, gender, cmnd, homeTown, job, phoneNumber, email)
+            .then((value) => {
+                  Navigator.pop(context),
+                });
+      }
     }
   }
 

@@ -41,6 +41,10 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   firebase_storage: ^10.1.0
   file_picker: ^4.2.4
+  pdf: ^3.6.3
+  open_file: ^3.2.1
+  path_provider: ^2.0.1
+  syncfusion_flutter_pdf: ^19.3.55-beta
 
   charts_flutter: ^0.12.0
 dev_dependencies:
@@ -67,7 +71,14 @@ flutter:
     - assets/images/
     - assets/service_icon/
     - assets/notification_icon/
-
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/OpenSans-Bold.ttf
+        - asset: assets/OpenSans-BoldItalic.ttf
+        - asset: assets/OpenSans-Italic.ttf
+        - asset: assets/OpenSans-Regular.ttf
+         
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

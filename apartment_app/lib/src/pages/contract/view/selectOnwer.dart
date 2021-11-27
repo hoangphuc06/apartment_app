@@ -1,5 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_owner.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 
@@ -12,23 +13,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-class SelectRenterContract extends StatefulWidget {
-  const SelectRenterContract({Key? key}) : super(key: key);
+class SelectOwner extends StatefulWidget {
+  const SelectOwner({Key? key}) : super(key: key);
 
   @override
-  _SelectRenterContractState createState() => _SelectRenterContractState();
+  _SelectOwnerState createState() => _SelectOwnerState();
 }
 
-class _SelectRenterContractState extends State<SelectRenterContract> {
+class _SelectOwnerState extends State<SelectOwner> {
   DwellersFB dwellersFB = new DwellersFB();
-  RenterFB renterFB = new RenterFB();
+  OwnerFB ownerFB = new OwnerFB();
   String name = '';
   String phoneNumber = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar("Người thuê"),
+      appBar: myAppBar("Đại diện cho thuê"),
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -40,7 +41,7 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
             Expanded(
               child: SingleChildScrollView(
                 child: StreamBuilder(
-                    stream: renterFB.collectionReference.snapshots(),
+                    stream: ownerFB.collectionReference.snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
@@ -109,8 +110,8 @@ class _SelectRenterContractState extends State<SelectRenterContract> {
         child: Icon(Icons.add),
         backgroundColor: myGreen,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddPerson(flag: "0")));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddPerson(flag: '1',)));
         },
       ),
     );

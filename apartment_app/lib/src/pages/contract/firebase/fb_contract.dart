@@ -8,6 +8,7 @@ class ContractFB {
 
   Future<void> add(
       String host,
+      String nameHost,
       String room,
       String startDay,
       String expirationDate,
@@ -16,6 +17,7 @@ class ContractFB {
       String roomCharge,
       String deposit,
       String renter,
+      String nameRenter,
       String rulesA,
       String rulesB,
       String rulesC,
@@ -29,6 +31,7 @@ class ContractFB {
         .set({
           "id": id,
           "host": host,
+          "nameHost": nameHost,
           "room": room,
           "startDay": startDay,
           "expirationDate": expirationDate,
@@ -37,6 +40,7 @@ class ContractFB {
           "roomCharge": roomCharge,
           "deposit": deposit,
           "renter": renter,
+          "nameRenter": nameRenter,
           "rulesA": rulesA,
           "rulesB": rulesB,
           "rulesC": rulesC,
@@ -92,7 +96,8 @@ class ContractFB {
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
   }
-   Future<void> liquidation(String id) async {
+
+  Future<void> liquidation(String id) async {
     return FirebaseFirestore.instance
         .collection("contract")
         .doc(id)

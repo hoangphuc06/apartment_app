@@ -1,27 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DwellersFB {
+class OwnerFB {
   CollectionReference collectionReference =
-      FirebaseFirestore.instance.collection("dweller");
-  String idreal = (new DateTime.now().millisecondsSinceEpoch).toString();
+      FirebaseFirestore.instance.collection("owner");
+
   Future<void> add(
-      String id,
-      String idApartment,
-      String name,
-      String birthday,
-      String gender,
-      String cmnd,
-      String homeTown,
-      String job,
-      String phoneNumber,
-      String email,
-      String note) async {
+    String name,
+    String birthday,
+    String gender,
+    String cmnd,
+    String homeTown,
+    String job,
+    String phoneNumber,
+    String email,
+  ) async {
+    String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+
     return collectionReference
-        .doc(idreal)
+        .doc(id)
         .set({
           "id": id,
-          "idRealTime": idreal,
-          "idApartment": idApartment,
           "name": name,
           "birthday": birthday,
           "gender": gender,
@@ -30,7 +28,6 @@ class DwellersFB {
           "job": job,
           "phoneNumber": phoneNumber,
           "email": email,
-          "note": note
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
@@ -38,7 +35,6 @@ class DwellersFB {
 
   Future<void> update(
       String id,
-      String idApartment,
       String name,
       String birthday,
       String gender,
@@ -46,14 +42,11 @@ class DwellersFB {
       String homeTown,
       String job,
       String phoneNumber,
-      String email,
-      String note) async {
+      String email) async {
     return collectionReference
         .doc(id)
         .update({
-          
           "id": id,
-          "idApartment": idApartment,
           "name": name,
           "birthday": birthday,
           "gender": gender,
@@ -62,7 +55,6 @@ class DwellersFB {
           "job": job,
           "phoneNumber": phoneNumber,
           "email": email,
-          "note": note
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
@@ -76,8 +68,5 @@ class DwellersFB {
         })
         .then((value) => print("completed"))
         .catchError((error) => print("fail"));
-  }
-   Future<void> delete(String id) async {
-    return FirebaseFirestore.instance.collection("dweller").doc(id).delete();
   }
 }
