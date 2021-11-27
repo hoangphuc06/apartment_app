@@ -144,7 +144,9 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
                     this.model= new StatisticModel(0,0,0,0,0);
 
                     snapshot.data!.docs.forEach((element) {
-                        if(element['yearBill']==this.selectYear&&element['monthBill']==this.selectMonth)
+                        if(element['yearBill']==this.selectYear&&element['monthBill']==this.selectMonth
+                        &&element['status']!='Chưa thanh toán'
+                        )
                           {
                             this.model.total+=int.parse(element['total']);
                             this.model.fine+=int.parse(element['fine']);

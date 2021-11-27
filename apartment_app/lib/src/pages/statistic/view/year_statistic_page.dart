@@ -173,7 +173,7 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                           this.listStatistic.add(new StatisticModel(0,0,0,0,0));
                       }
                       snapshot.data!.docs.forEach((element) {
-                        if(element['yearBill']==this.selectYear)
+                        if(element['yearBill']==this.selectYear&& element['status']!='Chưa thanh toán')
                         {
                           this.model.total+=int.parse(element['total']);
                           this.model.fine+=int.parse(element['fine']);

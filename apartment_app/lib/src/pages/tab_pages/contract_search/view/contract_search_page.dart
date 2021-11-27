@@ -154,7 +154,7 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
       setState(() {
       });
     },
-    keyboardType: this.option? TextInputType.name: TextInputType.phone,
+    keyboardType: TextInputType.phone,
     decoration: InputDecoration(
         hintText: this.hitText,
         icon: Icon(Icons.search)

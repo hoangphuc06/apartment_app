@@ -194,6 +194,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
                                   }
                                   this.idAndName.clear();
                                   this.ListCategory.clear();
+                                  this.ListCategory.add('Tất cả');
                                   snapshot.data!.docs.forEach((element) {
                                     idAndName.putIfAbsent(
                                         element['id'], () => element['name']);
@@ -240,7 +241,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
     if ((temp.status == this.state ||
             this.state == null ||
             this.state == 'Tất cả            ') &&
-        (temp.categoryid == value || value == '') && checkFloor&&
+        (temp.categoryid == value || value == ''||this.Category=='Tất cả') && checkFloor&&
         ((this.option &&
                 (temp.id!.contains(this.searchController.text) ||
                     this.searchController.text.isEmpty)) ||
@@ -260,7 +261,7 @@ class _ApartmentSearchTabState extends State<ApartmentSearchTab> {
           ),
           hintText: this.hitText,
         ),
-        keyboardType: this.option ? TextInputType.name : TextInputType.number,
+        keyboardType: TextInputType.number,
         onChanged: (value) {
           setState(() {});
         },
