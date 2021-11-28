@@ -446,6 +446,7 @@ class _ContractDetailsState extends State<ContractDetails> {
             ],
           );
         });
+  }
   Future<void> deleteDweller() async {
     Stream<QuerySnapshot> query = dwellersFB.collectionReference
         .where('idApartment', isEqualTo: widget.idRoom)

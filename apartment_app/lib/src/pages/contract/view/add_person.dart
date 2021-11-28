@@ -204,7 +204,7 @@ class _AddPersonState extends State<AddPerson> {
       if (widget.flag == '0') {
         renterFB
             .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
-                email, false)
+                email, false,id)
             .then((value) => {
                   Navigator.pop(context),
                 });
@@ -217,14 +217,14 @@ class _AddPersonState extends State<AddPerson> {
                 });
       }
 
-      renterFB
-          .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
-              email, false,id)
-          .then((value) => {
-                createAccount(),
-                //MsgDialog.showMsgDialog(context, "Tạo tài khoản", "tài khoản $_emailController"),
-                Navigator.pop(context),
-              });
+      // renterFB
+      //     .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
+      //         email, false,id)
+      //     .then((value) => {
+      //           createAccount(),
+      //           //MsgDialog.showMsgDialog(context, "Tạo tài khoản", "tài khoản $_emailController"),
+      //           Navigator.pop(context),
+      //         });
     }
   }
 

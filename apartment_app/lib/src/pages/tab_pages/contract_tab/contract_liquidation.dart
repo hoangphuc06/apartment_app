@@ -20,6 +20,9 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
     ContractFB contractFB = new ContractFB();
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
+
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       // appBar: myAppBar(
@@ -62,7 +65,7 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ContractDetails(
-                                            listContract: [],
+                                            listContract: ["h"],
                                             id: x["id"],
                                             idRoom: x['room'],
                                             flag: '1',

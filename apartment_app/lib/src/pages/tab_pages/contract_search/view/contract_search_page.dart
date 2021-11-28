@@ -33,6 +33,29 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
   bool check=false;
   String? type= 'Tất cả';
   List<String> typelist=['Tất cả','Hợp đồng bán','Hợp đông thuê'];
+
+  List<String> listContract = <String>[];
+
+  Future<void> loadData() async {
+    ContractFB contractFB = new ContractFB();
+    listContract.add('h');
+    Stream<QuerySnapshot> query = contractFB.collectionReference
+        .where('liquidation', isEqualTo: false)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listContract.add(t['id']);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
   void filterBottomSheep() {
     showModalBottomSheet(builder: (BuildContext context) {
       return StatefulBuilder(builder: (BuildContext context, void Function(void Function()) setState1) {
@@ -160,11 +183,6 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
         icon: Icon(Icons.search)
     ),
   );
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,8 +241,9 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
                                   MaterialPageRoute(
                                       builder: (context) => ContractDetails(
                                         id:  Cache[index].id.toString(),
-                                        idRoom:  Cache[index].id.toString(),
+                                        idRoom:  Cache[index].room.toString(),
                                         flag: '0',
+                                        listContract: listContract,
                                       )));
                             }
                             );
