@@ -1,5 +1,7 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
+import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
+import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
@@ -7,6 +9,7 @@ import 'package:apartment_app/src/pages/dweller/view/add_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/detail_dweller_page.dart';
 import 'package:apartment_app/src/pages/dweller/view/edit_dweller_page.dart';
 import 'package:apartment_app/src/widgets/cards/dweller_card.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +26,18 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
   DwellersFB dwellersFB = new DwellersFB();
   RentedRoomFB rentedRoomFB = new RentedRoomFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
+  ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
+  ContractFB contractFB = new ContractFB();
+  bool _canAdd = false;
 
   late int num;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    CheckforAdd();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +62,7 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
                     } else {
                       num = snapshot.data!.docs.length;
                       floorInfoFB.updateDweller(widget.id_apartment, num.toString());
+                      CheckforAdd();
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: ScrollPhysics(),
@@ -75,15 +89,22 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddDwellerPage(widget.id_apartment)));
+        onPressed: (){
+          if(_canAdd == true)
+            gotoPage();
+          else MsgDialog.showMsgDialog(context, "Chỉ phòng có hợp đồng mới có thể thêm người", "");
         },
         backgroundColor: myGreen,
       ),
     );
+  }
+
+
+  gotoPage(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddDwellerPage(widget.id_apartment)));
   }
 
   _title(String text) => Text(
@@ -93,4 +114,17 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
         fontWeight: FontWeight.bold
     ),
   );
+  Future<void> CheckforAdd() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("contract").where('room',isEqualTo: this.widget.id_apartment).where('liquidation',isEqualTo: "false").where('isVisible',isEqualTo: "true").get();
+    //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
+    print(querySnapshot.docs.length);
+    if(querySnapshot.docs.length == 0) {
+      print("oke");
+      _canAdd = false;
+    }
+    else {
+      print("not oke");
+      _canAdd = true;
+    }
+  }
 }

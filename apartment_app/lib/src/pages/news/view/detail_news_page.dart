@@ -19,6 +19,8 @@ class DetailNewsPage extends StatefulWidget {
 class _DetailNewsPageState extends State<DetailNewsPage> {
 
   NewsFB newFB = new NewsFB();
+  final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  bool _isAdd = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,25 +95,45 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: myGreen,
-        child: Icon(Icons.edit, color: Colors.white,),
-        onPressed: (){
-          edit();
-        },
+      floatingActionButton: AnimatedFloatingActionButton(
+          key: fabKey,
+          fabButtons: <Widget>[
+            edit(),
+            delete(),
+          ],
+          colorStartAnimation: myGreen,
+          colorEndAnimation: myGreen,
+          animatedIconData: AnimatedIcons.menu_close //To principal button
       ),
     );
   }
 
-  Future<void> edit() async {
+  Widget edit() {
+    return FloatActionButtonText(
+      onPressed: (){
+        fabKey.currentState!.animate();
+        _gotoPage();
+      },
+      icon: Icons.mode_edit,
+      text: "Sửa",
+      textLeft: -80,
+    );
+  }
+
+  Widget delete() {
+    return FloatActionButtonText(
+      onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
+      icon: Icons.delete,
+      textLeft: -80,
+      text: "Xóa",
+    );
+  }
+
+  _gotoPage(){
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => EditNewsPage(widget.news)));
-    // if(n!=null)
-    //   setState(() {
-    //     this.widget.news = n;
-    //   });
   }
 
   String readDatime(String timestamp) {
@@ -129,5 +151,38 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
       SizedBox(height: 10,),
     ],
   );
+
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa tin này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    fabKey.currentState!.animate();
+                    this.newFB.delete(widget.news.timestamp.toString());
+                    Navigator.pop(context);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
 
 }

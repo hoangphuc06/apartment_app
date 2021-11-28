@@ -2,6 +2,7 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/apartment/view/selectService.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class ListServicePage extends StatefulWidget {
 
 class _ListServicePageState extends State<ListServicePage> {
    List<String> listIdService = <String>[];
+   bool _canAdd = false;
 
   Future<void> loadData() async {
     listIdService.add("s");
@@ -60,6 +62,7 @@ class _ListServicePageState extends State<ListServicePage> {
                   if (!snapshot.hasData) {
                     return Center(child: Text("No Data"));
                   } else {
+                    CheckforAdd();
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
@@ -119,12 +122,19 @@ class _ListServicePageState extends State<ListServicePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SelectServicePage(listIdService: listIdService,id: this.widget.id,)));
+          if(_canAdd == true)
+            gotoPage();
+          else MsgDialog.showMsgDialog(context, "Chỉ phòng có hợp đồng mới có thể thêm dịch vụ", "");
         },
         backgroundColor: myGreen,
       ),
     );
   }
+
+  gotoPage(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SelectServicePage(listIdService: listIdService,id: this.widget.id,)));
+  }
+
    _title(String text) => Text(
      text,
      style: TextStyle(
@@ -132,4 +142,17 @@ class _ListServicePageState extends State<ListServicePage> {
          fontWeight: FontWeight.bold
      ),
    );
+   Future<void> CheckforAdd() async {
+     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("contract").where('room',isEqualTo: this.widget.id).where('liquidation',isEqualTo: "false").where('isVisible',isEqualTo: "true").get();
+     //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
+     print(querySnapshot.docs.length);
+     if(querySnapshot.docs.length == 0) {
+       print("oke");
+       _canAdd = false;
+     }
+     else {
+       print("not oke");
+       _canAdd = true;
+     }
+   }
 }

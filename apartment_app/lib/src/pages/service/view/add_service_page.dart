@@ -50,7 +50,7 @@ class StateAddPage extends State<AddServicPage> {
     this.buttonText='Thay đổi thông tin';
     this.nameController.text=service!.name.toString();
     this.chargeController.text=service.charge.toString();
-    type= service.type.toString();
+    //type= service.type.toString();
     noteController.text= service.detail.toString();
   }
   void delete() {
@@ -63,11 +63,11 @@ class StateAddPage extends State<AddServicPage> {
       this.info= new ServiceModel(
           name :this.nameController.text,
           charge: this.chargeController.text,
-          type: type,
+          //type: type,
           detail: noteController.text
       );
       if(this.buttonText!='Thêm dịch vụ')
-      this.fb.update(widget.sv!.id.toString(), this.nameController.text, this.noteController.text, this.chargeController.text, type);
+      this.fb.update(widget.sv!.id.toString(), this.nameController.text, this.noteController.text, this.chargeController.text);
       Navigator.pop(context,this.info);
     }
     else {
@@ -132,6 +132,13 @@ class StateAddPage extends State<AddServicPage> {
       controller: this.chargeController,
       decoration: MyStyle().style_decoration_tff("Nhập phí dịch vụ"),
       keyboardType: TextInputType.number,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập phí dịch vụ tên";
+        }
+
+        return null;
+      },
     ),
   );
   @override
@@ -170,9 +177,9 @@ class StateAddPage extends State<AddServicPage> {
                       _nameTextField(),
                       SizedBox(height: 10,),
 
-                      TitleInfoNotNull(text: "Thu phí dựa trên"),
-                      SizedBox(height: 10,),
-                      _dropDownList(),
+                      // TitleInfoNotNull(text: "Thu phí dựa trên"),
+                      // SizedBox(height: 10,),
+                      // _dropDownList(),
                       SizedBox(height: 10,),
                       TitleInfoNotNull(text:  "Phí dịch vụ"),
                       SizedBox(height: 10,),

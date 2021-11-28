@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ServiceModel {
    String? name;
-   String? type;
+   //String? type;
    String?charge;
    String? detail;
    String? id;
@@ -13,7 +13,6 @@ class ServiceModel {
     this.name,
     this.charge,
     this.detail,
-    this.type,
 
   });
 
@@ -24,7 +23,7 @@ class ServiceModel {
       name: doc['name'],
       charge: doc['charge'],
       detail: doc['note'],
-      type: doc['type'],
+      /*type: doc['type'],*/
     );
   }
 }
