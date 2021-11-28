@@ -1,13 +1,16 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_account.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_renter.dart';
 
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
 import 'package:dropdown_formfield/dropdown_formfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:select_form_field/select_form_field.dart';
 
@@ -20,10 +23,13 @@ class AddRenter extends StatefulWidget {
 
 class _AddRenterState extends State<AddRenter> {
   final _formkey = GlobalKey<FormState>();
+  String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+  late FirebaseAuth _firebaseAuth;
 
   DwellersFB dwellersFB = new DwellersFB();
   RenterFB renterFB = new RenterFB();
   DateTime selectedDate = DateTime.now();
+  AccountFB accountFB = new AccountFB();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
@@ -33,7 +39,7 @@ class _AddRenterState extends State<AddRenter> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _jobController = TextEditingController();
   final TextEditingController _homeTownController = TextEditingController();
-  final TextEditingController _roleController = TextEditingController();
+  //final TextEditingController _roleController = TextEditingController();
 
   final List<Map<String, dynamic>> _items = [
     {
@@ -101,11 +107,12 @@ class _AddRenterState extends State<AddRenter> {
                 padding: MyStyle().padding_container_tff(),
                 decoration: MyStyle().style_decoration_container(),
                 child: SelectFormField(
-                  decoration: MyStyle().style_decoration_tff("Nhập giới tính"),
+                  decoration: MyStyle().style_decoration_tff("Chọn giới tính"),
                   type: SelectFormFieldType.dropdown, // or can be dialog
                   items: _items,
                   onChanged: (val) => _genderController.text = val,
                   onSaved: (val) => _genderController.text = val!,
+                  validator: (val) => val == "" ? 'Vui lòng chọn giới tính' : null,
                 ),
               ),
 
@@ -189,17 +196,17 @@ class _AddRenterState extends State<AddRenter> {
       String cmnd = _cmndController.text.trim();
       String homeTown = _homeTownController.text.trim();
       String job = _jobController.text.trim();
-      String role = _roleController.text.trim();
       String phoneNumber = _phoneNumberController.text.trim();
       String email = _emailController.text.trim();
 
       renterFB
           .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
-              email, false)
+              email, false,id)
           .then((value) => {
+                createAccount(),
+                //MsgDialog.showMsgDialog(context, "Tạo tài khoản", "tài khoản $_emailController"),
                 Navigator.pop(context),
               });
-      ;
     }
   }
 
@@ -253,10 +260,16 @@ class _AddRenterState extends State<AddRenter> {
         padding: MyStyle().padding_container_tff(),
         decoration: MyStyle().style_decoration_container(),
         child: TextFormField(
-          decoration: MyStyle().style_decoration_tff("Nhập email"),
+          decoration: MyStyle().style_decoration_tff("Nhập CMND/CCCD"),
           style: MyStyle().style_text_tff(),
           controller: _cmndController,
           keyboardType: TextInputType.text,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng số CMND hoặc CCCD";
+            }
+            return null;
+          },
         ),
       );
 
@@ -267,7 +280,13 @@ class _AddRenterState extends State<AddRenter> {
           decoration: MyStyle().style_decoration_tff("Nhập số điện thoại"),
           style: MyStyle().style_text_tff(),
           controller: _phoneNumberController,
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.number,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập số điện thoại";
+            }
+            return null;
+          },
         ),
       );
 
@@ -281,7 +300,7 @@ class _AddRenterState extends State<AddRenter> {
           keyboardType: TextInputType.text,
           validator: (val) {
             if (val!.isEmpty) {
-              return null;
+              return "Vui lòng nhập email";
             }
             var isValidEmail = RegExp(
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
@@ -344,4 +363,24 @@ class _AddRenterState extends State<AddRenter> {
         style: TextStyle(
             color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
       );
+  Future createAccount() async{
+    //var user = _firebaseAuth.createUserWithEmailAndPassword(email: _emailController.text, password: "123456");
+    try {
+      UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: "123456"
+      );
+      String uid = user.user!.uid;
+      print(uid);
+      await accountFB.add(id, uid, _emailController.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

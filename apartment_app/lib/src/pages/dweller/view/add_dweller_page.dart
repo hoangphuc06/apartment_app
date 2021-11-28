@@ -121,6 +121,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
                         items: _items,
                         onChanged: (val) => _genderController.text = val,
                         onSaved: (val) => _genderController.text = val!,
+                        validator: (val) => val == "" ? 'Vui lòng chọn giới tính' : null,
                       ),
                     ),
 

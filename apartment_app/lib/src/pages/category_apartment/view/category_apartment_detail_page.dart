@@ -1,8 +1,11 @@
 import 'package:animated_float_action_button/animated_floating_action_button.dart';
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/pages/category_apartment/firebase/fb_category_apartment.dart';
 import 'package:apartment_app/src/pages/category_apartment/model/category_apartment_model.dart';
 import 'package:apartment_app/src/pages/category_apartment/view/edit_category_apartment_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +21,13 @@ class CategotyApartmentDetailPage extends StatefulWidget {
 class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPage> {
 
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  CategoryApartmentFB categoryApartmentFB = new CategoryApartmentFB();
   bool _isAdd = false;
+  bool _canDelete = false;
 
   @override
   Widget build(BuildContext context) {
+    CheckforDelete();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: myAppBar("Thông tin"),
@@ -201,8 +207,19 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
                       _isAdd = false;
                     });
                     fabKey.currentState!.animate();
-                    // Close the dialog
-                    Navigator.of(context).pop();
+                    if(_canDelete == true)
+                    {
+                      fabKey.currentState!.animate();
+                      this.categoryApartmentFB.delete(widget.categoryApartment.id.toString());
+                      Navigator.pop(context);
+                    }
+                    else {
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      MsgDialog.showMsgDialog(
+                          context, "Không thể xóa loại phòng đang được sử dụng",
+                          "");
+                    }
                   },
                   child: Text('Có')),
               TextButton(
@@ -214,5 +231,19 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
             ],
           );
         });
+  }
+
+  Future<void> CheckforDelete() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("floorinfo").where('categoryid',isEqualTo: widget.categoryApartment.id.toString()).get();
+    //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
+    print(querySnapshot.docs.length);
+    if(querySnapshot.docs.length == 0) {
+      print("oke");
+      _canDelete = true;
+    }
+    else {
+      print("not oke");
+      _canDelete = false;
+    }
   }
 }

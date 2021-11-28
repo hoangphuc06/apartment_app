@@ -37,7 +37,7 @@ class StateServicePage extends State<ServicePage> {
         print('path::' + t['icon'].toString());
         ListServiceModel.add(ServiceModel(id: t['id'],
             name: t['name'],
-            type: t['type'],
+            //type: t['type'],
             detail: t['note'],
             charge: t['charge']));
       });
@@ -51,7 +51,7 @@ class StateServicePage extends State<ServicePage> {
       this.fb.update(
           sv.id.toString(), Result.name.toString(),
           Result.detail.toString(), Result.charge.toString(),
-          Result.type.toString());
+          /*Result.type.toString()*/);
     }
     setState(() {});
   }
@@ -77,7 +77,7 @@ class StateServicePage extends State<ServicePage> {
           if (temp == null) return;
           this.fb.add( temp.name.toString(),
               temp.detail.toString(), temp.charge.toString(),
-              temp.type.toString());
+              /*temp.type.toString()*/);
           //    listService.add(temp);
           setState(() {});
         },

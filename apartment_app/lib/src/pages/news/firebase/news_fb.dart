@@ -25,4 +25,7 @@ class NewsFB
         .then((value) => print("completed"))
         .catchError((error)=>print("fail"));
   }
+  Future<void> delete(String id) async {
+    return FirebaseFirestore.instance.collection("news").doc(id).delete();
+  }
 }

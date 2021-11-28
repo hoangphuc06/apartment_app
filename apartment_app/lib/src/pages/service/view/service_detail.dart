@@ -4,6 +4,8 @@ import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'add_service_page.dart';
@@ -20,8 +22,10 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
   ServiceFB fb = new ServiceFB();
   bool _isAdd = false;
+  bool _canDelete = false;
   @override
   Widget build(BuildContext context) {
+    CheckforDelete();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: myAppBar("Thông tin dịch vụ"),
@@ -35,8 +39,8 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                 _title("Thông tin chi tiết"),
                 SizedBox(height: 10,),
                 _detail("Tên dịch vụ", widget.service.name.toString()),
-                SizedBox(height: 10,),
-                _detail("Loại dịch vụ", widget.service.type.toString()),
+                // SizedBox(height: 10,),
+                // _detail("Loại dịch vụ", widget.service.type.toString()),
                 SizedBox(height: 10,),
                 _detail("Phí dịch vụ", widget.service.charge.toString()),
                 SizedBox(height: 30,),
@@ -193,11 +197,16 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                     setState(() {
                       _isAdd = false;
                     });
-                    fabKey.currentState!.animate();
-                    this.fb.delete(widget.service.id.toString());
-                    Navigator.pop(context);
+                    if(_canDelete == true)
+                    {
+                      fabKey.currentState!.animate();
+                      this.fb.delete(widget.service.id.toString());
+                      Navigator.pop(context);
+                    }
+                    else{
+                      Navigator.of(context).pop();
+                      MsgDialog.showMsgDialog(context, "Không thể xóa dịch vụ đang được sử dụng", "");}
                     // Close the dialog
-                    Navigator.of(context).pop();
                   },
                   child: Text('Có')),
               TextButton(
@@ -209,5 +218,18 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
             ],
           );
         });
+  }
+  Future<void> CheckforDelete() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("service_apartment").where('idService',isEqualTo: widget.service.id.toString()).get();
+    //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
+    print(querySnapshot.docs.length);
+    if(querySnapshot.docs.length == 0) {
+      print("oke");
+      _canDelete = true;
+    }
+    else {
+      print("not oke");
+      _canDelete = false;
+    }
   }
 }

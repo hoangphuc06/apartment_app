@@ -14,8 +14,9 @@ class RenterFB {
       String job,
       String phoneNumber,
       String email,
-      bool expired) async {
-    String id = (new DateTime.now().millisecondsSinceEpoch).toString();
+      bool expired,
+      String id) async {
+    //String id = (new DateTime.now().millisecondsSinceEpoch).toString();
 
     return collectionReference
         .doc(id)
