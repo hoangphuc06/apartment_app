@@ -15,13 +15,33 @@ class ContractLiquidation extends StatefulWidget {
 }
 
 class _ContractLiquidationState extends State<ContractLiquidation> {
+  List<String> listContract = <String>[];
+
+  Future<void> loadData() async {
+    ContractFB contractFB = new ContractFB();
+    listContract.add('gh');
+    Stream<QuerySnapshot> query = contractFB.collectionReference
+        .where('liquidation', isEqualTo: false)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        listContract.add(t['id']);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    loadData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ContractFB contractFB = new ContractFB();
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -65,7 +85,7 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ContractDetails(
-                                            listContract: ["h"],
+                                            listContract: listContract,
                                             id: x["id"],
                                             idRoom: x['room'],
                                             flag: '1',
