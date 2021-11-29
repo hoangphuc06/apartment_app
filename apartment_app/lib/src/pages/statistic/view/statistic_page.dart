@@ -19,21 +19,23 @@ class _StatisticPageState  extends State<StatisticPage>{
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          elevation: 0,
+          elevation: 1,
           centerTitle: true,
           title: Text(
             "Thống kê",
             style: TextStyle(color:myGreen, fontWeight: FontWeight.bold, fontSize: 22),
           ),
-          bottom: TabBar(
-            labelColor: myGreen,
-            labelStyle: TextStyle(color: myGreen, fontSize: 15, fontWeight: FontWeight.bold),
-            indicatorColor: myGreen,
-            indicatorWeight: 5,
-            tabs: [
-              Tab(text: "Theo tháng",),
-              Tab(text: "Theo năm",),
-            ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: TabBar(
+              labelColor: Colors.black,
+              indicatorColor: myGreen,
+              indicatorWeight: 3,
+              tabs: [
+                Tab(text: "Theo tháng",),
+                Tab(text: "Theo năm",),
+              ],
+            ),
           ),
         ),
 

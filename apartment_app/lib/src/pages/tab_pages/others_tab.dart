@@ -1,6 +1,6 @@
 import 'package:apartment_app/src/colors/colors.dart';
 import 'package:apartment_app/src/model/card.dart';
-import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
+import 'package:apartment_app/src/pages/update_password/update_password_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/cards/otherListItem.dart';
 import 'package:firebase_auth/firebase_auth.dart';
