@@ -61,7 +61,7 @@ class _ContractDetailsState extends State<ContractDetails> {
   RenterModel renterModel = new RenterModel();
   @override
   void initState() {
-    print('ss' + widget.listContract[1]);
+  
     contractFB.collectionReference.doc(widget.id).get().then((value) => {
           contract = Contract.fromDocument(value),
           renterFB.collectionReference
