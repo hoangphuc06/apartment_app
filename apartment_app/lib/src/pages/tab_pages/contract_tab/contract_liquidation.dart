@@ -29,53 +29,53 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
       //   "Hợp đồng",
       // ),
       body: SingleChildScrollView(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Padding(
-          padding: EdgeInsets.only(left: 16),
-          child: _title("Danh sách hợp đồng"),
-        ),
-        Container(
-          margin: EdgeInsets.all(16),
-          child: StreamBuilder(
-              stream: contractFB.collectionReference
-                  .where('isVisible', isEqualTo: true)
-                  .where('liquidation', isEqualTo: true)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Text("No Data"),
-                  );
-                } else {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, i) {
-                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                        return ContractCard(
-                            id: x["id"],
-                            host: x["host"],
-                            room: x["room"],
-                            startDay: x["startDay"],
-                            expirationDate: x["expirationDate"],
-                            funtion: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ContractDetails(
-                                            listContract: ["h"],
-                                            id: x["id"],
-                                            idRoom: x['room'],
-                                            flag: '1',
-                                          )));
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              _title("Danh sách hợp đồng"),
+              SizedBox(height: 10,),
+              Container(
+                //margin: EdgeInsets.all(16),
+                child: StreamBuilder(
+                    stream: contractFB.collectionReference
+                        .where('isVisible', isEqualTo: true)
+                        .where('liquidation', isEqualTo: true)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Text("No Data"),
+                        );
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            physics: ScrollPhysics(),
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, i) {
+                              QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                              return ContractCard(
+                                  id: x["id"],
+                                  host: x["host"],
+                                  room: x["room"],
+                                  startDay: x["startDay"],
+                                  expirationDate: x["expirationDate"],
+                                  funtion: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ContractDetails(
+                                                  listContract: ["h"],
+                                                  id: x["id"],
+                                                  idRoom: x['room'],
+                                                  flag: '1',
+                                                )));
+                                  });
                             });
-                      });
-                }
-              }),
-        ),
-      ])),
+                      }
+                    }),
+              ),
+      ]),
+              )),
     );
   }
 

@@ -115,7 +115,7 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
     ),
   );
   Future<void> CheckforAdd() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("contract").where('room',isEqualTo: this.widget.id_apartment).where('liquidation',isEqualTo: "false").where('isVisible',isEqualTo: "true").get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("contract").where('room',isEqualTo: this.widget.id_apartment).where('liquidation',isEqualTo: false).where('isVisible',isEqualTo: true).get();
     //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
     print(querySnapshot.docs.length);
     if(querySnapshot.docs.length == 0) {

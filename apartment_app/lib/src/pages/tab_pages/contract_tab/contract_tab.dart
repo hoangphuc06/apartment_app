@@ -21,27 +21,24 @@ class _ContractTabState extends State<ContractTab> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: myGreen,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "Hợp đồng",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+          iconTheme: IconThemeData(
+            color: myGreen, //change your color here
           ),
-          bottom: TabBar(
-            labelStyle: TextStyle(
-                color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            indicatorColor: Colors.white,
-            indicatorWeight: 5,
-            tabs: [
-              Tab(
-                text: "Chưa thanh lý",
-              ),
-              Tab(
-                text: "Đã thanh lý",
-              ),
-            ],
+          backgroundColor: Colors.white,
+          elevation: 1,
+          title: Text("Thông tin căn hộ", style: TextStyle(color: myGreen,),),
+          centerTitle: true,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: TabBar(
+              labelColor: Colors.black,
+              indicatorColor: myGreen,
+              indicatorWeight: 3,
+              tabs: [
+                Tab(text: "Chưa thanh lý",),
+                Tab(text: "Đã thanh lý",),
+              ],
+            ),
           ),
         ),
         body: TabBarView(
