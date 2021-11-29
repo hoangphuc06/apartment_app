@@ -48,52 +48,53 @@ class _ContractNotLiquidationState extends State<ContractNotLiquidation> {
       //   "Hợp đồng",
       // ),
       body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _title("Danh sách hợp đồng"),
-              SizedBox(height: 10,),
-              Container(
-                child: StreamBuilder(
-                      stream: contractFB.collectionReference
-                          .where('isVisible', isEqualTo: true)
-                          .where('liquidation', isEqualTo: false)
-                          .snapshots(),
-                      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: Text("No Data"),
-                          );
-                        } else {
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, i) {
-                                QueryDocumentSnapshot x = snapshot.data!.docs[i];
-                                return ContractCard(
-                                    id: x["id"],
-                                    host: x["host"],
-                                    room: x["room"],
-                                    startDay: x["startDay"],
-                                    expirationDate: x["expirationDate"],
-                                    funtion: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ContractDetails(
-                                                    listContract: listContract,
-                                                    id: x["id"],
-                                                    idRoom: x['room'],
-                                                    flag: '0',
-                                                  )));
-                                    });
-                              });
-                        }
-                      }),
-              ),
-            ]),
-              )),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: _title("Danh sách hợp đồng"),
+        ),
+        Container(
+          margin: EdgeInsets.all(16),
+          child: StreamBuilder(
+              stream: contractFB.collectionReference
+                  .where('isVisible', isEqualTo: true)
+                  .where('liquidation', isEqualTo: false)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: Text("No Data"),
+                  );
+                } else {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, i) {
+                        QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                        return ContractCard(
+                            id: x["id"],
+                            host: x["host"],
+                            room: x["room"],
+                            startDay: x["startDay"],
+                            expirationDate: x["expirationDate"],
+                            funtion: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ContractDetails(
+                                            listContract: listContract,
+                                            id: x["id"],
+                                            idRoom: x['room'],
+                                            flag: '0',
+                                          )));
+                            });
+                      });
+                }
+              }),
+        ),
+      ])),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: myGreen,

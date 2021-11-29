@@ -14,7 +14,6 @@ import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 
 import 'package:apartment_app/src/style/my_style.dart';
-import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
 import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:apartment_app/src/widgets/title/title_info_null.dart';
@@ -155,187 +154,393 @@ class _AddBillPageState extends State<AddBillPage> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: myAppBar("Thêm hóa đơn"),
+      backgroundColor: Colors.white.withOpacity(0.9),
+      appBar: AppBar(
+        backgroundColor: myGreen,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "Thêm hóa đơn",
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _fomkey,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _title("Thông tin"),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    TitleInfoNotNull(text: "Ngày lập hóa đơn"),
-                    SizedBox(height: 10,),
-                    GestureDetector(
-                        onTap: () {},
-                        child: AbsorbPointer(
-                          child: _textformFieldwithIcon(
-                              _billdatecontroler,
-                              "20/04/2021...",
-                              "ngày bắt đầu tính tiền",
-                              Icons.calendar_today_outlined),
-                        )),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    TitleInfoNotNull(text: "Phòng"),
-                    SizedBox(height: 10,),
-                    GestureDetector(
-                        onTap: () => {},
-                        child: AbsorbPointer(
-                          child: _textformFieldwithIcon(
-                              _roomidcontroler,
-                              "Chọn phòng",
-                              "phòng",
-                              Icons.home),
-                        )),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10,),
-              Container(
-                child: Column(
-                  children: [
-                    TitleInfoNotNull(
-                        text: "Hạn thanh toán hóa đơn"),
-                    SizedBox(height: 10,),
-                    GestureDetector(
-                        onTap: () =>
-                            _selectDate(context, _paymentTerm),
-                        child: AbsorbPointer(
-                          child: _textformFieldwithIcon(
-                              _billdatecontroler,
-                              "Chọn ngày thanh toán",
-                              "hạn thanh toán hóa đơn",
-                              Icons.calendar_today_outlined),
-                        )),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30,),
-              _title("Tiền nhà"),
-              SizedBox(height: 10,),
-              widget.flag == '0' && widget.liquidation == '1'
-                  ? _detail("Thành tiền", _chargeRoom.text
-                  )
-                  : widget.we.type == '0'
-                  ? Column(
+              Card(
+                  elevation: 2,
+                  child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            _title("Thông tin"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(text: "Ngày lập hóa đơn"),
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _billdatecontroler,
+                                            "20/04/2021...",
+                                            "ngày bắt đầu tính tiền",
+                                            Icons.calendar_today_outlined),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(text: "Chọn phòng"),
+                                  GestureDetector(
+                                      onTap: () => {},
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _roomidcontroler,
+                                            "Chọn phòng",
+                                            "phòng",
+                                            Icons.home),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  TitleInfoNotNull(
+                                      text: "Hạn thanh toán hóa đơn"),
+                                  GestureDetector(
+                                      onTap: () =>
+                                          _selectDate(context, _paymentTerm),
+                                      child: AbsorbPointer(
+                                        child: _textformFieldwithIcon(
+                                            _billdatecontroler,
+                                            "Chọn ngày thanh toán",
+                                            "hạn thanh toán hóa đơn",
+                                            Icons.calendar_today_outlined),
+                                      )),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ]))),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitleInfoNull(text: "Khoảng thời gian"),
-                      SizedBox(height: 10,),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.center,
-                        children: [
-                          //Chọn ngày bắt đầu
-                          Container(
-                            width: width * 0.4,
-                            child: Column(
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("Tiền nhà"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      widget.flag == '0' && widget.liquidation == '1'
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: AbsorbPointer(
-                                      child: _textformFieldwithIcon(
-                                          _startDayController,
-                                          "Chọn ngày",
-                                          "ngày thanh toán",
-                                          Icons
-                                              .calendar_today_outlined),
-                                    )),
+                                Text(
+                                  'Thành tiền',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                Container(
+                                  width: width * 0.3,
+                                  child: TextFormField(
+                                    decoration: InputDecoration(enabled: false),
+                                    controller: _chargeRoom,
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17,
+                                        color: Colors.black),
+                                  ),
+                                ),
                               ],
+                            )
+                          : widget.we.type == '0'
+                              ? Column(
+                                  children: [
+                                    TitleInfoNull(text: "Khoảng thời gian"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        //Chọn ngày bắt đầu
+                                        Container(
+                                          width: width * 0.4,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                  onTap: () {},
+                                                  child: AbsorbPointer(
+                                                    child: _textformFieldwithIcon(
+                                                        _startDayController,
+                                                        "Chọn ngày",
+                                                        "ngày thanh toán",
+                                                        Icons
+                                                            .calendar_today_outlined),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        //Chọn ngày kết thúc
+                                        Container(
+                                          width: width * 0.4,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                  onTap: () {},
+                                                  child: AbsorbPointer(
+                                                    child: _textformFieldwithIcon(
+                                                        _expirationDateController,
+                                                        "Chọn ngày",
+                                                        "hạn thanh toán",
+                                                        Icons
+                                                            .calendar_today_outlined),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Thành tiền',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width * 0.3,
+                                          child: TextFormField(
+                                            decoration:
+                                                InputDecoration(enabled: false),
+                                            controller: _chargeRoom,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 17,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Thành tiền',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: width * 0.3,
+                                      child: TextFormField(
+                                        decoration:
+                                            InputDecoration(enabled: false),
+                                        controller: _chargeRoom,
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 17,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              (widget.flag == '0' || widget.liquidation == '1')
+                  ? Card(
+                      elevation: 2,
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 10,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          //Chọn ngày kết thúc
-                          Container(
-                            width: width * 0.4,
-                            child: Column(
+                            _title("Tiền cọc"),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _textinRow(
+                                'Tiền cọc',
+                                FontWeight.w400,
+                                FontWeight.w700,
+                                Colors.black,
+                                _depositController,
+                                17),
+                            SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("Tổng hợp"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textinRow("Tiền nhà", FontWeight.w400, FontWeight.w700,
+                          Colors.black, _chargeRoom, 16),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      (widget.flag == '0' || widget.liquidation == '1')
+                          ? Column(
                               children: [
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: AbsorbPointer(
-                                      child: _textformFieldwithIcon(
-                                          _expirationDateController,
-                                          "Chọn ngày",
-                                          "hạn thanh toán",
-                                          Icons
-                                              .calendar_today_outlined),
-                                    )),
+                                _textinRow(
+                                    "Tiền cọc",
+                                    FontWeight.w400,
+                                    FontWeight.w700,
+                                    Colors.black,
+                                    _depositController,
+                                    16),
+                                SizedBox(
+                                  height: 20,
+                                ),
                               ],
-                            ),
+                            )
+                          : Container(),
+                      _textinRow("Điện - Nước", FontWeight.w400,
+                          FontWeight.w700, Colors.black, _TotalWE, 16),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textinRow("Dịch vụ", FontWeight.w400, FontWeight.w700,
+                          Colors.black, serviceFee, 16),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textinRow("Tổng", FontWeight.w400, FontWeight.w700,
+                          Colors.black, _Total, 16),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textFormFieldinRow(
+                          _fine, "Tiền phạt", width, Colors.black),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textFormFieldinRow(_discount, "Giảm giá", width, myRed),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      _textinRow("Thanh toán", FontWeight.w500, FontWeight.w700,
+                          myGreen, _FinalTotal, 18),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      _title("GHI CHÚ"),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        minLines: 2,
+                        maxLines: 7,
+                        controller: _noteControler,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: 'Ghi chú cho hóa đơn',
+                          hintStyle: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
-                        ],
+                        ),
                       ),
                       SizedBox(
                         height: 10,
                       ),
-                      _detail("Thành tiền", _chargeRoom.text),
-
                     ],
-                  )
-                      : _detail("Thành tiền", _chargeRoom.text),
-              SizedBox(height: 30,),
-              (widget.flag == '0' || widget.liquidation == '1')
-                  ? Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _title("Tiền cọc"),
-                    SizedBox(height: 10,),
-                    _detail("tiền cọc", _depositController.text)
-                  ],
+                  ),
                 ),
-              )
-                  : Container(),
-              SizedBox(height: 30,),
-              _title("Tổng hợp"),
-              SizedBox(height: 10,),
-              _detail("Tiền nhà", _chargeRoom.text),
-              SizedBox(height: 10,),
-              _detail("Tiền cọc", _depositController.text),
-              SizedBox(height: 10,),
-              _detail("Điện - nước", _TotalWE.text),
-              SizedBox(height: 10,),
-              _detail("Dịch vụ", serviceFee.text),
-              SizedBox(height: 10,),
-              _detail("Tổng", _Total.text),
-              SizedBox(height: 10,),
-              TitleInfoNull(text: "Tiền phạt"),
-              SizedBox(height: 10,),
-              _fineTextFormField(),
-              SizedBox(height: 10,),
-              TitleInfoNull(text: "Giảm giá"),
-              SizedBox(height: 10,),
-              _discountTextFormField(),
-              SizedBox(height: 30,),
-              _detailtotal("Thanh toán", _FinalTotal.text),
-              SizedBox(height: 30,),
-              _title("Ghi chú"),
-              SizedBox(height: 10,),
-              _note(),
-              SizedBox(height: 30,),
+              ),
               widget.liquidation == '0'
                   ? Container(
+                      padding: EdgeInsets.all(16),
                       child: MainButton(name: "Thêm", onpressed: _onClick),
                     )
                   : Container(
+                      padding: EdgeInsets.all(16),
                       child: MainButton(
                           name: "Thanh lý", onpressed: _onClickLiquidation),
                     ),
@@ -346,56 +551,28 @@ class _AddBillPageState extends State<AddBillPage> {
     );
   }
 
-  _fineTextFormField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      controller: _fine,
-      decoration: MyStyle().style_decoration_tff(""),
-      style: MyStyle().style_text_tff(),
-      keyboardType: TextInputType.number,
-    ),
-  );
-  _discountTextFormField() => Container(
-    padding: MyStyle().padding_container_tff(),
-    decoration: MyStyle().style_decoration_container(),
-    child: TextFormField(
-      controller: _discount,
-      decoration: MyStyle().style_decoration_tff(""),
-      style: MyStyle().style_text_tff(),
-      keyboardType: TextInputType.number,
-    ),
-  );
-
   _title(String text) =>
       Text(text, style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold));
   _textformFieldwithIcon(TextEditingController controller, String hint,
           String text, IconData icon) =>
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Colors.blueGrey.withOpacity(0.2)),
-        child: TextFormField(
-          style: MyStyle().style_text_tff(),
-          controller: controller,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: hint,
-            suffixIcon: Padding(
-              padding: EdgeInsetsDirectional.all(0),
-              child: Icon(icon),
-            ),
+      TextFormField(
+        style: MyStyle().style_text_tff(),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hint,
+          suffixIcon: Padding(
+            padding: EdgeInsetsDirectional.all(0),
+            child: Icon(icon),
           ),
-          keyboardType: TextInputType.datetime,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Vui lòng nhập " + text;
-            } else {
-              return null;
-            }
-          },
         ),
+        keyboardType: TextInputType.datetime,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Vui lòng nhập " + text;
+          } else {
+            return null;
+          }
+        },
       );
   _textFormFieldinRow(TextEditingController controller, String text,
           double width, Color color) =>
@@ -542,86 +719,4 @@ class _AddBillPageState extends State<AddBillPage> {
       });
     });
   }
-
-  _detail(String name, String detail) => Container(
-    padding: EdgeInsets.all(8),
-    height: 50,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.blueGrey.withOpacity(0.2)
-    ),
-    child: Row(
-      children: [
-        Text(
-          name,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-        Spacer(),
-        Text(
-          detail,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500
-          ),
-        ),
-      ],
-    ),
-  );
-  _detailtotal(String name, String detail) => Container(
-    padding: EdgeInsets.all(8),
-    height: 50,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.blueGrey.withOpacity(0.2)
-    ),
-    child: Row(
-      children: [
-        Text(
-          name,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-          ),
-        ),
-        Spacer(),
-        Text(
-          detail,
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500
-          ),
-        ),
-      ],
-    ),
-  );
-  _note() => Container(
-    width: double.infinity,
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      color: Colors.blueGrey.withOpacity(0.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextFormField(
-          controller: _noteControler,
-          maxLines: 10,
-          minLines: 3,
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Ghi chú cho hóa đơn"
-          ),
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w400
-          ),
-        ),
-        SizedBox(height: 10,),
-      ],
-    ),
-  );
 }
