@@ -54,6 +54,7 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 Padding(
                   padding: EdgeInsets.only(left: 16),
                   child: _title("Danh sách hợp đồng"),
@@ -109,6 +110,8 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
 >>>>>>> parent of c3cf0a9 (commit)
 =======
 >>>>>>> parent of c3cf0a9 (commit)
+=======
+>>>>>>> parent of c3cf0a9 (commit)
         Padding(
           padding: EdgeInsets.only(left: 16),
           child: _title("Danh sách hợp đồng"),
@@ -156,6 +159,9 @@ class _ContractLiquidationState extends State<ContractLiquidation> {
       ])),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of c3cf0a9 (commit)
+=======
 >>>>>>> parent of c3cf0a9 (commit)
 =======
 >>>>>>> parent of c3cf0a9 (commit)
