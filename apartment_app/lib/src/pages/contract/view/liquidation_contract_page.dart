@@ -8,6 +8,7 @@ import 'package:apartment_app/src/pages/Bill/model/WE_model.dart';
 import 'package:apartment_app/src/pages/Bill/model/billService_model.dart';
 import 'package:apartment_app/src/pages/Bill/view/add_new_bill_page.dart';
 import 'package:apartment_app/src/pages/Bill/view/close_bill.dart';
+import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/model/task.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_rentedRoom.dart';
@@ -57,6 +58,7 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
   RentedRoomFB rentedRoomFB = new RentedRoomFB();
   DwellersFB dwellersFB = new DwellersFB();
   FloorInfoFB floorInfoFB = new FloorInfoFB();
+  ServiceApartmentFB serviceApartmentFB = new ServiceApartmentFB();
   Task task = new Task();
   DateTime selectedDate = DateTime.now();
   final TextEditingController _DateController = TextEditingController();
@@ -566,6 +568,7 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
               rentedRoomFB.liquidation(value.docs[0]['id'])
             });
     deleteDweller();
+    deleteService();
     floorInfoFB.updateStatus(_idRoom.text, 'Trống');
     Navigator.popUntil(context, (route) {
       return count++ == 2;
@@ -580,6 +583,18 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
       x.docs.asMap().forEach((key, value) {
         var t = x.docs[key];
         dwellersFB.delete(t['idRealTime']);
+      });
+    });
+  }
+
+  Future<void> deleteService() async {
+    Stream<QuerySnapshot> query = serviceApartmentFB.collectionReference
+        .where('idRoom', isEqualTo: widget.idRoom)
+        .snapshots();
+    await query.forEach((x) {
+      x.docs.asMap().forEach((key, value) {
+        var t = x.docs[key];
+        serviceApartmentFB.delete(t['id']);
       });
     });
   }

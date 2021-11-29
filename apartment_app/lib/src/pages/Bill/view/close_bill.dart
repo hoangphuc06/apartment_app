@@ -511,8 +511,8 @@ class _CloseBillState extends State<CloseBill> {
                         if (value!.isEmpty) {
                           return "Vui lòng nhập chỉ số cuối";
                         } else {
-                          if (int.parse(value) < int.parse(_startIndexE.text))
-                            return "Chỉ số cuối phải lớn hơn chỉ số \nđầu";
+                          if (int.parse(controllerEnd.text) < int.parse(controllerStart.text))
+                            return "Chỉ số cuối phải lớn hơn \nchỉ số đầu";
                         }
                       },
                     ),
