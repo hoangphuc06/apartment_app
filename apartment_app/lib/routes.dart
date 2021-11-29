@@ -11,7 +11,7 @@ import 'package:apartment_app/src/pages/reset_password/view/reset_password_page.
 import 'package:apartment_app/src/pages/splash/splash_page.dart';
 import 'package:apartment_app/src/pages/statistic/view/statistic_page.dart';
 import 'package:apartment_app/src/pages/tab_pages/tab_page.dart';
-import 'package:apartment_app/src/pages/update_password/view/update_password_page.dart';
+import 'package:apartment_app/src/pages/update_password/update_password_page.dart';
 import 'package:flutter/material.dart';
 
 final routes = <String, WidgetBuilder>{
