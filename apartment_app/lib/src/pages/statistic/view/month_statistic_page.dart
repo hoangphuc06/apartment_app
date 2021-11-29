@@ -35,8 +35,8 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
         domainFn: (typeCharge charge, _) => charge.name,
         measureFn: (typeCharge charge, _) => charge.money,
         data: data,
-
       )
+
     ];
   }
   _monthDownList() => DropdownButton(
@@ -159,15 +159,13 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
 
                     return Column(
                       children: [
-
-                        _detail('Tiền điện ', this.model.fine.toString(),myYellow),
+                        _detail('Tiền điện ', this.model.chargeE.toString(),myYellow),
                         SizedBox(height: 10,),
                         _detail('Tiền nước', this.model.chargeW.toString(),myBlue),
                         SizedBox(height: 10,),
-                        _detail('Tiền phat', this.model.chargeE.toString(),myRed),
+                        _detail('Tiền phat', this.model.fine.toString(),myRed),
                         SizedBox(height: 10,),
                         _detail('Tổng cộng', this.model.total.toString(),myGreen),
-
                      SizedBox(height: 25,),
                      Expanded(child: chart.BarChart(this._createSampleData( model.fine,model.chargeE,model.chargeW,model.total), animate: true,),),
                         SizedBox(height: 25,),
