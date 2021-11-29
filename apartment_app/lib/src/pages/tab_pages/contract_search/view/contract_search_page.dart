@@ -80,6 +80,7 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
                       style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     Spacer(),
+                    
                     StreamBuilder(
                         stream: this.apartmentFB.collectionReference.snapshots(),
                         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -242,7 +243,7 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
                                       builder: (context) => ContractDetails(
                                         id:  Cache[index].id.toString(),
                                         idRoom:  Cache[index].room.toString(),
-                                        flag: '0',
+                                        flag: Cache[index].liquidation==false?'0':'1',
                                         listContract: listContract,
                                       )));
                             }

@@ -8,6 +8,7 @@ class Contract {
   String? expirationDate;
   String? billingStartDate;
   String? roomPaymentPeriod;
+  bool? liquidation;
   String? roomCharge;
   String? deposit;
   String? renter;
@@ -27,6 +28,7 @@ class Contract {
     this.roomCharge,
     this.deposit,
     this.renter,
+    this.liquidation,
     this.rulesA,
     this.rulesB,
     this.rulesC,
@@ -51,6 +53,7 @@ class Contract {
       rulesC: doc["rulesC"],
       type: doc['type'],
       isVisible: doc["isVisible"],
+      liquidation: doc['liquidation'],
     );
   }
 }
