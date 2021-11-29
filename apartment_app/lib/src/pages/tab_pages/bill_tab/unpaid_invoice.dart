@@ -61,7 +61,7 @@ class _UnpaidInvoiceState extends State<UnpaidInvoice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey.withOpacity(0.1),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

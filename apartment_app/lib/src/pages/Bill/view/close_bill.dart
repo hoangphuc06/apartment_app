@@ -8,7 +8,9 @@ import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/service/firebase/fb_service.dart';
 import 'package:apartment_app/src/pages/service/model/service_model.dart';
 import 'package:apartment_app/src/style/my_style.dart';
+import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
 import 'package:apartment_app/src/widgets/buttons/main_button.dart';
+import 'package:apartment_app/src/widgets/title/title_info_not_null.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -122,129 +124,173 @@ class _CloseBillState extends State<CloseBill> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-        backgroundColor: Colors.white.withOpacity(0.9),
-        appBar: AppBar(
-          backgroundColor: myGreen,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "Chốt dịch vụ - Điện nước",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
-        ),
+        backgroundColor: Colors.white,
+        appBar: myAppBar("Chốt dịch vụ - điện nước"),
         body: SingleChildScrollView(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
                 key: _fomkey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                        elevation: 2,
-                        child: Container(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  _title("Điện - Nước"),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  _services_startend_index(
-                                      "Điện",
-                                      '10000 đ/kwh',
-                                      width,
-                                      _totalE,
-                                      _startIndexE,
-                                      _endIndexE,
-                                      _chargeE,
-                                      Icons.flash_on_outlined,
-                                      'đ/kwh'),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  _services_startend_index(
-                                      "Nước",
-                                      '10000 đ/m3',
-                                      width,
-                                      _totalW,
-                                      _startIndexW,
-                                      _endIndexW,
-                                      _chargeW,
-                                      Icons.invert_colors,
-                                      'đ/m3'),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ]))),
-                    Card(
-                      elevation: 2,
-                      child: Container(
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 10,
-                            ),
-                            _title("Dịch vụ"),
-                            StreamBuilder(
-                                stream: serviceApartmentFB.collectionReference
-                                    .where('idRoom', isEqualTo: widget.id)
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return SizedBox(
-                                      height: 10,
-                                    );
-                                  } else {
-                                    return ListView.builder(
-                                        shrinkWrap: true,
-                                        physics: ScrollPhysics(),
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, i) {
-                                          QueryDocumentSnapshot x =
-                                              snapshot.data!.docs[i];
-
-                                          return Container(
-                                            child: StreamBuilder(
-                                                stream: FirebaseFirestore
-                                                    .instance
-                                                    .collection("ServiceInfo")
-                                                    .where('id',
-                                                        isEqualTo:
-                                                            x["idService"])
-                                                    .snapshots(),
-                                                builder: (context,
-                                                    AsyncSnapshot<QuerySnapshot>
-                                                        snapshot) {
-                                                  if (!snapshot.hasData) {
-                                                    return Center(
-                                                        child: Text(""));
-                                                  } else {
-                                                    QueryDocumentSnapshot y =
-                                                        snapshot.data!.docs[0];
-
-                                                    return _services_month(
-                                                        y['name'],
-                                                        width,
-                                                        y['charge']);
-                                                  }
-                                                }),
-                                          );
-                                        });
-                                  }
-                                }),
-                          ],
-                        ),
-                      ),
+                    _titletext("Thông tin hợp đồng"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TitleInfoNotNull(text: "Điện nước"),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _services_startend_index(
+                        "Điện",
+                        '10000 đ/kwh',
+                        width,
+                        _totalE,
+                        _startIndexE,
+                        _endIndexE,
+                        _chargeE,
+                        Icons.flash_on_outlined,
+                        'đ/kwh'),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _services_startend_index(
+                        "Nước",
+                        '10000 đ/m3',
+                        width,
+                        _totalW,
+                        _startIndexW,
+                        _endIndexW,
+                        _chargeW,
+                        Icons.invert_colors,
+                        'đ/m3'),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    _titletext("Dịch vụ"),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
-                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          StreamBuilder(
+                              stream: serviceApartmentFB.collectionReference
+                                  .where('idRoom', isEqualTo: widget.id)
+                                  .snapshots(),
+                              builder: (context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (!snapshot.hasData) {
+                                  return SizedBox(
+                                    height: 10,
+                                  );
+                                } else {
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ScrollPhysics(),
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, i) {
+                                        QueryDocumentSnapshot x =
+                                        snapshot.data!.docs[i];
+
+                                        return Container(
+                                          child: StreamBuilder(
+                                              stream: FirebaseFirestore
+                                                  .instance
+                                                  .collection("ServiceInfo")
+                                                  .where('id',
+                                                  isEqualTo:
+                                                  x["idService"])
+                                                  .snapshots(),
+                                              builder: (context,
+                                                  AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                      child: Text(""));
+                                                } else {
+                                                  QueryDocumentSnapshot y =
+                                                  snapshot.data!.docs[0];
+
+                                                  return _services_month(
+                                                      y['name'],
+                                                      width,
+                                                      y['charge']);
+                                                }
+                                              }),
+                                        );
+                                      });
+                                }
+                              }),
+                        ],
+                      ),
+                    ),
+                    // Card(
+                    //   elevation: 2,
+                    //   child: Container(
+                    //     padding: EdgeInsets.all(16),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+                    //       children: [
+                    //         SizedBox(
+                    //           height: 10,
+                    //         ),
+                    //         _title("Dịch vụ"),
+                    //         StreamBuilder(
+                    //             stream: serviceApartmentFB.collectionReference
+                    //                 .where('idRoom', isEqualTo: widget.id)
+                    //                 .snapshots(),
+                    //             builder: (context,
+                    //                 AsyncSnapshot<QuerySnapshot> snapshot) {
+                    //               if (!snapshot.hasData) {
+                    //                 return SizedBox(
+                    //                   height: 10,
+                    //                 );
+                    //               } else {
+                    //                 return ListView.builder(
+                    //                     shrinkWrap: true,
+                    //                     physics: ScrollPhysics(),
+                    //                     itemCount: snapshot.data!.docs.length,
+                    //                     itemBuilder: (context, i) {
+                    //                       QueryDocumentSnapshot x =
+                    //                           snapshot.data!.docs[i];
+                    //
+                    //                       return Container(
+                    //                         child: StreamBuilder(
+                    //                             stream: FirebaseFirestore
+                    //                                 .instance
+                    //                                 .collection("ServiceInfo")
+                    //                                 .where('id',
+                    //                                     isEqualTo:
+                    //                                         x["idService"])
+                    //                                 .snapshots(),
+                    //                             builder: (context,
+                    //                                 AsyncSnapshot<QuerySnapshot>
+                    //                                     snapshot) {
+                    //                               if (!snapshot.hasData) {
+                    //                                 return Center(
+                    //                                     child: Text(""));
+                    //                               } else {
+                    //                                 QueryDocumentSnapshot y =
+                    //                                     snapshot.data!.docs[0];
+                    //
+                    //                                 return _services_month(
+                    //                                     y['name'],
+                    //                                     width,
+                    //                                     y['charge']);
+                    //                               }
+                    //                             }),
+                    //                       );
+                    //                     });
+                    //               }
+                    //             }),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(height: 30,),
+                    Container(
                       child: MainButton(
                         name: "Chốt dịch vụ & Điện - nước",
                         onpressed: _onClick,
@@ -267,12 +313,9 @@ class _CloseBillState extends State<CloseBill> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          name,
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-        ),
+        TitleInfoNotNull(text: name),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         Row(
           children: [
@@ -289,44 +332,50 @@ class _CloseBillState extends State<CloseBill> {
             ),
           ],
         ),
-        TextFormField(
-          style: MyStyle().style_text_tff(),
-          controller: controllerCharge,
-          onChanged: (value) {
-            setState(() {
-              if (!(controllerEnd.text.isEmpty &&
-                  controllerStart.text.isEmpty &&
-                  controllerCharge.text.isEmpty)) {
-                total.text = (((int.parse(controllerEnd.text) -
-                            int.parse(controllerStart.text))) *
-                        int.parse(controllerCharge.text))
-                    .toString();
+        SizedBox(height: 10,),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.blueGrey.withOpacity(0.2)),
+          child: TextFormField(
+            style: MyStyle().style_text_tff(),
+            controller: controllerCharge,
+            onChanged: (value) {
+              setState(() {
+                if (!(controllerEnd.text.isEmpty &&
+                    controllerStart.text.isEmpty &&
+                    controllerCharge.text.isEmpty)) {
+                  total.text = (((int.parse(controllerEnd.text) -
+                              int.parse(controllerStart.text))) *
+                          int.parse(controllerCharge.text))
+                      .toString();
 
-                _TotalWE.text =
-                    (int.parse(_totalW.text) + int.parse(_totalE.text))
-                        .toString();
-              }
-            });
-          },
-          decoration: InputDecoration(
-            hintText: 'Đơn giá',
-            suffixIcon: Padding(
-              padding: EdgeInsetsDirectional.all(0),
-              child: Icon(icon),
+                  _TotalWE.text =
+                      (int.parse(_totalW.text) + int.parse(_totalE.text))
+                          .toString();
+                }
+              });
+            },
+            decoration: InputDecoration(
+              hintText: 'Đơn giá',
+              border: InputBorder.none,
+              suffixIcon: Padding(
+                padding: EdgeInsetsDirectional.all(0),
+                child: Icon(icon),
+              ),
             ),
+            keyboardType: TextInputType.datetime,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Vui lòng nhập đơn giá";
+              } else {
+                return null;
+              }
+            },
           ),
-          keyboardType: TextInputType.datetime,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return "Vui lòng nhập đơn giá";
-            } else {
-              return null;
-            }
-          },
         ),
-        SizedBox(
-          height: 20,
-        ),
+        SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -351,40 +400,48 @@ class _CloseBillState extends State<CloseBill> {
                       ),
                     ],
                   ),
-                  TextFormField(
-                    style: MyStyle().style_text_tff(),
-                    controller: controllerStart,
-                    enabled: false,
-                    onChanged: (value) {
-                      setState(() {
-                        if (!(controllerEnd.text.isEmpty &&
-                            controllerStart.text.isEmpty &&
-                            controllerCharge.text.isEmpty)) {
-                          total.text = (((int.parse(controllerEnd.text) -
-                                      int.parse(controllerStart.text))) *
-                                  int.parse(controllerCharge.text))
-                              .toString();
-                          _TotalWE.text = (int.parse(_totalW.text) +
-                                  int.parse(_totalE.text))
-                              .toString();
-                        }
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Chỉ số đầu',
-                      suffixIcon: Padding(
-                        padding: EdgeInsetsDirectional.all(0),
-                        child: Icon(icon),
+                  SizedBox(height: 10,),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.blueGrey.withOpacity(0.2)),
+                    child: TextFormField(
+                      style: MyStyle().style_text_tff(),
+                      controller: controllerStart,
+                      enabled: false,
+                      onChanged: (value) {
+                        setState(() {
+                          if (!(controllerEnd.text.isEmpty &&
+                              controllerStart.text.isEmpty &&
+                              controllerCharge.text.isEmpty)) {
+                            total.text = (((int.parse(controllerEnd.text) -
+                                        int.parse(controllerStart.text))) *
+                                    int.parse(controllerCharge.text))
+                                .toString();
+                            _TotalWE.text = (int.parse(_totalW.text) +
+                                    int.parse(_totalE.text))
+                                .toString();
+                          }
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Chỉ số đầu',
+                        suffixIcon: Padding(
+                          padding: EdgeInsetsDirectional.all(0),
+                          child: Icon(icon),
+                        ),
                       ),
+                      keyboardType: TextInputType.datetime,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Vui lòng nhập chỉ số đầu";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    keyboardType: TextInputType.datetime,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Vui lòng nhập chỉ số đầu";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
                 ],
               ),
@@ -412,59 +469,63 @@ class _CloseBillState extends State<CloseBill> {
                       ),
                     ],
                   ),
-                  TextFormField(
-                    style: MyStyle().style_text_tff(),
-                    controller: controllerEnd,
-                    onChanged: (value) {
-                      setState(() {
-                        if (int.parse(controllerStart.text) <=
-                            int.parse(controllerEnd.text)) {
-                          if (!(controllerEnd.text.isEmpty &&
-                              controllerStart.text.isEmpty &&
-                              controllerCharge.text.isEmpty)) {
-                            total.text = (((int.parse(controllerEnd.text) -
-                                        int.parse(controllerStart.text))) *
-                                    int.parse(controllerCharge.text))
-                                .toString();
-                            _TotalWE.text = (int.parse(_totalW.text) +
-                                    int.parse(_totalE.text))
-                                .toString();
+                  SizedBox(height: 10,),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.blueGrey.withOpacity(0.2)),
+                    child: TextFormField(
+                      style: MyStyle().style_text_tff(),
+                      controller: controllerEnd,
+                      onChanged: (value) {
+                        setState(() {
+                          if (int.parse(controllerStart.text) <=
+                              int.parse(controllerEnd.text)) {
+                            if (!(controllerEnd.text.isEmpty &&
+                                controllerStart.text.isEmpty &&
+                                controllerCharge.text.isEmpty)) {
+                              total.text = (((int.parse(controllerEnd.text) -
+                                          int.parse(controllerStart.text))) *
+                                      int.parse(controllerCharge.text))
+                                  .toString();
+                              _TotalWE.text = (int.parse(_totalW.text) +
+                                      int.parse(_totalE.text))
+                                  .toString();
+                            }
+                          } else {
+                            total.text = '0';
                           }
-                        } else {
-                          total.text = '0';
-                        }
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Chỉ số cuối',
-                      suffixIcon: Padding(
-                        padding: EdgeInsetsDirectional.all(0),
-                        child: Icon(icon),
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Chỉ số cuối',
+                        suffixIcon: Padding(
+                          padding: EdgeInsetsDirectional.all(0),
+                          child: Icon(icon),
+                        ),
                       ),
+                      keyboardType: TextInputType.datetime,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Vui lòng nhập chỉ số cuối";
+                        } else {
+                          if (int.parse(value) < int.parse(_startIndexE.text))
+                            return "Chỉ số cuối phải lớn hơn chỉ số \nđầu";
+                        }
+                      },
                     ),
-                    keyboardType: TextInputType.datetime,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Vui lòng nhập chỉ số cuối";
-                      } else {
-                        if (int.parse(value) < int.parse(_startIndexE.text))
-                          return "Chỉ số cuối phải lớn hơn chỉ số \nđầu";
-                      }
-                    },
                   ),
                 ],
               ),
             ),
           ],
         ),
-        SizedBox(
-          height: 20,
-        ),
+        SizedBox(height: 20,),
         _textinRow("Thành tiền", FontWeight.w400, FontWeight.w700, Colors.black,
             total, 17),
-        SizedBox(
-          height: 20,
-        ),
+
       ],
     );
   }
@@ -597,4 +658,9 @@ class _CloseBillState extends State<CloseBill> {
                   )));
     }
   }
+  _titletext(String text) => Text(
+    text,
+    style: TextStyle(
+        color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
+  );
 }
