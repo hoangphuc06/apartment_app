@@ -59,7 +59,7 @@ class _AddPersonState extends State<AddPerson> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar("Thêm người thuê"),
+      appBar: widget.flag=='0'?myAppBar("Thêm người thuê"):myAppBar("Thêm đại diện cho thuê"),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Form(

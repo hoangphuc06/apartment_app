@@ -7,6 +7,7 @@ class ServiceApartmentFB {
   Future<void> add(String idRoom,String idService) async {
     String id = (new DateTime.now().microsecondsSinceEpoch).toString();
     return FirebaseFirestore.instance.collection("service_apartment").doc(id).set({
+      "id" : id,
       "idRoom" : idRoom,
       "idService" : idService,
     }
