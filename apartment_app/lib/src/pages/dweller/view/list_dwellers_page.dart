@@ -77,7 +77,7 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            DetailDwellerPage(dweller: dweller)));
+                                            DetailDwellerPage(dweller: dweller, id: x.id,)));
                               },
                             );
                           });

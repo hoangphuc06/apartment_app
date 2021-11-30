@@ -253,8 +253,8 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                           itemCount: this.Cache.length,
                           itemBuilder: (context, index) {
                             return DwellerCard(dweller: this.Cache[index], funtion: (){
-                              Route route = MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: this.Cache[index], ));
-                              Navigator.push(context,route);
+                              //Route route = MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: this.Cache[index], ));
+                              //Navigator.push(context,route);
                             });
                           });
                     })

@@ -51,8 +51,6 @@ class DwellersFB {
     return collectionReference
         .doc(id)
         .update({
-          
-          "id": id,
           "idApartment": idApartment,
           "name": name,
           "birthday": birthday,

@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 
 class DetailDwellerPage extends StatefulWidget {
   late  Dweller dweller;
+  final String id;
   DetailDwellerPage({Key? key,
-  required this.dweller}) : super(key: key);
+  required this.dweller, required this.id}) : super(key: key);
 
   @override
   _DetailDwellerPageState createState() => _DetailDwellerPageState();
@@ -82,16 +83,6 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
           ),
         ),
       ),
-      // floatingActionButton: AnimatedFloatingActionButton(
-      //     key: fabKey,
-      //     fabButtons: <Widget>[
-      //       edit(),
-      //       delete(),
-      //     ],
-      //     colorStartAnimation: myGreen,
-      //     colorEndAnimation: myGreen,
-      //     animatedIconData: AnimatedIcons.menu_close //To principal button
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           _gotoPage();
@@ -125,7 +116,7 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
   // }
 
   void _gotoPage() async {
-    final Dweller d = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(this.widget.dweller)));
+    final Dweller d = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(this.widget.dweller, this.widget.id)));
     if (d!=null) {
       setState(() {
         this.widget.dweller = d;

@@ -13,8 +13,9 @@ import 'package:select_form_field/select_form_field.dart';
 
 class EditDwellerPage extends StatefulWidget {
   final Dweller dweller;
+  final String idDweller;
   //const EditDwellerPage({Key? key}) : super(key: key);
-  EditDwellerPage(this.dweller);
+  EditDwellerPage(this.dweller, this.idDweller);
 
   @override
   _EditDwellerPageState createState() => _EditDwellerPageState();
@@ -257,7 +258,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
 
     dwellersFB
         .update(
-            widget.dweller.id.toString(),
+            widget.idDweller,
             widget.dweller.idApartment.toString(),
             name,
             birthday,
