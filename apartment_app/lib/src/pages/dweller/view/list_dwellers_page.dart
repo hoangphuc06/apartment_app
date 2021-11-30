@@ -92,7 +92,8 @@ class _ListDwellersPageState extends State<ListDwellersPage> {
         onPressed: (){
           if(_canAdd == true)
             gotoPage();
-          else MsgDialog.showMsgDialog(context, "Chỉ phòng có hợp đồng mới có thể thêm người", "");
+          //else MsgDialog.showMsgDialog(context, "Chỉ phòng có hợp đồng mới có thể thêm người", "");
+          else MsgDialog.showMsgDialog(context,"Thông báo", "Chỉ phòng có hợp đồng mới có thể thêm người");
         },
         backgroundColor: myGreen,
       ),

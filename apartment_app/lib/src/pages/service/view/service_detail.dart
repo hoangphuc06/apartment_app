@@ -202,6 +202,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                       fabKey.currentState!.animate();
                       this.fb.delete(widget.service.id.toString());
                       Navigator.pop(context);
+                      Navigator.of(context).pop();
                     }
                     else{
                       Navigator.of(context).pop();

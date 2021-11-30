@@ -206,6 +206,7 @@ class _AddPersonState extends State<AddPerson> {
             .add("", name, birthday, gender, cmnd, homeTown, job, phoneNumber,
                 email, false,id)
             .then((value) => {
+                  createAccount(),
                   Navigator.pop(context),
                 });
       } else {
@@ -213,6 +214,7 @@ class _AddPersonState extends State<AddPerson> {
             .add(
                 name, birthday, gender, cmnd, homeTown, job, phoneNumber, email)
             .then((value) => {
+                  createAccount(),
                   Navigator.pop(context),
                 });
       }
