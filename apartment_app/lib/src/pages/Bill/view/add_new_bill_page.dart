@@ -307,7 +307,7 @@ class _AddBillPageState extends State<AddBillPage> {
                           SizedBox(
                             height: 10,
                           ),
-                          _detail("tiền cọc", _depositController.text)
+                          _detail("Tiền cọc", _depositController.text)
                         ],
                       ),
                     )
@@ -532,8 +532,22 @@ class _AddBillPageState extends State<AddBillPage> {
                 print(value.docs[0]['id']),
                 rentedRoomFB.liquidation(value.docs[0]['id'])
               });
-      deleteDweller();
-      deleteService();
+      dwellersFB.collectionReference
+          .where('idApartment', isEqualTo: widget.id)
+          .get()
+          .then((value) => {
+                for (int i = 0; i < value.docs.length; i++)
+                  dwellersFB.delete(value.docs[i].id)
+              });
+      serviceApartmentFB.collectionReference
+          .where('idRoom', isEqualTo: widget.id)
+          .get()
+          .then((value) => {
+                for (int i = 0; i < value.docs.length; i++)
+                  serviceApartmentFB.delete(value.docs[i].id)
+              });
+      // deleteDweller();
+      // deleteService();
       floorInfoFB.updateStatus(widget.id, 'Trống');
       _addBill();
     }

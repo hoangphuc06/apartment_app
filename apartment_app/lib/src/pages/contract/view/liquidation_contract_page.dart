@@ -567,8 +567,23 @@ class _LiquidationContractPageState extends State<LiquidationContractPage> {
               print(value.docs[0]['id']),
               rentedRoomFB.liquidation(value.docs[0]['id'])
             });
-    deleteDweller();
-    deleteService();
+    dwellersFB.collectionReference
+        .where('idApartment', isEqualTo: widget.idRoom)
+        .get()
+        .then((value) => {
+              for (int i = 0; i < value.docs.length; i++)
+                dwellersFB.delete(value.docs[i].id)
+            });
+
+    serviceApartmentFB.collectionReference
+        .where('idRoom', isEqualTo: widget.idRoom)
+        .get()
+        .then((value) => {
+              for (int i = 0; i < value.docs.length; i++)
+                serviceApartmentFB.delete(value.docs[i].id)
+            });
+    // deleteDweller();
+    // deleteService();
     floorInfoFB.updateStatus(_idRoom.text, 'Trống');
     Navigator.popUntil(context, (route) {
       return count++ == 2;

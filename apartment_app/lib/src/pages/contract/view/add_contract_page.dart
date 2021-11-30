@@ -343,6 +343,7 @@ class _AddContractPageState extends State<AddContractPage> {
                   .doc(_renterController.text)
                   .get()
                   .then((value) => {
+                      
                         dwellersFB.add(
                             value['id'],
                             value['idApartment'],

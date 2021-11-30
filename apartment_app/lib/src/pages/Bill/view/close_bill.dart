@@ -98,6 +98,7 @@ class _CloseBillState extends State<CloseBill> {
     billInfoFB.collectionReference
         .where('idRoom', isEqualTo: this.widget.id)
         .where('monthBill', isEqualTo: (now.toLocal().month - 1).toString())
+        .where('idContract', isEqualTo: _idContract.text)
         .where('yearBill', isEqualTo: now.toLocal().year.toString())
         .get()
         .then((value) => {
@@ -192,26 +193,24 @@ class _CloseBillState extends State<CloseBill> {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder: (context, i) {
                                         QueryDocumentSnapshot x =
-                                        snapshot.data!.docs[i];
+                                            snapshot.data!.docs[i];
 
                                         return Container(
                                           child: StreamBuilder(
-                                              stream: FirebaseFirestore
-                                                  .instance
+                                              stream: FirebaseFirestore.instance
                                                   .collection("ServiceInfo")
                                                   .where('id',
-                                                  isEqualTo:
-                                                  x["idService"])
+                                                      isEqualTo: x["idService"])
                                                   .snapshots(),
                                               builder: (context,
                                                   AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
+                                                      snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return Center(
                                                       child: Text(""));
                                                 } else {
                                                   QueryDocumentSnapshot y =
-                                                  snapshot.data!.docs[0];
+                                                      snapshot.data!.docs[0];
 
                                                   return _services_month(
                                                       y['name'],
@@ -289,7 +288,9 @@ class _CloseBillState extends State<CloseBill> {
                     //     ),
                     //   ),
                     // ),
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     Container(
                       child: MainButton(
                         name: "Chốt dịch vụ & Điện - nước",
@@ -332,7 +333,9 @@ class _CloseBillState extends State<CloseBill> {
             ),
           ],
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
@@ -375,7 +378,9 @@ class _CloseBillState extends State<CloseBill> {
             },
           ),
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -400,7 +405,9 @@ class _CloseBillState extends State<CloseBill> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
@@ -469,7 +476,9 @@ class _CloseBillState extends State<CloseBill> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
@@ -511,7 +520,8 @@ class _CloseBillState extends State<CloseBill> {
                         if (value!.isEmpty) {
                           return "Vui lòng nhập chỉ số cuối";
                         } else {
-                          if (int.parse(controllerEnd.text) < int.parse(controllerStart.text))
+                          if (int.parse(controllerEnd.text) <
+                              int.parse(controllerStart.text))
                             return "Chỉ số cuối phải lớn hơn \nchỉ số đầu";
                         }
                       },
@@ -522,10 +532,11 @@ class _CloseBillState extends State<CloseBill> {
             ),
           ],
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         _textinRow("Thành tiền", FontWeight.w400, FontWeight.w700, Colors.black,
             total, 17),
-
       ],
     );
   }
@@ -658,9 +669,10 @@ class _CloseBillState extends State<CloseBill> {
                   )));
     }
   }
+
   _titletext(String text) => Text(
-    text,
-    style: TextStyle(
-        color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
-  );
+        text,
+        style: TextStyle(
+            color: Colors.black.withOpacity(0.5), fontWeight: FontWeight.bold),
+      );
 }
