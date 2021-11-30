@@ -123,6 +123,12 @@ class _LoginPageState extends State<LoginPage> {
     if(_formkey.currentState!.validate()) {
       LoadingDialog.showLoadingDialog(context, "Loading...");
 
+      if (email!="ad.apartment.m12@gmail.com"){
+        LoadingDialog.hideLoadingDialog(context);
+        MsgDialog.showMsgDialog(context, "Đăng nhập thất bại", "Vui lòng sử dụng đúng tài khoản quản lý!");
+        return;
+      }
+
       authBloc.signIn(
           email,
           pass,
