@@ -20,11 +20,14 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
   String selectYear=DateFormat('yyyy').format( DateTime.now());
   String selectMonth=DateFormat('MM').format( DateTime.now());
   BillInfoFB fb= new BillInfoFB();
-  List<chart.Series<typeCharge, String>> _createSampleData( int fine, int chargeE , int chargeW, int total) {
+  List<chart.Series<typeCharge, String>> _createSampleData( int fine, int chargeE , int chargeW, int total,int service,int room,int discount) {
     final data = [
+      new typeCharge('Tiền giảm giá', discount,myPink),
       new typeCharge('Tiền phạt', fine,myRed),
       new typeCharge('Tiền điện', chargeE,myYellow),
       new typeCharge('Tiền nước', chargeW,myBlue),
+      new typeCharge('Tiền dịch vụ', service,myPurple),
+      new typeCharge('Tiền nhà',room ,myBrown),
       new typeCharge('Tổng cộng', total,myGreen),
     ];
 
@@ -103,7 +106,7 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
       backgroundColor:  Colors.white,
       body: Container(
         padding: EdgeInsets.all(16),
-        child: Column(
+        child: ListView(
           children: [
             Row(
               children: [
@@ -142,7 +145,8 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
                       return Center(child: Text("No Data"),);
                     }
                     this.model= new StatisticModel(0,0,0,0,0);
-
+                    this.model.room=0;
+                    this.model.discout=0;
                     snapshot.data!.docs.forEach((element) {
                         if(element['yearBill']==this.selectYear&&element['monthBill']==this.selectMonth
                         &&element['status']!='Chưa thanh toán'
@@ -153,25 +157,41 @@ class _MonthStatisticPageState extends State<MonthStatisticPage>{
                             this.model.chargeE+=int.parse(element['totalE']);
                             this.model.chargeW+=int.parse(element['totalW']);
                             this.model.service+=int.parse(element['serviceFee']);
-
+                            this.model.room+=int.parse(element['roomCharge']);
+                            this.model.discout+=int.parse(element['discount']);
                           }
                     });
 
                     return Column(
                       children: [
+                        _detail('Tiền giảm giá', this.model.discout.toString(),myPink),
+                        SizedBox(height: 10,),
+                        _detail('Tiền phạt', this.model.fine.toString(),myRed),
+                        SizedBox(height: 10,),
                         _detail('Tiền điện ', this.model.chargeE.toString(),myYellow),
                         SizedBox(height: 10,),
                         _detail('Tiền nước', this.model.chargeW.toString(),myBlue),
                         SizedBox(height: 10,),
-                        _detail('Tiền phat', this.model.fine.toString(),myRed),
+                        _detail('Tiền dịch vụ', this.model.service.toString(),myPurple),
+                        SizedBox(height: 10,),
+                        _detail('Tiền nhà', this.model.room.toString(),myBrown),
                         SizedBox(height: 10,),
                         _detail('Tổng cộng', this.model.total.toString(),myGreen),
                      SizedBox(height: 25,),
-                     Expanded(child: chart.BarChart(this._createSampleData( model.fine,model.chargeE,model.chargeW,model.total), animate: true,),),
+                     SizedBox(
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(width: 550,
+                              child: chart.BarChart(
+                                this._createSampleData( model.fine,model.chargeE,model.chargeW,model.total,model.service,model.room,model.discout),
+                                animate: true,),)
+                        ],
+                      )
+                       ,
+                     height:380,),
                         SizedBox(height: 25,),
                       ],
-
-
                     );
                   }),
             ),
