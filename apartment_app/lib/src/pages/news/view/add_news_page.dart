@@ -129,6 +129,12 @@ class _AddNewsPageState extends State<AddNewsPage> {
       keyboardType: TextInputType.name,
       minLines: 3,
       maxLines: 5,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập tiêu đề";
+        }
+        return null;
+      },
     ),
   );
 
@@ -142,6 +148,12 @@ class _AddNewsPageState extends State<AddNewsPage> {
       keyboardType: TextInputType.name,
       minLines: 8,
       maxLines: 15,
+      validator: (val) {
+        if (val!.isEmpty) {
+          return "Vui lòng nhập nội dung";
+        }
+        return null;
+      },
     ),
   );
   Future _selectImage() async {

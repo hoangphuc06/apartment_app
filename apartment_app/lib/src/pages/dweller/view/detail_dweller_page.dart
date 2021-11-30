@@ -4,6 +4,7 @@ import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/edit_dweller_page.dart';
 import 'package:apartment_app/src/widgets/appbars/my_app_bar.dart';
+import 'package:apartment_app/src/widgets/dialog/msg_dilog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -19,11 +20,14 @@ class DetailDwellerPage extends StatefulWidget {
 
 class _DetailDwellerPageState extends State<DetailDwellerPage> {
 
-  //final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
+  final GlobalKey<AnimatedFloatingActionButtonState> fabKey = GlobalKey();
   DwellersFB dwellersFB = new DwellersFB();
+  bool _isAdd = false;
+  bool _canDelete = false;
 
   @override
   Widget build(BuildContext context) {
+    CheckforDelete();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: myAppBar("Hồ sơ"),
@@ -83,12 +87,15 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          _gotoPage();
-        },
-        child: Icon(Icons.menu, color: Colors.white,),
-        backgroundColor: myGreen,
+      floatingActionButton: AnimatedFloatingActionButton(
+          key: fabKey,
+          fabButtons: <Widget>[
+            edit(),
+            delete(),
+          ],
+          colorStartAnimation: myGreen,
+          colorEndAnimation: myGreen,
+          animatedIconData: AnimatedIcons.menu_close //To principal button
       ),
     );
   }
@@ -103,17 +110,17 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
     ],
   );
 
-  // Widget edit() {
-  //   return FloatActionButtonText(
-  //     onPressed: (){
-  //       fabKey.currentState!.animate();
-  //       _gotoPage();
-  //     },
-  //     icon: Icons.mode_edit,
-  //     text: "Sửa",
-  //     textLeft: -80,
-  //   );
-  // }
+  Widget edit() {
+    return FloatActionButtonText(
+      onPressed: (){
+        fabKey.currentState!.animate();
+        _gotoPage();
+      },
+      icon: Icons.mode_edit,
+      text: "Sửa",
+      textLeft: -80,
+    );
+  }
 
   void _gotoPage() async {
     final Dweller d = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditDwellerPage(this.widget.dweller, this.widget.id)));
@@ -124,16 +131,14 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
     }
   }
 
-  // Widget delete() {
-  //   return FloatActionButtonText(
-  //     onPressed: (){
-  //       fabKey.currentState!.animate();
-  //     },
-  //     icon: Icons.delete,
-  //     textLeft: -80,
-  //     text: "Xóa",
-  //   );
-  // }
+  Widget delete() {
+    return FloatActionButtonText(
+      onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
+      icon: Icons.delete,
+      textLeft: -80,
+      text: "Xóa",
+    );
+  }
 
   _title(String text) => Text(
     text,
@@ -202,5 +207,62 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
       ],
     ),
   );
+
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa thành viên này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    fabKey.currentState!.animate();
+                    if(_canDelete == true)
+                    {
+                      fabKey.currentState!.animate();
+                      this.dwellersFB.delete(widget.dweller.id.toString());
+                      Navigator.pop(context);
+                      Navigator.of(context).pop();
+                    }
+                    else {
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      MsgDialog.showMsgDialog(
+                          context, "Không thể xóa thành viên có tên trong hợp đồng",
+                          "");
+                    }
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
+
+  Future<void> CheckforDelete() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("contract").where('renter',isEqualTo: widget.dweller.id.toString()).get();
+    //var con = contractFB.collectionReference.where('room',isEqualTo: this.widget.id_apartment).get();
+    print(querySnapshot.docs.length);
+    if(querySnapshot.docs.length == 0) {
+      print("oke");
+      _canDelete = true;
+    }
+    else {
+      print("not oke");
+      _canDelete = false;
+    }
+  }
 
 }
