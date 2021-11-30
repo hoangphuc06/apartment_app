@@ -30,7 +30,7 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
         child: Container(
           padding: EdgeInsets.all(16),
           child: StreamBuilder(
-              stream: dwellersFB.collectionReference.where('id', isEqualTo: widget.dweller.id).snapshots(),
+              stream: dwellersFB.collectionReference.where('idApartment', isEqualTo: widget.dweller.idApartment).where('id', isEqualTo: widget.dweller.id).snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: Text("No Data"),);

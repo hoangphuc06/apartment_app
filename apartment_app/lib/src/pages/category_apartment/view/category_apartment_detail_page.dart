@@ -212,6 +212,7 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
                       fabKey.currentState!.animate();
                       this.categoryApartmentFB.delete(widget.categoryApartment.id.toString());
                       Navigator.pop(context);
+                      Navigator.of(context).pop();
                     }
                     else {
                       // Close the dialog
