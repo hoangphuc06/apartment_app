@@ -254,9 +254,9 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                       return ListView.builder(
                           itemCount: this.Cache.length,
                           itemBuilder: (context, index) {
-                            return DwellerCard(dweller: this.Cache[index], funtion: (){
-                              //Route route = MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: this.Cache[index], ));
-                              //Navigator.push(context,route);
+                            return SearchDwellerCard(dweller: this.Cache[index], funtion: (){
+                              Route route = MaterialPageRoute(builder: (context) => DetailDwellerPage(dweller: this.Cache[index], id: this.Cache[index].idRealtime.toString(), ));
+                              Navigator.push(context,route);
                             });
                           });
                     })
