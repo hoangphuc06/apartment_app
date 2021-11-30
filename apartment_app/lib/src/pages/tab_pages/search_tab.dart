@@ -19,23 +19,31 @@ class _SearchTabState extends State<SearchTab> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: true,
-          title: Text(
-            "Tìm kiếm",
-            style: TextStyle(color:myGreen, fontWeight: FontWeight.bold, fontSize: 22),
+          iconTheme: IconThemeData(
+            color: myGreen, //change your color here
           ),
-          bottom: TabBar(
-            labelColor: myGreen,
-            labelStyle: TextStyle(color: myGreen, fontSize: 15, fontWeight: FontWeight.bold),
-            indicatorColor: myGreen,
-            indicatorWeight: 5,
-            tabs: [
-              Tab(text: "Căn hộ",),
-              Tab(text: "Dân cư",),
-              Tab(text: "Hợp đồng",),
-            ],
+          backgroundColor: Colors.white,
+          elevation: 1,
+          title: Text("Tìm kiếm", style: TextStyle(color: myGreen,),),
+          centerTitle: true,
+          // actions:[
+          //   IconButton(
+          //     icon: Icon(Icons.settings),
+          //     onPressed: () {},
+          //   ),
+          // ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: TabBar(
+              labelColor: Colors.black,
+              indicatorColor: myGreen,
+              indicatorWeight: 3,
+              tabs: [
+                Tab(text: "Thông tin",),
+                Tab(text: "Thành viên",),
+                Tab(text: "Dịch vụ",),
+              ],
+            ),
           ),
         ),
 
