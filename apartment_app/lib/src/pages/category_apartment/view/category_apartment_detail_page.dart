@@ -197,7 +197,7 @@ class _CategotyApartmentDetailPageState extends State<CategotyApartmentDetailPag
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text('XÁC NHẬN'),
-            content: Text('Bạn có chắc muốn xóa loại căn hộ này này?'),
+            content: Text('Bạn có chắc muốn xóa loại căn hộ này?'),
             actions: [
               // The "Yes" button
               TextButton(

@@ -286,6 +286,12 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
           style: MyStyle().style_text_tff(),
           controller: _cmndController,
           keyboardType: TextInputType.text,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập số CMND hoặc CCCD";
+            }
+            return null;
+          },
         ),
       );
 
@@ -296,7 +302,13 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
           decoration: MyStyle().style_decoration_tff("Nhập số điện thoại"),
           style: MyStyle().style_text_tff(),
           controller: _phoneNumberController,
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.number,
+          validator: (val) {
+            if (val!.isEmpty) {
+              return "Vui lòng nhập số điện thoại";
+            }
+            return null;
+          },
         ),
       );
 
@@ -310,7 +322,7 @@ class _AddDwellerPageState extends State<AddDwellerPage> {
           keyboardType: TextInputType.text,
           validator: (val) {
             if (val!.isEmpty) {
-              return null;
+              return "Vui lòng nhập email";
             }
             var isValidEmail = RegExp(
                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
