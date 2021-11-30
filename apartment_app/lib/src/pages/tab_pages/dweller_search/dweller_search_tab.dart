@@ -1,10 +1,12 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/dweller/firebase/fb_dweller.dart';
 import 'package:apartment_app/src/pages/dweller/model/dweller_model.dart';
 import 'package:apartment_app/src/pages/dweller/view/detail_dweller_page.dart';
 import 'package:apartment_app/src/style/my_style.dart';
 import 'package:apartment_app/src/widgets/cards/dweller_card.dart';
+import 'package:apartment_app/src/widgets/cards/seach_dweller_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dweller_detail.dart';
@@ -25,7 +27,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
   TextEditingController searchController = new TextEditingController();
   List<Dweller>Cache =[];
   List<String> ListApartment=[];
-  ServiceApartmentFB apartmentFB= new ServiceApartmentFB();
+  FloorInfoFB apartmentFB= new FloorInfoFB();
   String apartment= 'Tất cả';
   DwellersFB fb= new DwellersFB();
   int radioValue = 1;
@@ -75,8 +77,8 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
                           this.ListApartment.clear();
                           ListApartment.add('Tất cả');
                           snapshot.data!.docs.forEach((element) {
-                            if(!this.ListApartment.contains(element['idRoom']))
-                              this.ListApartment.add(element['idRoom']);
+                            if(!this.ListApartment.contains(element['name']))
+                              this.ListApartment.add(element['name']);
                           }
                           );
                           return  DropdownButton(
@@ -181,7 +183,7 @@ class _DwellerSearchTabState extends State<DwellerSearchTab> {
 
     if((!check||this.chechInfo(temp))&&
         KTGioiTinh&&KTroom&&
-        (temp.name!.contains(this.searchController.text)||this.searchController.text.isEmpty)
+        (temp.name!.toLowerCase().contains(this.searchController.text.toLowerCase())||this.searchController.text.isEmpty)
     )
       return true;
     return false;

@@ -43,6 +43,9 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
     List<typeCharge> chargeW = [];
     List<typeCharge> fine = [];
     List<typeCharge> total = [];
+    List<typeCharge> room = [];
+    List<typeCharge> service = [];
+    List<typeCharge> discout = [];
     int index=0;
       month.forEach((element) {
         index ++;
@@ -51,9 +54,33 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
         chargeW.add(new typeCharge(index.toString(), month[index-1].chargeW, myBlue));
         fine.add(new typeCharge(index.toString(), month[index-1].fine, myRed));
         total.add(new typeCharge(index.toString(), month[index-1].total, myGreen));
+        room.add(new typeCharge(index.toString(), month[index-1].room, myBrown));
+        service.add(new typeCharge(index.toString(), month[index-1].service, myPurple));
+        discout.add(new typeCharge(index.toString(), month[index-1].discout, myPink));
       });
     return [
       // Blue bars with a lighter center color.
+      new chart.Series<typeCharge, String>(
+        id: 'discount',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: discout,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
+      new chart.Series<typeCharge, String>(
+        id: 'fine',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: fine,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
+      new chart.Series<typeCharge, String>(
+        id: 'electric charge',
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: chargeE,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+        domainFn: (typeCharge charge, _) => charge.name,
+      ),
       new chart.Series<typeCharge, String>(
         id: 'water charge',
         domainFn: (typeCharge charge, _) => charge.name,
@@ -63,19 +90,20 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
       ),
       // Solid red bars. Fill color will default to the series color if no
       // fillColorFn is configured.
-      new chart.Series<typeCharge, String>(
-        id: 'electric charge',
-        measureFn: (typeCharge charge, _) => charge.money,
-        data: chargeE,
-        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
-        domainFn: (typeCharge charge, _) => charge.name,
-      ),
+
       // Hollow green bars.
       new chart.Series<typeCharge, String>(
-        id: 'fine',
+        id: 'service',
         domainFn: (typeCharge charge, _) => charge.name,
         measureFn: (typeCharge charge, _) => charge.money,
-        data: fine,
+        data: service,
+        colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
+      ),
+      new chart.Series<typeCharge, String>(
+        id: 'room',
+        domainFn: (typeCharge charge, _) => charge.name,
+        measureFn: (typeCharge charge, _) => charge.money,
+        data: room,
         colorFn: (typeCharge charge, _) => chart.ColorUtil.fromDartColor(charge.Color),
       ),
       new chart.Series<typeCharge, String>(
@@ -168,9 +196,15 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                         return Center(child: Text("No Data"),);
                       }
                       this.model= new StatisticModel(0,0,0,0,0);
+                      model.discout=0;
+                      model.room=0;
                       this.listStatistic=[];
                       for(int i=0; i<12;i++){
-                          this.listStatistic.add(new StatisticModel(0,0,0,0,0));
+                        StatisticModel tempModel=new StatisticModel(0,0,0,0,0);
+                        tempModel.room=0;
+                        tempModel.discout=0;
+                          this.listStatistic.add(tempModel);
+
                       }
                       snapshot.data!.docs.forEach((element) {
                         if(element['yearBill']==this.selectYear&& element['status']!='Chưa thanh toán')
@@ -180,32 +214,42 @@ class _YearStatisticPageState extends State<YearStatisticPage>{
                           this.model.chargeE+=int.parse(element['totalE']);
                           this.model.chargeW+=int.parse(element['totalW']);
                           this.model.service+=int.parse(element['serviceFee']);
+                          this.model.discout+=int.parse(element['discount']);
+                          this.model.room+=int.parse(element['roomCharge']);
                           int month=int.parse(element['monthBill']);
                           listStatistic[month-1].total+=int.parse(element['total']);
                           listStatistic[month-1].fine+=int.parse(element['fine']);
                           listStatistic[month-1].chargeE+=int.parse(element['totalE']);
                           listStatistic[month-1].chargeW+=int.parse(element['totalW']);
                           listStatistic[month-1].service+=int.parse(element['serviceFee']);
+                          listStatistic[month-1].room+=int.parse(element['roomCharge']);
+                          listStatistic[month-1].discout+=int.parse(element['discount']);
                         }
                       });
 
                       return ListView(
                         children: [
+                          _detail('Tiền giảm giá', this.model.discout.toString(),myPink),
+                          SizedBox(height: 10,),
+                          _detail('Tiền phạt', this.model.fine.toString(),myRed),
+                          SizedBox(height: 10,),
                           _detail('Tiền điện ', this.model.chargeE.toString(),myYellow),
                           SizedBox(height: 10,),
                           _detail('Tiền nước', this.model.chargeW.toString(),myBlue),
                           SizedBox(height: 10,),
-                          _detail('Tiền phat', this.model.fine.toString(),myRed),
+                          _detail('Tiền dịch vụ', this.model.service.toString(),myPurple),
+                          SizedBox(height: 10,),
+                          _detail('Tiền nhà', this.model.room.toString(),myBrown),
                           SizedBox(height: 10,),
                           _detail('Tổng cộng', this.model.total.toString(),myGreen),
                           SizedBox(height: 50,),
                          Container(
-                           height: 450,
+                           height: 400,
                            child: ListView(
                              scrollDirection: Axis.horizontal,
                              children: [
                                SizedBox(
-                                 width: 1500,
+                                 width: 1200,
                                  child: chart.BarChart(this.createSampleData(this.listStatistic),
                                    animate: true,
                                    defaultRenderer: new chart.BarRendererConfig(

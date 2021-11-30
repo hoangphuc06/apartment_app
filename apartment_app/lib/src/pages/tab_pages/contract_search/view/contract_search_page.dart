@@ -1,4 +1,5 @@
 import 'package:apartment_app/src/colors/colors.dart';
+import 'package:apartment_app/src/fire_base/fb_floor_info.dart';
 import 'package:apartment_app/src/pages/apartment/firebase/fb_service_apartment.dart';
 import 'package:apartment_app/src/pages/contract/firebase/fb_contract.dart';
 import 'package:apartment_app/src/pages/contract/model/contract_model.dart';
@@ -25,11 +26,13 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
   List<Contract>Cache =[];
   List<String> ListApartment=[];
   ContractFB fb= new ContractFB();
-  ServiceApartmentFB apartmentFB= new ServiceApartmentFB();
+  FloorInfoFB apartmentFB= new FloorInfoFB();
   int radioValue = 1;
   bool option= true;
   String hitText= 'mã hợp đồng';
   String apartment= 'Tất cả               ';
+  String liquidation='Tất cả                ';
+  List<String> lyquidationList=[ 'Tất cả                ','Chưa thanh lý' ,'Đã thanh lý'];
   bool check=false;
   String? type= 'Tất cả';
   List<String> typelist=['Tất cả','Hợp đồng bán','Hợp đông thuê'];
@@ -90,8 +93,8 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
                           this.ListApartment.clear();
                           ListApartment.add('Tất cả               ');
                           snapshot.data!.docs.forEach((element) {
-                            if(!this.ListApartment.contains(element['idRoom']))
-                            this.ListApartment.add(element['idRoom']);
+                            if(!this.ListApartment.contains(element['name']))
+                            this.ListApartment.add(element['name']);
                           }
                           );
                           return  DropdownButton(
@@ -152,7 +155,38 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
                   ],
                 ),
               ),
-
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      'Thanh lý:',
+                      style:  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                    DropdownButton(
+                      hint: Text(this.liquidation.toString(),  style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: this.liquidation.toString()=='Chưa thanh lý'? myRed : this.liquidation.toString()=='Đã thanh lý'? myYellow: Colors.grey,
+                      ),),
+                      iconSize: 36,
+                      onChanged: (temp) {
+                        setState(() {
+                          this.liquidation = temp.toString();
+                        });
+                        setState1((){
+                        });
+                      },
+                      items: this.lyquidationList.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )
+                  ],
+                ),
+              ),
 
             ],),
         );
@@ -164,7 +198,14 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
   }
 
   bool _filter(Contract temp){
-      if((this.apartment=='Tất cả               '||this.apartment==temp.room)&&
+
+    bool liquidateCheck= true;
+    if((this.liquidation=='Chưa thanh lý'&&temp.liquidation==false)||
+        (this.liquidation=='Đã thanh lý'&&temp.liquidation==true)||
+        this.liquidation=='Tất cả                ')
+      liquidateCheck=true;
+    else liquidateCheck=false;
+      if((this.apartment=='Tất cả               '||this.apartment==temp.room)&&liquidateCheck&&
           (this.type=='Tất cả'||(this.type=='Hợp đồng bán'&&temp.type=='0')||(this.type=='Hợp đông thuê'&&temp.type=='1'))&&
           (temp.id!.contains(this.searchController.text)||this.searchController.text.isEmpty))return true;
       return false;
