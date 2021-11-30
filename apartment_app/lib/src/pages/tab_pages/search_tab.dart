@@ -39,9 +39,9 @@ class _SearchTabState extends State<SearchTab> {
               indicatorColor: myGreen,
               indicatorWeight: 3,
               tabs: [
-                Tab(text: "Thông tin",),
-                Tab(text: "Thành viên",),
-                Tab(text: "Dịch vụ",),
+                Tab(text: "Căn hộ",),
+                Tab(text: "Dân cư",),
+                Tab(text: "Hợp đồng",),
               ],
             ),
           ),

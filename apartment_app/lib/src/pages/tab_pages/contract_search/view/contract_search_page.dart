@@ -206,7 +206,7 @@ class _ContractSearchTabState extends State<ContractSearchTab> {
       liquidateCheck=true;
     else liquidateCheck=false;
       if((this.apartment=='Tất cả               '||this.apartment==temp.room)&&liquidateCheck&&
-          (this.type=='Tất cả'||(this.type=='Hợp đồng bán'&&temp.type=='0')||(this.type=='Hợp đông thuê'&&temp.type=='1'))&&
+          (this.type=='Tất cả'||(this.type=='Hợp đồng bán'&&temp.type=='1')||(this.type=='Hợp đông thuê'&&temp.type=='0'))&&
           (temp.id!.contains(this.searchController.text)||this.searchController.text.isEmpty))return true;
       return false;
 
