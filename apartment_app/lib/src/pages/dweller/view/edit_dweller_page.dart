@@ -153,7 +153,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    TitleInfoNull(text: "CMND/CCCD"),
+                    TitleInfoNotNull(text: "CMND/CCCD"),
                     SizedBox(
                       height: 10,
                     ),
@@ -186,7 +186,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    TitleInfoNull(text: "Số điện thoại"),
+                    TitleInfoNotNull(text: "Số điện thoại"),
                     SizedBox(
                       height: 10,
                     ),
@@ -194,7 +194,7 @@ class _EditDwellerPageState extends State<EditDwellerPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    TitleInfoNull(text: "Email"),
+                    TitleInfoNotNull(text: "Email"),
                     SizedBox(
                       height: 10,
                     ),

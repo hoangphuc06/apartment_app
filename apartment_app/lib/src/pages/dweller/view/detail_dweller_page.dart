@@ -227,7 +227,7 @@ class _DetailDwellerPageState extends State<DetailDwellerPage> {
                     if(_canDelete == true)
                     {
                       fabKey.currentState!.animate();
-                      this.dwellersFB.delete(widget.dweller.id.toString());
+                      this.dwellersFB.delete(widget.dweller.idRealtime.toString());
                       Navigator.pop(context);
                       Navigator.of(context).pop();
                     }

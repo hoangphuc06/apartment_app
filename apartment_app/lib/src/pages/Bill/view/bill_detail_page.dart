@@ -42,6 +42,7 @@ class _BillInfoPageState extends State<BillDetailPage> {
   final TextEditingController _noteController = TextEditingController();
   final TextEditingController _discountControler = TextEditingController();
   DateTime selectedDate = new DateTime.now();
+  bool _isAdd = false;
 
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -245,12 +246,7 @@ class _BillInfoPageState extends State<BillDetailPage> {
                                 Container(
                                   child: RoundedButton(
                                       name: 'Thanh toán',
-                                      onpressed: () => {
-                                            billInfoFB.updateStatus(
-                                                x['idBillInfo'],
-                                                "Đã thanh toán"),
-                                            Navigator.pop(context)
-                                          },
+                                      onpressed:_isAdd == false ? () => _AddConfirm(context,x['idBillInfo']) : null,
                                       color: myGreen),
                                 ),
                               ],
@@ -272,6 +268,40 @@ class _BillInfoPageState extends State<BillDetailPage> {
                 }
               }),
         ));
+  }
+
+  void _AddConfirm(BuildContext context, String bill) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa hóa đơn này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    billInfoFB.updateStatus(
+                        bill,
+                        "Đã thanh toán");
+                    Navigator.pop(context);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 
   _title(String text) => Text(

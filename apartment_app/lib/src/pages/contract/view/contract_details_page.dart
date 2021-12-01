@@ -249,32 +249,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                               ? Container(
                                   child: RoundedButton(
                                       name: 'Thanh lý',
-                                      onpressed: () => {
-                                            print(_check.text),
-                                            print(_idBill.text),
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LiquidationContractPage(
-                                                            total: _total.text,
-                                                            statusBill:
-                                                                _statusBill
-                                                                    .text,
-                                                            deposit1:
-                                                                _deposit1.text,
-                                                            deposit2:
-                                                                _deposit2.text,
-                                                            idRoom:
-                                                                widget.idRoom,
-                                                            beforeBill:
-                                                                _beforeBill
-                                                                    .text,
-                                                            idBill:
-                                                                _idBill.text,
-                                                            flag: _check.text,
-                                                            id: widget.id)))
-                                          },
+                                      onpressed: _isAdd == false ? () => _LiquidConfirm(context) : null,
                                       color: myGreen),
                                 )
                               : Container(),
@@ -432,9 +407,64 @@ class _ContractDetailsState extends State<ContractDetails> {
                     setState(() {
                       _isAdd = false;
                     });
-                    _onClick();
+
                     // Close the dialog
                     Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
+  void _LiquidConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn thanh lý hợp đồng này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    print(_check.text);
+                    print(_idBill.text);
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) =>
+                    LiquidationContractPage(
+                    total: _total.text,
+                    statusBill:
+                    _statusBill
+                        .text,
+                    deposit1:
+                    _deposit1.text,
+                    deposit2:
+                    _deposit2.text,
+                    idRoom:
+                    widget.idRoom,
+                    beforeBill:
+                    _beforeBill
+                        .text,
+                    idBill:
+                    _idBill.text,
+                    flag: _check.text,
+                    id: widget.id)
+                    )
+                    );
+                    // Close the dialog
                   },
                   child: Text('Có')),
               TextButton(
