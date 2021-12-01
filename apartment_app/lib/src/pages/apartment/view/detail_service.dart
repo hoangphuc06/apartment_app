@@ -79,14 +79,7 @@ class _DetailServiceState extends State<DetailService> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.delete_forever_outlined),
           backgroundColor: myGreen,
-          onPressed: () {
-            serviceApartmentFB.collectionReference
-                .where('idService', isEqualTo: widget.id)
-                .where('idRoom', isEqualTo: widget.idRoom)
-                .get()
-                .then((value) => {serviceApartmentFB.delete(value.docs[0].id)});
-                Navigator.pop(context);
-          },
+          onPressed: _isAdd == false ? () => _AddConfirm(context) : null,
         ));
   }
 
@@ -152,4 +145,39 @@ class _DetailServiceState extends State<DetailService> {
           ],
         ),
       );
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn xóa dịch vụ này ra khỏi phòng?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    serviceApartmentFB.collectionReference
+                        .where('idService', isEqualTo: widget.id)
+                        .where('idRoom', isEqualTo: widget.idRoom)
+                        .get()
+                        .then((value) => {serviceApartmentFB.delete(value.docs[0].id)});
+                    Navigator.pop(context);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
+  }
 }

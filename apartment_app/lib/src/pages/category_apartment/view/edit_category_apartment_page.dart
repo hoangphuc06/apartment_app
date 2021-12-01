@@ -42,7 +42,7 @@ class _EditCategoryApartmentPageState extends State<EditCategoryApartmentPage> {
     _areaController.text = widget.categoryApartment.area.toString();
     _amountBedroomController.text = widget.categoryApartment.amountBedroom.toString();
     _amountWcController.text = widget.categoryApartment.amountWc.toString();
-    _amountDwellerController.text = widget.categoryApartment.amountWc.toString();
+    _amountDwellerController.text = widget.categoryApartment.amountDweller.toString();
     _priceController.text = widget.categoryApartment.price.toString();
     _rentalPriceController.text = widget.categoryApartment.rentalPrice.toString();
   }

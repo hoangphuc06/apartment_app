@@ -20,6 +20,7 @@ class FixInfoPage extends StatefulWidget {
 class _FixInfoPageState extends State<FixInfoPage> {
 
   FixFB fixFB = new FixFB();
+  bool _isAdd = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,10 +87,9 @@ class _FixInfoPageState extends State<FixInfoPage> {
                         //   ],
                         // ),
                         widget.fix.status == "Đã hoàn thành" ? Container() : Container(
-                          child: MainButton(name: "Xác nhận hoàn thành", onpressed:(){
-                            fixFB.updatestatus(widget.fix.timestamp.toString(), "Đã hoàn thành");
-                            Navigator.pop(context);
-                          }),
+                          child: MainButton(name: "Xác nhận hoàn thành",
+                              onpressed: _isAdd == false ? () => _AddConfirm(context) : null,
+                          ),
                         ),
                       ],
                     );
@@ -204,5 +204,37 @@ class _FixInfoPageState extends State<FixInfoPage> {
   String readDatime(String timestamp) {
     final DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(int.parse(timestamp) * 1000);
     return "${dateTime.day.toString()}/${dateTime.month.toString()}/${dateTime.year.toString()}  ${dateTime.hour.toString()}:${dateTime.minute.toString()}";
+  }
+
+  void _AddConfirm(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('XÁC NHẬN'),
+            content: Text('Bạn có chắc muốn hoàn thành yêu cầu sửa chữa này?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _isAdd = false;
+                    });
+                    fixFB.updatestatus(widget.fix.timestamp.toString(), "Đã hoàn thành");
+                    Navigator.pop(context);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Có')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Không'))
+            ],
+          );
+        });
   }
 }
